@@ -63,7 +63,6 @@ static void
 idle_line_callback(void* data, void* cb_data)
 {
     empd_connection_t* conn = (empd_connection_t *) cb_data;
-    char* line = (char *) data;
     printf("idle signal\n");
     empd_callback_set(&conn->line_callback, line_callback, conn);
     if(conn->idle_mode) {
@@ -136,7 +135,6 @@ static int
 empd_socket(const char *sockpath)
 {
     struct sockaddr_un  socket_unix;
-    char                buf[4096];
     int fd = socket(AF_UNIX, SOCK_STREAM, 0);
     int curstate = 0;
     if(fd < 0) goto err_sock;

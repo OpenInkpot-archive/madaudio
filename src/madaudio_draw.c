@@ -115,7 +115,6 @@ draw_volume(Evas_Object* gui, const struct mpd_status* status)
 static void
 draw_status(Evas_Object* gui, const struct mpd_status* status)
 {
-    char *a;
     int time = mpd_status_get_total_time(status);
     enum mpd_state state = mpd_status_get_state(status);
     if(state == MPD_STATE_PLAY || state == MPD_STATE_PAUSE) {
