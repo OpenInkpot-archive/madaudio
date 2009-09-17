@@ -1,7 +1,7 @@
 THEMES=$(wildcard *.edc)
 COMPILED_THEMES=$(patsubst %.edc,%.edj,$(THEMES))
 
-theme_dir=$(datadir)/madshelf
+theme_dir=$(datadir)/madaudio
 
 #%.edj: %.edc
 #	edje_cc $< $@
