@@ -64,7 +64,9 @@ get_title_by_num(madaudio_player_t* player, int offset)
     if(pos < 0 || pos > mpd_status_get_playlist_length(player->conn->status))
         return "";
     struct mpd_song* song = eina_list_nth(player->conn->playlist, pos);
-    return get_song_title(song);
+    if(song)
+        return get_song_title(song);
+    return "";
 }
 
 static void
