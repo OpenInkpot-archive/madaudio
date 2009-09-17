@@ -130,6 +130,7 @@ empd_pending_events(empd_connection_t* conn)
         printf("flush delayed\n");
         if(delayed->arg)
         {
+            conn->busy = true; /* We busy again */
             assert(delayed->action == NULL);
             printf("flush delayed: %s\n", delayed->arg);
             empd_send_wait_unlocked(conn, delayed->callback, delayed->data,
