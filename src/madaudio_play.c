@@ -94,7 +94,7 @@ void
 madaudio_polling_start(madaudio_player_t* player)
 {
     printf("Start polling\n");
-    player->poll_timer = ecore_timer_loop_add(1.0, poll_callback, player);
+    player->poll_timer = ecore_timer_loop_add(5.0, poll_callback, player);
     player->poll_mode = true;
     poll_callback(player);
 }
@@ -146,7 +146,7 @@ void
 madaudio_single(madaudio_player_t* player)
 {
     int current = mpd_status_get_single(player->conn->status);
-    empd_send_int_wait(player->conn, ready_callback, player, "signle",
+    empd_send_int_wait(player->conn, ready_callback, player, "single",
         current ? 0 : 1);
 }
 
@@ -156,7 +156,7 @@ madaudio_prevnext(madaudio_player_t* player, int step)
     int current = mpd_status_get_song(player->conn->status);
     int total = mpd_status_get_playlist_length(player->conn->status);
     current += step;
-    if(current >= 0 && current <= total)
+    if(current >= 0 && current < total)
         empd_send_int_wait(player->conn, ready_callback, player,
         "play", current);
 }
@@ -168,7 +168,7 @@ madaudio_seek(madaudio_player_t* player, int offset)
     int current = mpd_status_get_elapsed_time(player->conn->status);
     int total = mpd_status_get_total_time(player->conn->status);
     current += offset;
-    if(current >= 0 && current <= total)
+    if(current >= 0 && current <= total - offset)
         empd_seek(player->conn, ready_callback, player, current);
 }
 
