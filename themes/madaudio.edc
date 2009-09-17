@@ -37,11 +37,11 @@ styles {
 #define ARTIST_Y1   40
 #define ARTIST_Y2   65
 #define ALBUM_Y1    65
-#define ALBUM_Y2    100
-#define GENRE_Y1    100
-#define GENRE_Y2    135
-#define YEAR_Y1     135
-#define YEAR_Y2     160
+#define ALBUM_Y2    90
+#define GENRE_Y1    90
+#define GENRE_Y2    125
+#define YEAR_Y1     125
+#define YEAR_Y2     150
 
 
 #define SONG(x1, y1, x2, y2) \
@@ -121,8 +121,8 @@ styles {
 #define PREVNEXT(x1, y1, x2, y2) \
     CLIPPER("prev-next-clipper", x1, y1, x2, y2)  \
     STYLED("prev-song", "shaded", "prev-next-clipper", 10, 13, 350, 40) \
-    STYLED("this-song", "values", "prev-next-clipper", 10, 45, 350, 75) \
-    STYLED("next-song", "shaded", "prev-next-clipper", 10, 80, 350, 115)
+    STYLED("this-song", "values", "prev-next-clipper", 10, 40, 350, 70) \
+    STYLED("next-song", "shaded", "prev-next-clipper", 10, 70, 350, 105)
 
 
 #define BLOCK(x1, y1, x2, y2) \
@@ -137,8 +137,8 @@ styles {
     VALUE("album", ALBUM_Y1, ALBUM_Y2) \
     VALUE("genre", GENRE_Y1, GENRE_Y2) \
     VALUE("year", YEAR_Y1, YEAR_Y2) \
-    STYLED("total_time", "times", "clipper", 300, 170, 470, 200) \
-    STYLED("volume", "times", "clipper", 30, 170, 200, 200)
+    STYLED("total_time", "times", "clipper", VALUES_X1, 200, VALUES_X2, 230) \
+    STYLED("volume", "values", "clipper", CAPTION_X1, 200, CAPTION_X2, 230)
 
 collections {
     group {
@@ -154,15 +154,15 @@ collections {
                     image { normal, "madaudio-vertical.png"; }
                 }
             }
-            SONG(105, 25, 595, 55) 
-            BLOCK(105, 65, 595, 265)
-            PREVNEXT(140, 267, 585, 380) 
+            SONG(110, 33, 595, 66) 
+            BLOCK(110, 82, 595, 306)
+            PREVNEXT(110, 326, 595, 423) 
             
         }
     }
-/*
+
     group {
-        name, "horisontal";
+        name, "horizontal";
         parts {
             part {
                 name, "background";
@@ -174,9 +174,9 @@ collections {
                     image { normal, "madaudio-horizontal.png"; }
                 }
             }
-            SONG(150, 100, 400, 180)
-            BLOCK(150, 150, 400, 400)
-            PREVNEXT(150, 450, 500, 500)
+            SONG(5, 32, 487, 62)
+            BLOCK(5, 78, 487, 312)
+            PREVNEXT(36, 319, 487, 516)
         }
-    } */
+    } 
 }
