@@ -1,0 +1,23 @@
+Source: madaudio
+Section: gui
+Maintainer: Alexander V. Nikolaev
+XCS-Cross-Host-Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config
+XCS-Cross-Build-Depends: libextractor-mini-dev, libeina-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev, libmpdclient-dev
+Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config,  libeina-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev, libmpdclient-dev
+Priority: optional
+Standards-Version: 3.8.3
+
+Package: madaudio
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Audioplayer application
+ Bookshelf application.
+
+Package: madaudio-dbg
+Architecture: any
+Priority: extra
+Depends: madaudio (= ${binary:Version})
+Description: Audioplayer application -- debugging symbols
+ Audioplayer application.
+ .
+ This package contains debugging symbols.
