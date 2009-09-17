@@ -20,3 +20,6 @@ ltmain.sh
 madaudio
 missing
 stamp-h1
+debian/files
+debian/*.log
+debian/stamp-*
