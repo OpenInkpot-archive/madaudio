@@ -9,7 +9,7 @@ Standards-Version: 3.8.3
 
 Package: madaudio
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, mpd
 Description: Audioplayer application
  Bookshelf application.
 
