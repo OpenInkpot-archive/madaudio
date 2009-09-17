@@ -1,5 +1,5 @@
 /*
- * MadShelf - audioplayer application.
+ * MadAudio - audioplayer application.
  *
  * Copyright (C) 2009 by Alexander v. Nikolaev <avn@daemon.hole.ru>
  * Copyright (C) 2008,2009 Mikhail Gusarov <dottedmag@dottedmag.net>
@@ -52,16 +52,6 @@ static void madaudio_free_state(madaudio_player_t* player)
     free(player);
 }
 
-
-
-
-/* static bool is_dir_allowed(madshelf_state_t* state, const char* new_dir) */
-/* { */
-/*     madshelf_disk_t* disk = find_disk(&state->disks, state->loc.dir); */
-/*     if(!disk) */
-/*         die("is_dir_allowed: Current dir is not on any disk"); */
-/*     return is_prefix(disk->path, new_dir); */
-/* } */
 
 
 

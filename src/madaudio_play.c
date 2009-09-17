@@ -36,7 +36,7 @@ connect_errback(const char* sockpath, void* data)
             player->mpd_run=true;
             printf("spawing mpd\n");
             Ecore_Exe* exe;
-            exe = ecore_exe_run("/usr/bin/mpd /etc/madshelf/mpd.conf",
+            exe = ecore_exe_run("/usr/bin/mpd /etc/madaudio/mpd.conf",
                 NULL);
             if(exe)
                 ecore_exe_free(exe);
