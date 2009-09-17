@@ -1,0 +1,182 @@
+images {
+    image: "madaudio-vertical.png" COMP;
+    image: "madaudio-horizontal.png" COMP;
+}
+
+styles {
+    style {
+        name, "song_title";
+        base, "font=sans:bold font_size=28 color=#000 align=middle"; 
+    }
+    style {
+        name, "caption";
+        base, "font=sans:bold font_size=24 color=#555 align=left"; 
+    }
+    style {
+        name, "values";
+        base, "font=sans font_size=24 color=#000 align=left"; 
+    }
+    style {
+        name, "times";
+        base, "font=sans font_size=24 color=#000 align=right"; 
+    }
+    style {
+        name, "shaded";
+        base, "font=sans font_size=24 color=#555 align=left"; 
+    }
+}
+
+
+#define CAPTION_X1 14
+#define CAPTION_X2 200
+#define VALUES_X1 214
+#define VALUES_X2 480
+
+#define COMPOSER_Y1 15
+#define COMPOSER_Y2 40
+#define ARTIST_Y1   40
+#define ARTIST_Y2   65
+#define ALBUM_Y1    65
+#define ALBUM_Y2    100
+#define GENRE_Y1    100
+#define GENRE_Y2    135
+#define YEAR_Y1     135
+#define YEAR_Y2     160
+
+
+#define SONG(x1, y1, x2, y2) \
+    part { \
+        name, "title"; \
+        type, TEXTBLOCK; \
+        mouse_events, 0; \
+        description { \
+            state, "default" 0.0; \
+            color, 0 0 0 255; \
+            text { \
+                style, "song_title"; \
+                max, 0 1; \
+            } \
+            align, 0.5 0.5; \
+            rel1 { relative, 0.0 0.0; offset, x1 y1; } \
+            rel2 { relative, 0.0 0.0; offset, x2 y2; } \
+        } \
+    }
+
+#define CLIPPER(c, x1, y1, x2, y2)                        \
+   part {                                                 \
+      name, c;                                    \
+      type, RECT;                                         \
+      description {                                       \
+         state, "default" 0.0;                            \
+         color, 255 255 255 255;                            \
+         rel1 { relative, 0.0 0.0; offset, x1 y1; }         \
+         rel2 { relative, 0.0 0.0; offset, x2 y2; }       \
+      } \
+    }
+
+#define STYLED(n, s, c, x1, y1, x2, y2) \
+    part { \
+        name, n; \
+        type, TEXTBLOCK; \
+        mouse_events, 0; \
+        clip_to, c; \
+        description { \
+            state, "default" 0.0; \
+            color, 0 0 0 255; \
+            text { \
+                style, s; \
+                max, 0 1; \
+            } \
+            align, 0.5 0.5; \
+            rel1 { relative, 0.0 0.0; to, c; offset, x1 y1; } \
+            rel2 { relative, 0.0 0.0; to, c; offset, x2 y2; } \
+        } \
+    }
+
+#define TIME(n, s, c, x1, y1, x2, y2) \
+    part { \
+        name, n; \
+        type, TEXTBLOCK; \
+        mouse_events, 0; \
+        clip_to, c; \
+        description { \
+            state, "default" 0.0; \
+            color, 0 0 0 255; \
+            text { \
+                style, s; \
+                max, 0 1; \
+            } \
+            align, 0.5 0.5; \
+            rel1 { relative, 0.0 0.0; to, c; offset, x1 y1; } \
+            rel2 { relative, 0.0 0.0; to, c; offset, x2 y2; } \
+        } \
+    }
+
+#define CAPTION(n, y1, y2) \
+    STYLED(n, "caption", "clipper", CAPTION_X1, y1, CAPTION_X2, y2)
+
+#define VALUE(n, y1, y2) \
+    STYLED(n, "values", "clipper", VALUES_X1, y1, VALUES_X2, y2)
+
+#define PREVNEXT(x1, y1, x2, y2) \
+    CLIPPER("prev-next-clipper", x1, y1, x2, y2)  \
+    STYLED("prev-song", "shaded", "prev-next-clipper", 10, 13, 350, 40) \
+    STYLED("this-song", "values", "prev-next-clipper", 10, 45, 350, 75) \
+    STYLED("next-song", "shaded", "prev-next-clipper", 10, 80, 350, 115)
+
+
+#define BLOCK(x1, y1, x2, y2) \
+    CLIPPER("clipper", x1, y1, x2, y2)  \
+    CAPTION("caption-composer", COMPOSER_Y1, COMPOSER_Y2) \
+    CAPTION("caption-artist", ARTIST_Y1, ARTIST_Y2) \
+    CAPTION("caption-album", ALBUM_Y1, ALBUM_Y2) \
+    CAPTION("caption-genre", GENRE_Y1, GENRE_Y2) \
+    CAPTION("caption-year", YEAR_Y1, YEAR_Y2) \
+    VALUE("composer", COMPOSER_Y1, COMPOSER_Y2 ) \
+    VALUE("artist", ARTIST_Y1, ARTIST_Y2) \
+    VALUE("album", ALBUM_Y1, ALBUM_Y2) \
+    VALUE("genre", GENRE_Y1, GENRE_Y2) \
+    VALUE("year", YEAR_Y1, YEAR_Y2) \
+    STYLED("total_time", "times", "clipper", 300, 170, 470, 200) \
+    STYLED("volume", "times", "clipper", 30, 170, 200, 200)
+
+collections {
+    group {
+        name, "vertical";
+        parts {
+            part {
+                name, "background";
+                type, IMAGE;
+                description {
+                    state, "default" 0.0;
+                    rel1 { relative, 0.0 0.0; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1; }
+                    image { normal, "madaudio-vertical.png"; }
+                }
+            }
+            SONG(105, 25, 595, 55) 
+            BLOCK(105, 65, 595, 265)
+            PREVNEXT(140, 267, 585, 360) 
+            
+        }
+    }
+/*
+    group {
+        name, "horisontal";
+        parts {
+            part {
+                name, "background";
+                type, IMAGE;
+                description {
+                    state, "default" 0.0;
+                    rel1 { relative, 0.0 0.0; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1; }
+                    image { normal, "madaudio-horizontal.png"; }
+                }
+            }
+            SONG(150, 100, 400, 180)
+            BLOCK(150, 150, 400, 400)
+            PREVNEXT(150, 450, 500, 500)
+        }
+    } */
+}
