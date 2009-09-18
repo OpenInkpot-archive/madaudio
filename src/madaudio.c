@@ -205,7 +205,6 @@ int main(int argc, char** argv)
     madaudio_player_t* player = calloc(1, sizeof(madaudio_player_t));
     player->retry = 10;
 
-    printf("This is madaudio\n");
     if(!ecore_init())
         err(1, "Unable to initialize Ecore");
 
@@ -230,6 +229,8 @@ int main(int argc, char** argv)
         err(1, "Unable to initialize Ecore_Evas");
     if(!edje_init())
         err(1, "Unable to initialize Edje");
+    if(!ecore_con_init())
+        err(1, "Unable to initialize Ecore Con");
     madaudio_opener_init();
 
     setlocale(LC_ALL, "");
@@ -282,7 +283,7 @@ int main(int argc, char** argv)
 
     ecore_event_handler_add(ECORE_CON_EVENT_CLIENT_ADD, _client_add, NULL);
     ecore_event_handler_add(ECORE_CON_EVENT_CLIENT_DATA, _client_data, NULL);
-    ecore_event_handler_add(ECORE_CON_EVENT_CLIENT_DEL, _client_del, &player);
+    ecore_event_handler_add(ECORE_CON_EVENT_CLIENT_DEL, _client_del, player);
 
     madaudio_draw_captions(player);
     if(argc == 2)

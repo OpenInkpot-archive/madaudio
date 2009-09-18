@@ -110,6 +110,8 @@ static void
 ready_callback(void *data, void* cb_data)
 {
     printf("ready callback\n");
+    madaudio_player_t* player = (madaudio_player_t*) cb_data;
+    empd_status_sync(player->conn, status_callback, player);
 }
 
 void
