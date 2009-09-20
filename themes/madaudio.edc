@@ -1,6 +1,10 @@
 images {
     image: "madaudio-vertical.png" COMP;
     image: "madaudio-horizontal.png" COMP;
+    image: "repeat-none-vertical.png" COMP;
+    image: "repeat-all-vertical.png" COMP;
+    image: "repeat-none-horizontal.png" COMP;
+    image: "repeat-all-horizontal.png" COMP;
 }
 
 styles {
@@ -140,6 +144,38 @@ styles {
     STYLED("total_time", "times", "clipper", VALUES_X1, 200, VALUES_X2, 230) \
     STYLED("volume", "values", "clipper", CAPTION_X1, 200, CAPTION_X2, 230)
 
+#define BUTTON(n, x1, y1, x2, y2, image1, image2) \
+    part { \
+        name, n; \
+        type, IMAGE; \
+        mouse_events, 0; \
+        description { \
+            state, "default" 0.0; \
+            rel1 { relative, 0.0 0.0; to, "background"; offset, x1 y1; } \
+            rel2  {relative, 0.0 0.0; to, "background"; offset, x2 y2; } \
+            image { normal, image1; } \
+        } \
+        description { \
+            state, "pressed" 0.0; \
+            inherit, "default" 0.0; \
+            image { normal, image2; } \
+        } \
+    }
+
+#define BUTTON_PROG(name1, name_len, signal_name)           \
+            program {                                       \
+                name, name1;                                \
+                signal, signal_name;                        \
+                                                            \
+                script {                                    \
+                    new name_arg[100], name[100];           \
+                    getsarg(0, name_arg, 100);              \
+                    strcut(name, name_arg, name_len, 100);  \
+                                                            \
+                    set_state(PART:name1, name, 0.0);       \
+                }                                           \
+            }
+
 collections {
     group {
         name, "vertical";
@@ -157,7 +193,11 @@ collections {
             SONG(110, 33, 595, 66) 
             BLOCK(110, 76, 595, 306)
             PREVNEXT(110, 326, 595, 423) 
-            
+            BUTTON("cycle", 0, 15, 96, 72, 
+                "repeat-none-vertical.png", "repeat-all-vertical.png")
+        }
+        programs {
+            BUTTON_PROG("cycle", 6, "cycle,*")
         }
     }
 
@@ -177,6 +217,11 @@ collections {
             SONG(5, 32, 487, 64)
             BLOCK(5, 80, 487, 310)
             PREVNEXT(36, 319, 487, 516)
+            BUTTON("cycle", 49, 456, 120, 552, 
+                "repeat-none-horizontal.png", "repeat-all-horizontal.png")
+        }
+        programs {
+            BUTTON_PROG("cycle", 6, "cycle,*")
         }
     } 
 }

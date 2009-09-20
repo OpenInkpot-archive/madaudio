@@ -115,6 +115,15 @@ draw_volume(Evas_Object* gui, const struct mpd_status* status)
 }
 
 static void
+draw_button(Evas_Object* gui, const char* button, bool state)
+{
+   char buf[100];
+   snprintf(buf, 100, "%s,%s", button, state ? "pressed" : "default");
+   edje_object_signal_emit(gui, buf , "");
+   printf("signal:%s\n", buf);
+}
+
+static void
 draw_status(Evas_Object* gui, const struct mpd_status* status)
 {
     int time = mpd_status_get_total_time(status);
@@ -133,6 +142,7 @@ draw_status(Evas_Object* gui, const struct mpd_status* status)
     {
         edje_object_part_text_set(gui, "total_time", format_time(time));
     }
+    draw_button(gui, "cycle", mpd_status_get_repeat(status));
 }
 
 void
