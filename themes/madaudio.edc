@@ -53,6 +53,43 @@ styles {
 }
 
 
+/* header and content for rotated */
+#define BACKGROUND(LEFT_OFFSET, RIGHT_OFFSET)                    \
+    part {                                                       \
+    name, "background";                                          \
+        type, RECT;                                              \
+        description {                                            \
+            state, "default" 0.0;                                \
+            color, 0 0 0 255;                                    \
+            rel1 { relative, 0.0 0.0; offset, LEFT_OFFSET 0; }   \
+            rel2 { relative, 1.0 1.0; offset, RIGHT_OFFSET -1; } \
+        }                                                        \
+    }
+
+#define HEADER_RECT                                                     \
+    part {                                                              \
+        name, "header";                                                 \
+        type, RECT;                                                     \
+        description {                                                   \
+            state, "default" 0.0;                                       \
+            color, 0 0 0 0;                                             \
+            rel1 { to, "background"; relative, 0.0 0.0; offset, 0 0; }  \
+            rel2 { to, "background"; relative, 1.0 0.0; offset, -1 49; } \
+        }                                                               \
+    }
+
+#define CONTENTS_SWALLOW                                                \
+    part {                                                              \
+        name, "contents";                                               \
+        type, SWALLOW;                                                  \
+        description {                                                   \
+            state, "default" 0.0;                                       \
+            rel1 { to, "header"; relative, 0.0 1.0; offset, 0 -1; }     \
+            rel2 { to, "background"; relative, 1.0 1.0; offset, -1 -1; } \
+        }                                                               \
+    }
+
+
 #define CAPTION_X1 14
 #define CAPTION_X2 200
 #define VALUES_X1 214
@@ -271,6 +308,29 @@ styles {
             }
 
 collections {
+    group {
+        name, "main_edje";
+        parts {
+            BACKGROUND(0,-1)
+            HEADER_RECT
+            part {
+                name, "clock";
+                type, TEXT;
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    text {
+                        font, sans-serif;
+                        size, 28;
+                        align, 1.0 0.5;
+                    }
+                    rel1 { to, "header"; relative, 1.0 0.0; offset, -100 0; }
+                    rel2 { to, "header"; relative, 1.0 1.0; offset, -10 -1; }
+                }
+            }
+            CONTENTS_SWALLOW
+        }
+    }
     group {
         name, "vertical";
         parts {

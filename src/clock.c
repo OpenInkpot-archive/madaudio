@@ -23,8 +23,17 @@ static int update_clock(void* param)
     return 1;
 }
 
+static void
+detach_clock_timer(void *data, Evas *e, Evas_Object *obj, void *event_info)
+{
+    Ecore_Timer* timer = (Ecore_Timer*) data;
+        ecore_timer_del(timer);
+}
+
 void init_clock(Evas_Object *edje)
 {
-    ecore_timer_add(60, &update_clock, edje);
+    Ecore_Timer* timer = ecore_timer_add(60, &update_clock, edje);
+    evas_object_event_callback_add(edje, EVAS_CALLBACK_DEL,
+            &detach_clock_timer, timer);
     update_clock(edje);
 }

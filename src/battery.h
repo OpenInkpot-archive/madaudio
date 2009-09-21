@@ -23,6 +23,6 @@
 
 #include <Evas.h>
 
-void update_battery(Evas_Object* top);
+void init_battery(Evas_Object* top);
 
 #endif
