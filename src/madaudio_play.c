@@ -8,7 +8,7 @@
 static void
 status_callback(void *data, void *cb_data)
 {
-    printf("madaudio: status callback\n");
+//    printf("madaudio: status callback\n");
     madaudio_player_t* player = (madaudio_player_t *) cb_data;
     if(mpd_status_get_state(player->conn->status) != MPD_STATE_PLAY)
     {
@@ -86,14 +86,14 @@ madaudio_polling_stop(madaudio_player_t* player)
     {
         player->poll_mode = false;
         ecore_timer_del(player->poll_timer);
-        printf("Stop polling\n");
+//        printf("Stop polling\n");
     }
 }
 
 void
 madaudio_polling_start(madaudio_player_t* player)
 {
-    printf("Start polling\n");
+//    printf("Start polling\n");
     player->poll_timer = ecore_timer_loop_add(5.0, poll_callback, player);
     player->poll_mode = true;
     poll_callback(player);
@@ -109,7 +109,7 @@ madaudio_connect(madaudio_player_t* player)
 static void
 ready_callback(void *data, void* cb_data)
 {
-    printf("ready callback\n");
+//    printf("ready callback\n");
     madaudio_player_t* player = (madaudio_player_t*) cb_data;
     empd_status_sync(player->conn, status_callback, player);
 }

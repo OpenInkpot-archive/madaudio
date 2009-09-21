@@ -27,11 +27,9 @@ draw_song_tag(Evas_Object* gui, const char *field, const struct mpd_song* song,
                 enum mpd_tag_type type)
 {
     const char* value = mpd_song_get_tag(song, type, 0);
-    printf("draw tag: %s\n", field);
     if(value)
     {
         edje_object_part_text_set(gui, field, value);
-        printf("part_text_set(%s, %s)\n", field, value);
     }
 }
 
@@ -145,7 +143,6 @@ void
 madaudio_draw_captions(madaudio_player_t* player)
 {
     Evas_Object* gui = player->gui;
-    printf("captions\n");
     edje_object_part_text_set(gui, "caption-composer", "Composer");
     edje_object_part_text_set(gui, "caption-artist", "Artist");
     edje_object_part_text_set(gui, "caption-album", "Album");
@@ -156,9 +153,10 @@ madaudio_draw_captions(madaudio_player_t* player)
 void
 madaudio_draw_song(madaudio_player_t* player)
 {
-    printf("madaudio_draw_song()\n");
     madaudio_draw_captions(player);
     blank_gui(player->gui);
+    if(!player->status)
+        return;
     draw_status(player->gui, player->conn->status);
     draw_volume(player->gui, player->conn->status);
     draw_prev_next(player);

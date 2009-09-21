@@ -34,11 +34,11 @@ line_callback(void *data,  void *cb_data)
             if(conn->finish_callback)
             {
                 empd_callback_once(&conn->finish_callback, conn);
-                printf("returned from finish callback\n");
+                //printf("returned from finish callback\n");
             }
             if(empd_pending_events(conn))
             {
-                printf("we still busy\n");
+                //printf("we still busy\n");
                 break;
             }
             conn->busy = false;
@@ -63,7 +63,7 @@ static void
 idle_line_callback(void* data, void* cb_data)
 {
     empd_connection_t* conn = (empd_connection_t *) cb_data;
-    printf("idle signal\n");
+    //printf("idle signal\n");
     empd_callback_set(&conn->line_callback, line_callback, conn);
     if(conn->idle_mode) {
         conn->idle_mode = false;
@@ -120,7 +120,7 @@ io_callback(void *data, Ecore_Fd_Handler *fd_handler)
 
     char *line = mpd_async_recv_line(conn->async);
     if(line) {
-        printf("got: %s\n", line);
+        //printf("got: %s\n", line);
         assert(conn);
         assert(conn->line_callback);
         empd_callback_run(conn->line_callback, line);

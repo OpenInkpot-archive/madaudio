@@ -12,7 +12,7 @@ empd_send(empd_connection_t* conn, const char* cmd)
 {
     assert(conn);
     mpd_async_send_command(conn->async, cmd, NULL);
-    printf("send: %s\n", cmd);
+//    printf("send: %s\n", cmd);
 }
 
 
@@ -26,7 +26,7 @@ empd_send_wait(empd_connection_t* conn,
     empd_callback_set(&conn->next_callback, callback, data);
     assert(conn->async);
     assert(cmd);
-    printf("send: %s\n", cmd);
+    //printf("send: %s\n", cmd);
     va_start(args, cmd);
     success = mpd_async_send_command_v(conn->async, cmd, args);
     va_end(args);
@@ -127,12 +127,12 @@ empd_pending_events(empd_connection_t* conn)
         empd_delayed_command_t* delayed = conn->delayed;
         conn->delayed = delayed->next;
 
-        printf("flush delayed\n");
+        //printf("flush delayed\n");
         if(delayed->arg)
         {
             conn->busy = true; /* We busy again */
             assert(delayed->action == NULL);
-            printf("flush delayed: %s\n", delayed->arg);
+            //printf("flush delayed: %s\n", delayed->arg);
             empd_send_wait_unlocked(conn, delayed->callback, delayed->data,
                                     delayed->arg);
         }
@@ -149,12 +149,12 @@ bool empd_busy(empd_connection_t* conn, empd_callback_func_t callback,
 {
     if(!conn->busy)
     {
-        printf("Not busy, proceeding\n");
+    //    printf("Not busy, proceeding\n");
         conn->busy = true;
         return false;
     }
 
-    printf("queueing delayed\n");
+    //printf("queueing delayed\n");
     empd_delayed_command_t* cmd = calloc(1, sizeof(empd_delayed_command_t));
     cmd->next = conn->delayed;
     conn->delayed = cmd;
