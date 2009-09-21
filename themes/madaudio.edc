@@ -387,7 +387,7 @@ collections {
             PREVNEXT(36, 319, 487, 516)
             BUTTON("cycle", 49, 456, 120, 552, 
                 "repeat-none-horizontal.png", "repeat-all-horizontal.png")
-            VOLUME(1.0, 0.0, -266, 53, -167, 168, 
+            VOLUME(1.0, 0.0, -271, 45, -172, 160, 
                 "volume-0-v.png",
                 "volume-10-v.png",
                 "volume-20-v.png",
