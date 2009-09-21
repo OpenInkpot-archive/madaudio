@@ -1,3 +1,11 @@
+madaudio (0.1-3) asimov; urgency=low
+
+  * Fix issue with existing instance
+  * Fix issue with rotation
+  * Make graphical volume meter
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 22 Sep 2009 00:09:49 +0300
+
 madaudio (0.1-2) asimov; urgency=low
 
   * Depend on mpd
