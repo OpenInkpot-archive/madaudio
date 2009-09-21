@@ -106,12 +106,9 @@ draw_volume(Evas_Object* gui, const struct mpd_status* status)
     char buf[100];
     int volume = mpd_status_get_volume(status);
     if(volume == -1)
-        edje_object_part_text_set(gui, "volume", "");
-    else
-    {
-        snprintf(buf, 100, "Volume: %d%%", volume);
-        edje_object_part_text_set(gui, "volume", buf);
-    }
+        volume = 0;
+    snprintf(buf, 100, "volume-level,%d", volume );
+    edje_object_signal_emit(gui, buf , "");
 }
 
 static void
@@ -120,7 +117,6 @@ draw_button(Evas_Object* gui, const char* button, bool state)
    char buf[100];
    snprintf(buf, 100, "%s,%s", button, state ? "pressed" : "default");
    edje_object_signal_emit(gui, buf , "");
-   printf("signal:%s\n", buf);
 }
 
 static void

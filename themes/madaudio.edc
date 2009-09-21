@@ -5,6 +5,28 @@ images {
     image: "repeat-all-vertical.png" COMP;
     image: "repeat-none-horizontal.png" COMP;
     image: "repeat-all-horizontal.png" COMP;
+    image: "volume-0.png" COMP;
+    image: "volume-0-v.png" COMP;
+    image: "volume-10.png" COMP;
+    image: "volume-10-v.png" COMP;
+    image: "volume-20.png" COMP;
+    image: "volume-20-v.png" COMP;
+    image: "volume-30.png" COMP;
+    image: "volume-30-v.png" COMP;
+    image: "volume-40.png" COMP;
+    image: "volume-40-v.png" COMP;
+    image: "volume-50.png" COMP;
+    image: "volume-50-v.png" COMP;
+    image: "volume-60.png" COMP;
+    image: "volume-60-v.png" COMP;
+    image: "volume-70.png" COMP;
+    image: "volume-70-v.png" COMP;
+    image: "volume-80.png" COMP;
+    image: "volume-80-v.png" COMP;
+    image: "volume-90.png" COMP;
+    image: "volume-90-v.png" COMP;
+    image: "volume-100.png" COMP;
+    image: "volume-100-v.png" COMP;
 }
 
 styles {
@@ -141,8 +163,7 @@ styles {
     VALUE("album", ALBUM_Y1, ALBUM_Y2) \
     VALUE("genre", GENRE_Y1, GENRE_Y2) \
     VALUE("year", YEAR_Y1, YEAR_Y2) \
-    STYLED("total_time", "times", "clipper", VALUES_X1, 200, VALUES_X2, 230) \
-    STYLED("volume", "values", "clipper", CAPTION_X1, 200, CAPTION_X2, 230)
+    STYLED("total_time", "times", "clipper", VALUES_X1, 200, VALUES_X2, 230) 
 
 #define BUTTON(n, x1, y1, x2, y2, image1, image2) \
     part { \
@@ -176,6 +197,79 @@ styles {
                 }                                           \
             }
 
+
+#define VOLUME_STATE(name, file)                              \
+        description {                                   \
+            state, name 0.0;                                \
+            inherit, "default" 0.0;                     \
+            image { normal, file; }   \
+        }
+
+#define VOLUME(r1, r2, x1, y1, x2, y2,                                        \
+        f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10)                          \
+        part {                                                                \
+            name, "volume";                                                   \
+            type, IMAGE;                                                      \
+            mouse_events, 0;                                                  \
+            description  {                                                    \
+                state, "default" 0.0;                                         \
+                rel1 { to, "background"; relative, r1 r2; offset, x1  y1; }   \
+                rel2 { to, "background"; relative, r1 r2; offset, x2  y2; }   \
+                image {                                                       \
+                    normal, f0;                                               \
+                }                                                             \
+            }                                                                 \
+            VOLUME_STATE("volume-0", f0)                                      \
+            VOLUME_STATE("volume-10", f1)                                     \
+            VOLUME_STATE("volume-20", f2)                                     \
+            VOLUME_STATE("volume-30", f3)                                     \
+            VOLUME_STATE("volume-40", f4)                                     \
+            VOLUME_STATE("volume-50", f5)                                     \
+            VOLUME_STATE("volume-60", f6)                                     \
+            VOLUME_STATE("volume-70", f7)                                     \
+            VOLUME_STATE("volume-80", f8)                                     \
+            VOLUME_STATE("volume-90", f9)                                     \
+            VOLUME_STATE("volume-100", f10)                                   \
+        }
+            
+#define VOLUME_PROG() \
+               program {                                                \
+                name, "volume-level";                                   \
+                signal, "volume-level,*";                               \
+                script {                                                \
+                    new level_arg[100];                                 \
+                    getsarg(0, level_arg, 100);                         \
+                    new level_s[100];                                   \
+                    strcut(level_s, level_arg, 13, 100);                \
+                    new level = atoi(level_s);                          \
+                                                                        \
+                    new z[100];                                         \
+                    snprintf(z, 100, "%d", level);                      \
+                                                                        \
+                                                                        \
+                    if(level > 90)                                      \
+                        set_state(PART:"volume", "volume-100", 0.0);    \
+                    else if(level > 80)                                 \
+                        set_state(PART:"volume", "volume-90", 0.0);     \
+                    else if(level > 70)                                 \
+                        set_state(PART:"volume", "volume-80", 0.0);     \
+                    else if(level > 60)                                 \
+                        set_state(PART:"volume", "volume-60", 0.0);     \
+                    else if(level > 50)                                 \
+                        set_state(PART:"volume", "volume-50", 0.0);     \
+                    else if(level > 40)                                 \
+                        set_state(PART:"volume", "volume-40", 0.0);     \
+                    else if(level > 30)                                 \
+                        set_state(PART:"volume", "volume-30", 0.0);     \
+                    else if(level > 20)                                 \
+                        set_state(PART:"volume", "volume-20", 0.0);     \
+                    else if(level > 10)                                 \
+                        set_state(PART:"volume", "volume-10", 0.0);     \
+                    else                                                \
+                        set_state(PART:"volume", "volume-0", 0.0);      \
+                }                                                       \
+            }
+
 collections {
     group {
         name, "vertical";
@@ -195,9 +289,23 @@ collections {
             PREVNEXT(110, 326, 595, 423) 
             BUTTON("cycle", 0, 15, 96, 72, 
                 "repeat-none-vertical.png", "repeat-all-vertical.png")
+            VOLUME(1.0, 1.0, -156, -240, -51, -151,
+                "volume-0.png",
+                "volume-10.png",
+                "volume-20.png",
+                "volume-30.png",
+                "volume-40.png",
+                "volume-50.png",
+                "volume-60.png",
+                "volume-70.png",
+                "volume-80.png",
+                "volume-90.png",
+                "volume-100.png"
+                )
         }
         programs {
             BUTTON_PROG("cycle", 6, "cycle,*")
+            VOLUME_PROG()
         }
     }
 
@@ -219,9 +327,23 @@ collections {
             PREVNEXT(36, 319, 487, 516)
             BUTTON("cycle", 49, 456, 120, 552, 
                 "repeat-none-horizontal.png", "repeat-all-horizontal.png")
+            VOLUME(1.0, 0.0, -266, 53, -167, 168, 
+                "volume-0-v.png",
+                "volume-10-v.png",
+                "volume-20-v.png",
+                "volume-30-v.png",
+                "volume-40-v.png",
+                "volume-50-v.png",
+                "volume-60-v.png",
+                "volume-70-v.png",
+                "volume-80-v.png",
+                "volume-90-v.png",
+                "volume-100-v.png"
+                )
         }
         programs {
             BUTTON_PROG("cycle", 6, "cycle,*")
+            VOLUME_PROG()
         }
     } 
 }
