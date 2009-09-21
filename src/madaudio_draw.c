@@ -155,7 +155,7 @@ madaudio_draw_song(madaudio_player_t* player)
 {
     madaudio_draw_captions(player);
     blank_gui(player->gui);
-    if(!player->status)
+    if(!player->conn || !player->conn->status)
         return;
     draw_status(player->gui, player->conn->status);
     draw_volume(player->gui, player->conn->status);

@@ -244,7 +244,7 @@ static void player_edje(Ecore_Evas* main_win)
 static void main_win_resize_handler(Ecore_Evas* main_win)
 {
     player_edje(main_win);
-    /* FIXME: force update here */
+    madaudio_draw_song(player);
 }
 
 
