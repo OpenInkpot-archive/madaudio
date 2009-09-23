@@ -167,9 +167,9 @@ styles {
 
 #define PREVNEXT(x1, y1, x2, y2) \
     CLIPPER("prev-next-clipper", x1, y1, x2, y2)  \
-    STYLED("prev-song", "shaded", "prev-next-clipper", 10, 5, 350, 30) \
-    STYLED("this-song", "values", "prev-next-clipper", 10, 36, 350, 64) \
-    STYLED("next-song", "shaded", "prev-next-clipper", 10, 68, 350, 103)
+    STYLED("prev-song", "shaded", "prev-next-clipper", 10, 5, 450, 30) \
+    STYLED("this-song", "values", "prev-next-clipper", 10, 36, 450, 64) \
+    STYLED("next-song", "shaded", "prev-next-clipper", 10, 68, 450, 103)
 
 
 #define BLOCK(x1, y1, x2, y2) \
@@ -333,7 +333,13 @@ collections {
             }
             SONG(110, 33, 595, 66) 
             BLOCK(110, 76, 595, 306)
-            PREVNEXT(110, 326, 595, 423) 
+
+            /* Prev/Next Box */
+            CLIPPER("prev-next-clipper", 130, 316, 595, 423)
+            STYLED("prev-song", "shaded", "prev-next-clipper", 15, 5, 450, 35)
+            STYLED("this-song", "values", "prev-next-clipper", 15, 39, 450, 66)
+            STYLED("next-song", "shaded", "prev-next-clipper", 15, 67, 450, 103)
+
             BUTTON("cycle", 0, 3, 102, 77, 
                 "repeat-none-vertical.png", "repeat-all-vertical.png")
             VOLUME(1.0, 1.0, -161, -250, -46, -151,
@@ -371,7 +377,13 @@ collections {
             }
             SONG(5, 32, 487, 64)
             BLOCK(5, 80, 487, 310)
-            PREVNEXT(36, 319, 487, 516)
+
+            /* Prev/Next Box */
+            CLIPPER("prev-next-clipper", 36, 319, 487, 516)
+            STYLED("prev-song", "shaded", "prev-next-clipper", 10, 5, 450, 30)
+            STYLED("this-song", "values", "prev-next-clipper", 10, 36, 450, 64)
+            STYLED("next-song", "shaded", "prev-next-clipper", 10, 68, 450, 103)
+
             BUTTON("cycle", 51, 451, 125, 547, 
                 "repeat-none-horizontal.png", "repeat-all-horizontal.png")
             VOLUME(1.0, 0.0, -271, 45, -172, 160, 
