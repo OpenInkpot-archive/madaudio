@@ -102,7 +102,7 @@ madaudio_polling_start(madaudio_player_t* player)
 void
 madaudio_connect(madaudio_player_t* player)
 {
-    empd_connection_new("/tmp/mpd.socket",
+    empd_connection_new("/tmp/madaudio-mpd.socket",
        connect_callback, connect_errback, player);
 }
 
