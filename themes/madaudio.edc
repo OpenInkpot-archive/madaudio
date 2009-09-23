@@ -137,7 +137,7 @@ styles {
       } \
     }
 
-#define STYLED(n, s, c, x1, y1, x2, y2) \
+#define STYLED_REL(n, s, c, x1, y1, x2, y2, rx, ry) \
     part { \
         name, n; \
         type, TEXTBLOCK; \
@@ -151,29 +151,13 @@ styles {
                 max, 0 1; \
             } \
             align, 0.5 0.5; \
-            rel1 { relative, 0.0 0.0; to, c; offset, x1 y1; } \
-            rel2 { relative, 0.0 0.0; to, c; offset, x2 y2; } \
+            rel1 { relative, rx ry; to, c; offset, x1 y1; } \
+            rel2 { relative, rx ry; to, c; offset, x2 y2; } \
         } \
     }
 
-#define TIME(n, s, c, x1, y1, x2, y2) \
-    part { \
-        name, n; \
-        type, TEXTBLOCK; \
-        mouse_events, 0; \
-        clip_to, c; \
-        description { \
-            state, "default" 0.0; \
-            color, 0 0 0 255; \
-            text { \
-                style, s; \
-                max, 0 1; \
-            } \
-            align, 0.5 0.5; \
-            rel1 { relative, 0.0 0.0; to, c; offset, x1 y1; } \
-            rel2 { relative, 0.0 0.0; to, c; offset, x2 y2; } \
-        } \
-    }
+#define STYLED(n, s, c, x1, y1, x2, y2) \
+    STYLED_REL(n, s, c, x1, y1, x2, y2, 0.0, 0.0)
 
 #define CAPTION(n, y1, y2) \
     STYLED(n, "caption", "clipper", CAPTION_X1, y1, CAPTION_X2, y2)
@@ -200,7 +184,8 @@ styles {
     VALUE("album", ALBUM_Y1, ALBUM_Y2) \
     VALUE("genre", GENRE_Y1, GENRE_Y2) \
     VALUE("year", YEAR_Y1, YEAR_Y2) \
-    STYLED("total_time", "times", "clipper", VALUES_X1, 200, VALUES_X2, 230) 
+    STYLED_REL("total_time", "times", "clipper", \
+        VALUES_X1, -40, VALUES_X2, -15, 0.0, 1.0)
 
 #define BUTTON(n, x1, y1, x2, y2, image1, image2) \
     part { \
