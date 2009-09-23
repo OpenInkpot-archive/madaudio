@@ -190,6 +190,8 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     madaudio_player_t* player = (madaudio_player_t*)param;
     Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
     const char* action = keys_lookup_by_event(player->keys, "player", ev);
+    if(!action)
+        return;
     if(!strcmp(action, "Quit"))
         ecore_main_loop_quit();
 
