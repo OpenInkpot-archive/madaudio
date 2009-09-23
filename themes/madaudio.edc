@@ -291,16 +291,18 @@ styles {
                     else if(level > 70)                                 \
                         set_state(PART:"volume", "volume-80", 0.0);     \
                     else if(level > 60)                                 \
-                        set_state(PART:"volume", "volume-60", 0.0);     \
+                        set_state(PART:"volume", "volume-70", 0.0);     \
                     else if(level > 50)                                 \
-                        set_state(PART:"volume", "volume-50", 0.0);     \
+                        set_state(PART:"volume", "volume-60", 0.0);     \
                     else if(level > 40)                                 \
-                        set_state(PART:"volume", "volume-40", 0.0);     \
+                        set_state(PART:"volume", "volume-50", 0.0);     \
                     else if(level > 30)                                 \
-                        set_state(PART:"volume", "volume-30", 0.0);     \
+                        set_state(PART:"volume", "volume-40", 0.0);     \
                     else if(level > 20)                                 \
-                        set_state(PART:"volume", "volume-20", 0.0);     \
+                        set_state(PART:"volume", "volume-30", 0.0);     \
                     else if(level > 10)                                 \
+                        set_state(PART:"volume", "volume-20", 0.0);     \
+                    else if(level >  0)                                 \
                         set_state(PART:"volume", "volume-10", 0.0);     \
                     else                                                \
                         set_state(PART:"volume", "volume-0", 0.0);      \
