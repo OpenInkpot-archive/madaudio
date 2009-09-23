@@ -349,7 +349,7 @@ collections {
             SONG(110, 33, 595, 66) 
             BLOCK(110, 76, 595, 306)
             PREVNEXT(110, 326, 595, 423) 
-            BUTTON("cycle", 0, 15, 102, 89, 
+            BUTTON("cycle", 0, 3, 102, 77, 
                 "repeat-none-vertical.png", "repeat-all-vertical.png")
             VOLUME(1.0, 1.0, -161, -250, -46, -151,
                 "volume-0.png",
