@@ -197,7 +197,10 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
 
     /* all commands except Quit require conn and conn->status */
     if(!player->conn || !player->conn->status)
+    {
+        printf("Not connected\n");
         return;
+    }
     if(!strcmp(action, "PlayPause"))
         madaudio_play_pause(player);
     if(!strcmp(action, "Previous"))
