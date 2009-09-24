@@ -61,7 +61,6 @@ _entity_pairs_first(void *data, void *cb_data)
     }
     conn->entity = entity;
     empd_callback_set(&conn->pair_callback, _entity_pairs, conn);
-    empd_callback_set(&conn->finish_callback, _entity_finish, conn);
 }
 
 void
@@ -71,6 +70,7 @@ empd_playlistinfo(empd_connection_t* conn,
     EMPD_BUSY(conn, callback, data, empd_playlistinfo);
     empd_callback_set(&conn->pair_callback, _entity_pairs_first, conn);
     empd_callback_set(&conn->playlist_callback, callback, data);
+    empd_callback_set(&conn->finish_callback, _entity_finish, conn);
     empd_send(conn, "playlistinfo");
 }
 
