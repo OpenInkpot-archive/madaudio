@@ -1,0 +1,36 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: madaudio 0.1\n"
+"Report-Msgid-Bugs-To: avn@daemon.hole.ru\n"
+"POT-Creation-Date: 2009-09-29 22:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/madaudio_draw.c:149
+msgid "Composer"
+msgstr ""
+
+#: src/madaudio_draw.c:150
+msgid "Artist"
+msgstr ""
+
+#: src/madaudio_draw.c:151
+msgid "Album"
+msgstr ""
+
+#: src/madaudio_draw.c:152
+msgid "Genre"
+msgstr ""
+
+#: src/madaudio_draw.c:153
+msgid "Year"
+msgstr ""

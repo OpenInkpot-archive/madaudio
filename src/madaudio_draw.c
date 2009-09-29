@@ -1,3 +1,4 @@
+#include <libintl.h>
 #include <stdio.h>
 #include <string.h>
 #include <Evas.h>
@@ -145,11 +146,11 @@ void
 madaudio_draw_captions(madaudio_player_t* player)
 {
     Evas_Object* gui = player->gui;
-    edje_object_part_text_set(gui, "caption-composer", "Composer");
-    edje_object_part_text_set(gui, "caption-artist", "Artist");
-    edje_object_part_text_set(gui, "caption-album", "Album");
-    edje_object_part_text_set(gui, "caption-genre", "Genre");
-    edje_object_part_text_set(gui, "caption-year", "Year");
+    edje_object_part_text_set(gui, "caption-composer", gettext("Composer"));
+    edje_object_part_text_set(gui, "caption-artist", gettext("Artist"));
+    edje_object_part_text_set(gui, "caption-album", gettext("Album"));
+    edje_object_part_text_set(gui, "caption-genre", gettext("Genre"));
+    edje_object_part_text_set(gui, "caption-year", gettext("Year"));
 }
 
 void
