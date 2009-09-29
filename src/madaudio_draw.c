@@ -136,7 +136,9 @@ draw_status(Evas_Object* gui, const struct mpd_status* status)
     {
         edje_object_part_text_set(gui, "total_time", format_time(time));
     }
+    draw_button(gui, "playpause", (state == MPD_STATE_PLAY));
     draw_button(gui, "cycle", mpd_status_get_repeat(status));
+    draw_button(gui, "full", mpd_status_get_single(status));
 }
 
 void

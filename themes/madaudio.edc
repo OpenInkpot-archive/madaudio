@@ -1,10 +1,16 @@
 images {
     image: "madaudio-vertical.png" COMP;
     image: "madaudio-horizontal.png" COMP;
+    image: "madaudio-play.png" COMP;
+    image: "madaudio-pause.png" COMP;
     image: "repeat-none-vertical.png" COMP;
     image: "repeat-all-vertical.png" COMP;
     image: "repeat-none-horizontal.png" COMP;
     image: "repeat-all-horizontal.png" COMP;
+    image: "play-one-horizontal.png" COMP;
+    image: "play-one-vertical.png" COMP;
+    image: "play-full-horizontal.png" COMP;
+    image: "play-full-vertical.png" COMP;
     image: "volume-0.png" COMP;
     image: "volume-0-v.png" COMP;
     image: "volume-10.png" COMP;
@@ -45,6 +51,10 @@ styles {
     style {
         name, "times";
         base, "font=sans font_size=24 color=#000 align=right"; 
+    }
+    style {
+        name, "playlist";
+        base, "font=sans font_size=24 color=#000 align=left"; 
     }
     style {
         name, "shaded";
@@ -335,13 +345,17 @@ collections {
             BLOCK(110, 76, 595, 306)
 
             /* Prev/Next Box */
-            CLIPPER("prev-next-clipper", 130, 316, 595, 423)
+            CLIPPER("prev-next-clipper", 130, 317, 595, 424)
             STYLED("prev-song", "shaded", "prev-next-clipper", 15, 5, 450, 35)
-            STYLED("this-song", "values", "prev-next-clipper", 15, 39, 450, 66)
+            STYLED("this-song", "playlist", "prev-next-clipper", 15, 39, 450, 66)
             STYLED("next-song", "shaded", "prev-next-clipper", 15, 67, 450, 103)
 
-            BUTTON("cycle", 0, 3, 102, 77, 
+            BUTTON("cycle", 0, 2, 102, 76, 
                 "repeat-none-vertical.png", "repeat-all-vertical.png")
+            BUTTON("full", 0, 80, 102, 154,
+                "play-one-vertical.png", "play-full-vertical.png")
+            BUTTON("playpause", 123, 363, 134, 383,
+                "madaudio-pause.png", "madaudio-play.png")
             VOLUME(1.0, 1.0, -161, -250, -46, -151,
                 "volume-0.png",
                 "volume-10.png",
@@ -358,6 +372,8 @@ collections {
         }
         programs {
             BUTTON_PROG("cycle", 6, "cycle,*")
+            BUTTON_PROG("full", 5, "full,*")
+            BUTTON_PROG("playpause", 10, "playpause,*")
             VOLUME_PROG()
         }
     }
@@ -381,11 +397,15 @@ collections {
             /* Prev/Next Box */
             CLIPPER("prev-next-clipper", 36, 319, 487, 516)
             STYLED("prev-song", "shaded", "prev-next-clipper", 10, 5, 450, 30)
-            STYLED("this-song", "values", "prev-next-clipper", 10, 36, 450, 64)
+            STYLED("this-song", "playlist", "prev-next-clipper", 10, 36, 450, 64)
             STYLED("next-song", "shaded", "prev-next-clipper", 10, 68, 450, 103)
 
-            BUTTON("cycle", 51, 451, 125, 547, 
+            BUTTON("cycle", 50, 451, 124, 551, 
                 "repeat-none-horizontal.png", "repeat-all-horizontal.png")
+            BUTTON("full", 128, 451, 202, 551,
+                "play-one-horizontal.png", "play-full-horizontal.png")
+            BUTTON("playpause", 18, 364, 29, 384,
+                "madaudio-pause.png", "madaudio-play.png")
             VOLUME(1.0, 0.0, -271, 45, -172, 160, 
                 "volume-0-v.png",
                 "volume-10-v.png",
@@ -402,6 +422,8 @@ collections {
         }
         programs {
             BUTTON_PROG("cycle", 6, "cycle,*")
+            BUTTON_PROG("full", 5, "full,*")
+            BUTTON_PROG("playpause", 10, "playpause,*")
             VOLUME_PROG()
         }
     } 

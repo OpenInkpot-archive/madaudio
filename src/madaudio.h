@@ -25,10 +25,13 @@ struct madaudio_player_t {
 void madaudio_play_file(madaudio_player_t*, const char*);
 bool madaudio_command(madaudio_player_t*, const char*);
 
+void madaudio_play(madaudio_player_t* player);
+void madaudio_pause(madaudio_player_t* player);
 void madaudio_play_pause(madaudio_player_t*);
 
 void madaudio_draw_captions(madaudio_player_t*);
 void madaudio_draw_song(madaudio_player_t*);
+
 
 void
 madaudio_polling_start(madaudio_player_t* player);
