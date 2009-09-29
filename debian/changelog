@@ -1,3 +1,10 @@
+madaudio (0.1-6) asimov; urgency=low
+
+  * Add translation
+  * Update gui graphics
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 30 Sep 2009 01:04:45 +0300
+
 madaudio (0.1-5) asimov; urgency=low
 
   * Fix volume meter rendering
