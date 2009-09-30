@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: madaudio 0.1\n"
+"Report-Msgid-Bugs-To: avn@daemon.hole.ru\n"
+"POT-Creation-Date: 2009-09-29 22:02+0000\n"
+"PO-Revision-Date: 2009-09-30 10:23+0200\n"
+"Last-Translator: Hanno Zulla <sockpuppet@hanno.de>\n"
+"Language-Team: German <openinkpot-l10n@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/madaudio_draw.c:149
+msgid "Composer"
+msgstr "Komponist"
+
+#: src/madaudio_draw.c:150
+msgid "Artist"
+msgstr "Interpret"
+
+#: src/madaudio_draw.c:151
+msgid "Album"
+msgstr "Album"
+
+#: src/madaudio_draw.c:152
+msgid "Genre"
+msgstr "Genre"
+
+#: src/madaudio_draw.c:153
+msgid "Year"
+msgstr "Jahr"
