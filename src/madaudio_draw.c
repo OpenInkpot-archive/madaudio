@@ -1,6 +1,7 @@
 #include <libintl.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <Evas.h>
 #include <Edje.h>
 #include <Ecore_File.h>
@@ -132,10 +133,14 @@ draw_status(Evas_Object* gui, const struct mpd_status* status)
         edje_object_part_text_set(gui, "total_time", timestr);
         free(total);
         free(elapsed);
+        if(elapsed_time)
+            elapsed_time = trunc(100 * elapsed_time/ time);
+        madaudio_update_meter(gui, elapsed_time);
     }
     else
     {
         edje_object_part_text_set(gui, "total_time", format_time(time));
+        madaudio_update_meter(gui, 0);
     }
     draw_button(gui, "playpause", (state == MPD_STATE_PLAY));
     draw_button(gui, "cycle", mpd_status_get_repeat(status));

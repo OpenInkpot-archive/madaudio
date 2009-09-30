@@ -99,6 +99,16 @@ styles {
         }                                                               \
     }
 
+#define METER_SWALLOW(c, x1, y1, x2, y2)                                   \
+    part {                                                              \
+        name, "meter";                                                  \
+        type, SWALLOW;                                                  \
+        description {                                                   \
+            state, "default" 0.0;                                       \
+            rel1 { to, c; relative, 0.0 1.0; offset, x1 y1; }     \
+            rel2 { to, c; relative, 0.0 1.0; offset, x2 y2; } \
+        }                                                               \
+    }
 
 #define CAPTION_X1 14
 #define CAPTION_X2 200
@@ -195,7 +205,9 @@ styles {
     VALUE("genre", GENRE_Y1, GENRE_Y2) \
     VALUE("year", YEAR_Y1, YEAR_Y2) \
     STYLED_REL("total_time", "times", "clipper", \
-        VALUES_X1, -40, VALUES_X2, -15, 0.0, 1.0)
+        300, -40, VALUES_X2, -15, 0.0, 1.0) \
+    METER_SWALLOW("clipper", 15, -25, 290, -15)
+
 
 #define BUTTON(n, x1, y1, x2, y2, image1, image2) \
     part { \

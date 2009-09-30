@@ -202,6 +202,7 @@ player_switch_common(Evas_Object* contents, Evas_Object* main_edje)
     evas_object_event_callback_add(contents, EVAS_CALLBACK_KEY_UP,
                                     &madaudio_key_handler, player);
 
+    madaudio_init_meter(contents);
     evas_object_show(contents);
     evas_object_show(main_edje);
     init_clock(main_edje);
