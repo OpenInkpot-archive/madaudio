@@ -9,7 +9,7 @@ madaudio_command(madaudio_player_t* player, const char* cmd)
     if(!strcmp(cmd, "raise"))
         return true;
     if(!strcmp(cmd, "play"))
-        madaudio_play(player);
+        madaudio_play(player, -1);
     else if (!strcmp(cmd, "pause"))
         madaudio_pause(player);
     else if (!strcmp(cmd, "playpause"))

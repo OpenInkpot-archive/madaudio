@@ -97,7 +97,8 @@ static int _client_del(void* param, int ev_type, void* ev)
         bool raise = false;
 
         if(msg->msg[0] == '/') {
-            madaudio_play_file(player, msg->msg);
+            player->filename = strdup(msg->msg);
+            madaudio_play_file(player);
             raise = true;
         } else {
             raise = madaudio_command(player, msg->msg);
@@ -316,6 +317,8 @@ int main(int argc, char** argv)
     madaudio_draw_captions(player);
     if(argc == 2)
         player->filename = strdup(argv[1]);
+    else
+        player->filename = NULL;
     madaudio_connect(player);
     ecore_main_loop_begin();
 

@@ -41,7 +41,7 @@ get_song_title(const struct mpd_song* song)
     const char* title = mpd_song_get_tag(song, MPD_TAG_TITLE, 0);
     if(!title || !strlen(title))
     {
-        title = mpd_song_get_tag(song, MPD_TAG_FILENAME, 0);
+        title = mpd_song_get_uri(song);
         if(title)
             return ecore_file_file_get(title);
     }
@@ -59,11 +59,11 @@ draw_song_title(Evas_Object* gui, const struct mpd_song* song)
 static const char*
 get_title_by_num(madaudio_player_t* player, int offset)
 {
-    int pos = mpd_status_get_song(player->conn->status);
+    int pos = mpd_status_get_song_pos(player->status);
     pos += offset;
-    if(pos < 0 || pos > mpd_status_get_playlist_length(player->conn->status))
+    if(pos < 0 || pos > mpd_status_get_queue_length(player->status))
         return "";
-    struct mpd_song* song = eina_list_nth(player->conn->playlist, pos);
+    struct mpd_song* song = eina_list_nth(player->playlist, pos);
     if(song)
         return get_song_title(song);
     return "";
@@ -158,23 +158,42 @@ madaudio_draw_captions(madaudio_player_t* player)
     edje_object_part_text_set(gui, "caption-year", gettext("Year"));
 }
 
+static void
+madaudio_draw_statusbar(madaudio_player_t* player)
+{
+    if(!player->status)
+    {
+        printf("No status\n");
+        return;
+    }
+    const char *error = mpd_status_get_error(player->status);
+    if(error)
+    {
+        Evas* evas = evas_object_evas_get(player->gui);
+        Evas_Object* edje = evas_object_name_find(evas, "main_edje");
+        edje_object_part_text_set(edje, "footer", error);
+        printf("mpd error: %s\n", error);
+    }
+}
+
 void
 madaudio_draw_song(madaudio_player_t* player)
 {
     madaudio_draw_captions(player);
     blank_gui(player->gui);
-    if(!player->conn || !player->conn->status)
+    if(!player->conn || !player->status)
         return;
-    draw_status(player->gui, player->conn->status);
-    draw_volume(player->gui, player->conn->status);
+    draw_status(player->gui, player->status);
+    draw_volume(player->gui, player->status);
     draw_prev_next(player);
-    if(player->conn->playlist)
+    if(player->playlist)
     {
-        int song_id = mpd_status_get_song(player->conn->status);
-        struct mpd_song* song = eina_list_nth(player->conn->playlist, song_id);
+        int song_id = mpd_status_get_song_pos(player->status);
+        struct mpd_song* song = eina_list_nth(player->playlist, song_id);
         if(song)
             draw_song(player->gui, song);
         else
             printf("No song\n");
     }
+    madaudio_draw_statusbar(player);
 }
