@@ -63,6 +63,8 @@ madaudio_polling_stop(madaudio_player_t* player)
 void
 madaudio_polling_start(madaudio_player_t* player)
 {
+    if(player->poll_mode)
+        return;
     printf("Start polling\n");
     player->poll_timer = ecore_timer_loop_add(5.0, poll_callback, player);
     player->poll_mode = true;
@@ -153,6 +155,7 @@ madaudio_pause(madaudio_player_t* player)
 void
 madaudio_play(madaudio_player_t* player, int track)
 {
+    madaudio_polling_start(player);
     mpd_run_play_pos(player->conn, track);
     MADAUDIO_CHECK_ERROR(player);
 }
@@ -211,12 +214,17 @@ madaudio_seek(madaudio_player_t* player, int offset)
     int total = mpd_status_get_total_time(player->status);
     current += offset;
     int pos = mpd_status_get_song_pos(player->status);
-    if(current >= 0 && current <= total - offset)
+    if(current >= 0 && current <= total)
     {
         mpd_run_seek_pos(player->conn,  pos, current);
         MADAUDIO_CHECK_ERROR(player);
         madaudio_status(player);
     }
+    else
+        if( current < 0)
+            madaudio_prev(player);
+        else
+            madaudio_next(player);
 }
 
 static void
