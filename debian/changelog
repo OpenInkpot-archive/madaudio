@@ -1,3 +1,9 @@
+madaudio (0.2-3) asimov; urgency=low
+
+  * Added translations: German, Ukrainian, Italian.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Wed, 07 Oct 2009 15:52:01 +0700
+
 madaudio (0.2-2) asimov; urgency=low
 
   * Fix issue when polling not start when we launched w/o files
