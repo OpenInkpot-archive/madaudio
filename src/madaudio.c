@@ -106,6 +106,7 @@ static int _client_del(void* param, int ev_type, void* ev)
         if(raise){
             ecore_evas_show(win);
             ecore_evas_raise(win);
+            madaudio_polling_start(player);
         };
     }
 
@@ -320,6 +321,7 @@ int main(int argc, char** argv)
     else
         player->filename = NULL;
     madaudio_connect(player);
+    madaudio_polling_start(player);
     ecore_main_loop_begin();
 
     madaudio_free_state(player);
