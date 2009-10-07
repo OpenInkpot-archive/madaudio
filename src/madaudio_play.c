@@ -1,20 +1,35 @@
+#define _GNU_SOURCE 1
 #include <assert.h>
+#include <err.h>
 #include <string.h>
-#include <mpd/status.h>
-#include "empd.h"
+#include <mpd/client.h>
+#include <mpd/error.h>
 #include "madaudio.h"
 
+#define MADAUDIO_SOCKET "/tmp/madaudio-mpd.socket"
 
-static void
-status_callback(void *data, void *cb_data)
+#define MADAUDIO_CHECK_ERROR(conn) \
+    if(madaudio_check_error(conn)) \
+        return;
+
+#define INVERT(x)  ((x) ? false : true)
+
+bool
+madaudio_check_error(madaudio_player_t* player)
 {
-//    printf("madaudio: status callback\n");
-    madaudio_player_t* player = (madaudio_player_t *) cb_data;
-    if(mpd_status_get_state(player->conn->status) != MPD_STATE_PLAY)
-    {
-        madaudio_polling_stop(player);
-    }
-    madaudio_draw_song(player);
+//    mpd_response_finish(player->conn);
+    if (mpd_connection_get_error(player->conn)==MPD_ERROR_SUCCESS)
+        return false;
+
+    printf("Error code: %d\n", mpd_connection_get_error(player->conn));
+    if(mpd_connection_get_error(player->conn) == MPD_ERROR_SERVER)
+        printf("mpd: ack = %d\n",
+            mpd_connection_get_server_error(player->conn));
+
+    printf("mpd error: %s\n", mpd_connection_get_error_message(player->conn));
+    if(!mpd_connection_clear_error(player->conn))
+        err(1, "Impossible to recover\n");
+    return true;
 }
 
 static int
@@ -25,57 +40,12 @@ reconnect_callback(void* data)
     return 0;
 }
 
-static void
-connect_errback(const char* sockpath, void* data)
-{
-    madaudio_player_t* player = (madaudio_player_t *) data;
-    if(--player->retry)
-    {
-        if(!player->mpd_run)
-        {
-            player->mpd_run=true;
-            printf("spawing mpd\n");
-            Ecore_Exe* exe;
-            exe = ecore_exe_run("/usr/bin/mpd /etc/madaudio/mpd.conf",
-                NULL);
-            if(exe)
-                ecore_exe_free(exe);
-        }
-        ecore_timer_add(1.0, reconnect_callback, data);
-    }
-    else
-    {
-        printf("Can't wake up mpd, exitting\n");
-        ecore_main_loop_quit();
-    }
-}
-
-static void
-connect_callback(void *data, void* cb_data)
-{
-    printf("connected\n");
-    madaudio_player_t* player = (madaudio_player_t*) cb_data;
-    empd_connection_t* conn = (empd_connection_t*) data;
-    assert(player);
-    player->conn = conn;
-    if(player->filename)
-    {
-        /* hack: madaudio_play_file try to free madaudio->player */
-        char* filename = player->filename;
-        player->filename = NULL;
-        madaudio_play_file(player, filename);
-        free(filename);
-    }
-    else
-        empd_status_sync(player->conn, status_callback, player);
-}
-
 
 static int
 poll_callback(void* data)
 {
     madaudio_player_t* player = (madaudio_player_t *) data;
-    empd_status_sync(player->conn, status_callback, player);
+    madaudio_status(player);
     return 1;
 }
 
@@ -86,14 +56,16 @@ madaudio_polling_stop(madaudio_player_t* player)
     {
         player->poll_mode = false;
         ecore_timer_del(player->poll_timer);
-//        printf("Stop polling\n");
+        printf("Stop polling\n");
     }
 }
 
 void
 madaudio_polling_start(madaudio_player_t* player)
 {
-//    printf("Start polling\n");
+    if(player->poll_mode)
+        return;
+    printf("Start polling\n");
     player->poll_timer = ecore_timer_loop_add(5.0, poll_callback, player);
     player->poll_mode = true;
     poll_callback(player);
@@ -102,86 +74,169 @@ madaudio_polling_start(madaudio_player_t* player)
 void
 madaudio_connect(madaudio_player_t* player)
 {
-    empd_connection_new("/tmp/madaudio-mpd.socket",
-       connect_callback, connect_errback, player);
+    struct mpd_connection *conn;
+    conn = mpd_connection_new(MADAUDIO_SOCKET, 0, 0);
+    if(conn && mpd_connection_get_error(conn)==MPD_ERROR_SUCCESS)
+    {
+        player->conn = conn;
+        if(madaudio_check_error(player))
+            err(1, "mpd not ready or has wrong version\n");
+        madaudio_status(player);
+        if(player->filename)
+            madaudio_play_file(player);
+        return;
+    }
+
+    if(--player->retry)
+    {
+        if(!player->mpd_run)
+        {
+            player->mpd_run=true;
+            printf("spawing mpd\n");
+            Ecore_Exe* exe;
+            exe = ecore_exe_run("/usr/bin/mpd /etc/madaudio/mpd.conf", NULL);
+            if(exe)
+                ecore_exe_free(exe);
+        }
+        ecore_timer_add(1.0, reconnect_callback, player);
+    }
+    else
+    {
+        printf("Can't wake up mpd, exitting\n");
+        ecore_main_loop_quit();
+    }
 }
 
-static void
-ready_callback(void *data, void* cb_data)
+void
+madaudio_status(madaudio_player_t* player)
 {
-//    printf("ready callback\n");
-    madaudio_player_t* player = (madaudio_player_t*) cb_data;
-    empd_status_sync(player->conn, status_callback, player);
+    struct mpd_status *status = mpd_run_status(player->conn);
+    if(!status)
+        MADAUDIO_CHECK_ERROR(player);
+    if(player->status)
+        mpd_status_free(player->status);
+    player->status = status;
+    if(player->playlist_stamp != mpd_status_get_queue_version(status))
+    {
+        /* kill old playlist */
+        struct mpd_song * old;
+        EINA_LIST_FREE(player->playlist, old)
+            mpd_song_free(old);
+        player->playlist = NULL;
+
+        mpd_send_command(player->conn, "playlistinfo", NULL);
+        struct mpd_entity* entity;
+        while((entity = mpd_recv_entity(player->conn)) != NULL)
+        {
+            if(mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG)
+            {
+                printf("protocol: Out of sync: %d\n", mpd_entity_get_type(entity));
+                mpd_entity_free(entity);
+                return;
+            }
+            const struct mpd_song * song;
+            song = mpd_song_dup(mpd_entity_get_song(entity));
+            player->playlist = eina_list_append(player->playlist, song);
+            mpd_entity_free(entity);
+        }
+        mpd_response_finish(player->conn);
+        MADAUDIO_CHECK_ERROR(player);
+    }
+    madaudio_draw_song(player);
 }
 
 void
 madaudio_pause(madaudio_player_t* player)
 {
-
-    empd_send_wait(player->conn, ready_callback, player, "pause", NULL);
+    mpd_run_pause(player->conn, true);
+    MADAUDIO_CHECK_ERROR(player);
 }
 
 void
-madaudio_play(madaudio_player_t* player)
+madaudio_play(madaudio_player_t* player, int track)
 {
-    empd_send_wait(player->conn, ready_callback, player, "play", NULL);
+    madaudio_polling_start(player);
+    mpd_run_play_pos(player->conn, track);
+    MADAUDIO_CHECK_ERROR(player);
 }
 
 void
 madaudio_play_pause(madaudio_player_t* player)
 {
-    if(mpd_status_get_state(player->conn->status) == MPD_STATE_PLAY)
-        madaudio_pause(player);
-    else
-        madaudio_play(player);
+    mpd_run_toggle_pause(player->conn);
+    MADAUDIO_CHECK_ERROR(player);
+}
+
+
+void
+madaudio_prev(madaudio_player_t* player)
+{
+    if((mpd_status_get_song_pos(player->status) > 0 ) ||
+        mpd_status_get_repeat(player->status))
+    {
+        mpd_run_previous(player->conn);
+        MADAUDIO_CHECK_ERROR(player);
+    }
+}
+
+void
+madaudio_next(madaudio_player_t* player)
+{
+    if((mpd_status_get_song_pos(player->status)
+        < mpd_status_get_queue_length(player->status)-1)
+        || mpd_status_get_repeat(player->status))
+    {
+        mpd_run_next(player->conn);
+        MADAUDIO_CHECK_ERROR(player);
+    }
 }
 
 void
 madaudio_cycle(madaudio_player_t* player)
 {
-    int current = mpd_status_get_repeat(player->conn->status);
-    empd_send_int_wait(player->conn, ready_callback, player, "repeat",
-        current ? 0 : 1);
+    int current = mpd_status_get_repeat(player->status);
+    mpd_run_repeat(player->conn, INVERT(current));
+    MADAUDIO_CHECK_ERROR(player);
 }
 
 void
 madaudio_single(madaudio_player_t* player)
 {
-    int current = mpd_status_get_single(player->conn->status);
-    empd_send_int_wait(player->conn, ready_callback, player, "single",
-        current ? 0 : 1);
+    int current = mpd_status_get_single(player->status);
+    mpd_run_single(player->conn, INVERT(current));
+    MADAUDIO_CHECK_ERROR(player);
 }
-
-static void
-madaudio_prevnext(madaudio_player_t* player, int step)
-{
-    int current = mpd_status_get_song(player->conn->status);
-    int total = mpd_status_get_playlist_length(player->conn->status);
-    current += step;
-    if(current >= 0 && current < total)
-        empd_send_int_wait(player->conn, ready_callback, player,
-        "play", current);
-}
-
 
 static void
 madaudio_seek(madaudio_player_t* player, int offset)
 {
-    int current = mpd_status_get_elapsed_time(player->conn->status);
-    int total = mpd_status_get_total_time(player->conn->status);
+    int current = mpd_status_get_elapsed_time(player->status);
+    int total = mpd_status_get_total_time(player->status);
     current += offset;
-    if(current >= 0 && current <= total - offset)
-        empd_seek(player->conn, ready_callback, player, current);
+    int pos = mpd_status_get_song_pos(player->status);
+    if(current >= 0 && current <= total)
+    {
+        mpd_run_seek_pos(player->conn,  pos, current);
+        MADAUDIO_CHECK_ERROR(player);
+        madaudio_status(player);
+    }
+    else
+        if( current < 0)
+            madaudio_prev(player);
+        else
+            madaudio_next(player);
 }
 
 static void
 madaudio_volume(madaudio_player_t* player, int offset)
 {
-    int volume = mpd_status_get_volume(player->conn->status);
+    int volume = mpd_status_get_volume(player->status);
     volume += offset;
     if(volume >= 0 && volume <= 100)
-        empd_send_int_wait(player->conn, ready_callback, player,
-            "setvol", volume);
+    {
+        mpd_run_set_volume(player->conn, volume);
+        MADAUDIO_CHECK_ERROR(player);
+    }
 }
 
 void
@@ -196,7 +251,7 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
         ecore_main_loop_quit();
 
     /* all commands except Quit require conn and conn->status */
-    if(!player->conn || !player->conn->status)
+    if(!player->conn || !player->status)
     {
         printf("Not connected\n");
         return;
@@ -204,9 +259,9 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     if(!strcmp(action, "PlayPause"))
         madaudio_play_pause(player);
     if(!strcmp(action, "Previous"))
-        madaudio_prevnext(player, -1);
+        madaudio_prev(player);
     if(!strcmp(action, "Next"))
-        madaudio_prevnext(player, 1);
+        madaudio_next(player);
     if(!strcmp(action, "VolumeUp"))
         madaudio_volume(player, 10);
     if(!strcmp(action, "VolumeDown"))
@@ -219,4 +274,5 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
         madaudio_cycle(player);
     if(!strcmp(action, "Single"))
         madaudio_single(player);
+    madaudio_status(player);
 }

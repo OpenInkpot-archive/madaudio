@@ -354,7 +354,7 @@ collections {
                 }
             }
             SONG(110, 33, 595, 66) 
-            BLOCK(110, 76, 595, 306)
+            BLOCK(110, 76, 595, 308)
 
             /* Prev/Next Box */
             CLIPPER("prev-next-clipper", 130, 317, 595, 424)

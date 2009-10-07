@@ -6,8 +6,7 @@
 #include <Efreet.h>
 #include <Efreet_Mime.h>
 #include <Ecore_File.h>
-#include <mpd/status.h>
-#include "empd.h"
+#include <mpd/client.h>
 #include "madaudio.h"
 
 #define DESKTOP "/usr/share/applications/madaudio.desktop"
@@ -52,79 +51,58 @@ madaudio_load_dir(madaudio_player_t* player, const char* basedir)
     Eina_List* ls = ecore_file_ls(basedir);
     /* ls = eina_list_sort(ls, eina_list_count(ls),
                   state->sort == MADSHELF_SORT_NAME ? &_name : &_namerev) */
-    Eina_List* playlist = NULL;
     Eina_List* next;
     for(next = ls; next; next = eina_list_next(next))
     {
-        char *filename;
+        char* filename;
+        char* url;
         asprintf(&filename, "%s/%s", basedir,
             (const char*) eina_list_data_get(next));
         if(madaudio_mime_match(filename))
-            playlist = eina_list_append(playlist, filename);
-            /* filenames freed later by libempd */
-        else
-            free(filename);
+        {
+            asprintf(&url, "file://%s", filename);
+            printf("load %s\n",  filename);
+            mpd_run_add(player->conn, url);
+            if(madaudio_check_error(player))
+                printf("Fail to load %s\n",  filename);
+        }
+        free(filename);
     }
-    if(playlist)
-        empd_enqueue_files(player->conn, playlist);
-    else
-        printf("Nothing to play\n");
     eina_list_free(ls);
 }
 
-static void
-madaudio_play_callback(void* data, void* cb_data)
-{
-    printf("playing\n");
-    madaudio_player_t* player = (madaudio_player_t*) cb_data;
-    madaudio_polling_start(player);
-}
 
-static void
-madaudio_got_playlist_callback(void* data, void* cb_data)
+static int
+madaudio_find_song_by_filename(madaudio_player_t* player, const char* filename)
 {
-    printf("playlist synced\n");
-    madaudio_player_t* player = (madaudio_player_t*) cb_data;
-
     int track_no = 0;
     Eina_List* next;
 
-    for(next = player->conn->playlist; next; next = eina_list_next(next))
+    for(next = player->playlist; next; next = eina_list_next(next))
     {
         struct mpd_song* song = eina_list_data_get(next);
-        if(!strcmp(mpd_song_get_tag(song, MPD_TAG_FILENAME, 0),
-            player->filename))
+        if(!strcmp(mpd_song_get_uri(song), filename))
+        {
             track_no = mpd_song_get_pos(song);
+            break;
+        }
     }
-
-    empd_play(player->conn, madaudio_play_callback, player, track_no);
-}
-
-static void
-madaudio_playlist_callback(void* data, void* cb_data)
-{
-    printf("playlist loaded\n");
-    madaudio_player_t* player = (madaudio_player_t*) cb_data;
-    empd_playlistinfo(player->conn, madaudio_got_playlist_callback, player);
-}
-
-static void
-madaudio_clear_callback(void* data, void* cb_data)
-{
-    printf("playlist cleared\n");
-    madaudio_player_t* player = (madaudio_player_t*) cb_data;
-    const char* dir = ecore_file_dir_get(player->filename);
-    empd_callback_set(&player->conn->next_callback, madaudio_playlist_callback,
-        player);
-    madaudio_load_dir(player, dir);
+    printf("track_no = %d\n", track_no);
+    return track_no;
 }
 
 void
-madaudio_play_file(madaudio_player_t* player, const char* filename)
+madaudio_play_file(madaudio_player_t* player)
 {
-    if(player->filename)
-        free(player->filename);
-    player->filename = strdup(filename);
-    empd_clear(player->conn, madaudio_clear_callback, player);
+    const char* dir = ecore_file_dir_get(player->filename);
+    mpd_run_clear(player->conn);
+    madaudio_check_error(player);
+    madaudio_load_dir(player, dir);
+    madaudio_status(player);
+    int track_no = madaudio_find_song_by_filename(player, player->filename);
+    madaudio_play(player, track_no);
+    free(player->filename);
+    player->filename = NULL;
+    madaudio_status(player);
 }
 

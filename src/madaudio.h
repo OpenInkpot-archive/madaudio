@@ -1,11 +1,12 @@
 #ifndef _MADAUDIO_H
 #define _MADAUDIO_H 1
 
+#include <Eina.h>
 #include <Evas.h>
 #include <Ecore.h>
 #include <Ecore_Evas.h>
 #include <libkeys.h>
-#include "empd.h"
+#include <mpd/connection.h>
 
 typedef struct madaudio_player_t madaudio_player_t;
 struct madaudio_player_t {
@@ -14,7 +15,10 @@ struct madaudio_player_t {
     keys_t* keys;
     Evas_Object* main_edje;
     Evas_Object* gui;
-    empd_connection_t* conn;
+    struct mpd_connection* conn;
+    struct mpd_status* status;
+    Eina_List* playlist;
+    unsigned long long  playlist_stamp;
     Ecore_Timer* poll_timer;
     bool poll_mode;
     char* filename;
@@ -22,10 +26,15 @@ struct madaudio_player_t {
     bool mpd_run;
 };
 
-void madaudio_play_file(madaudio_player_t*, const char*);
+
+bool
+madaudio_check_error(madaudio_player_t* player);
+
+void madaudio_play_file(madaudio_player_t*);
 bool madaudio_command(madaudio_player_t*, const char*);
 
-void madaudio_play(madaudio_player_t* player);
+void madaudio_status(madaudio_player_t* player);
+void madaudio_play(madaudio_player_t* player, int track);
 void madaudio_pause(madaudio_player_t* player);
 void madaudio_play_pause(madaudio_player_t*);
 
