@@ -316,7 +316,7 @@ int main(int argc, char** argv)
     ecore_event_handler_add(ECORE_CON_EVENT_CLIENT_DEL, _client_del, player);
 
     madaudio_draw_captions(player);
-    if(argc == 2)
+    if(argc == 2 && argv[1][0] == '/')
         player->filename = strdup(argv[1]);
     else
         player->filename = NULL;

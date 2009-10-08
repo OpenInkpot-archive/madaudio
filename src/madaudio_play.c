@@ -84,6 +84,8 @@ madaudio_connect(madaudio_player_t* player)
         madaudio_status(player);
         if(player->filename)
             madaudio_play_file(player);
+        else
+            madaudio_status(player);
         return;
     }
 
