@@ -1,3 +1,9 @@
+madaudio (0.2-3) asimov; urgency=low
+
+  * Fix issue with raise by play/pause hw button
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 08 Oct 2009 11:24:05 +0300
+
 madaudio (0.2-2) asimov; urgency=low
 
   * Fix issue when polling not start when we launched w/o files
