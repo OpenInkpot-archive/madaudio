@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=madaudio
 GenericName=E-book Audioplayer
+GenericName[de]=Audio abspielen
 Comment=E-book Audioplayer
 TryExec=madaudio
 Exec=madaudio %F
