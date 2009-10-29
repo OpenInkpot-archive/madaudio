@@ -86,7 +86,8 @@ format_time(int inttime)
     static char buf[64];
     time_t time = inttime;
     const struct tm *tm = gmtime(&time);
-    snprintf(buf, 64, "%d:%d", tm->tm_hour, tm->tm_min);
+    int min = tm->tm_hour * 60 + tm->tm_min;
+    snprintf(buf, 64, "%d:%02d", min, tm->tm_sec);
     return buf;
 }
 
