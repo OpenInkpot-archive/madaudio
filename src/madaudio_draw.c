@@ -83,10 +83,10 @@ draw_song(Evas_Object* gui, const struct mpd_song* song)
 static const char *
 format_time(int inttime)
 {
-    static char buf[1024];
+    static char buf[64];
     time_t time = inttime;
     const struct tm *tm = gmtime(&time);
-    strftime(buf, 1024, "%M:%S", tm);
+    snprintf(buf, 64, "%d:%d", tm->tm_hour, tm->tm_min);
     return buf;
 }
 
