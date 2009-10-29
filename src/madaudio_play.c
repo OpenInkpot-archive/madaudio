@@ -260,18 +260,36 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     }
     if(!strcmp(action, "PlayPause"))
         madaudio_play_pause(player);
+
+    /* prev/next */
     if(!strcmp(action, "Previous"))
         madaudio_prev(player);
     if(!strcmp(action, "Next"))
         madaudio_next(player);
+
+    /* volume */
     if(!strcmp(action, "VolumeUp"))
         madaudio_volume(player, 10);
     if(!strcmp(action, "VolumeDown"))
         madaudio_volume(player, -10);
+
+    /* Seek fw/nw 10 sec */
     if(!strcmp(action, "Forward"))
         madaudio_seek(player, 10);
     if(!strcmp(action, "Backward"))
         madaudio_seek(player, -10);
+    /* Seek fw/nw 1min  */
+    if(!strcmp(action, "Forward_1m"))
+        madaudio_seek(player, 60);
+    if(!strcmp(action, "Backward_1m"))
+        madaudio_seek(player, -60);
+    /* Seek fw/nw 10 min */
+    if(!strcmp(action, "Forward_10m"))
+        madaudio_seek(player, 600);
+    if(!strcmp(action, "Backward_10m"))
+        madaudio_seek(player, -600);
+
+    /* Repeat and cycling */
     if(!strcmp(action, "Cycle"))
         madaudio_cycle(player);
     if(!strcmp(action, "Single"))
