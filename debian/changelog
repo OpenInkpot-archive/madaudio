@@ -1,5 +1,12 @@
 madaudio (0.2-4) asimov; urgency=low
 
+  * Fix incorrect display for MP3 files longer than 60 minutes (#530)
+  * Add forward/backward seeking by 1m and 10m (#541)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Fri, 30 Oct 2009 01:57:42 +0200
+
+madaudio (0.2-4) asimov; urgency=low
+
   [Alexander V. Nikolaev]
   * Fix issue with raise by play/pause hw button.
   
