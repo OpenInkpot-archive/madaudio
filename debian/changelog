@@ -1,4 +1,4 @@
-madaudio (0.2-4) asimov; urgency=low
+madaudio (0.2-5) asimov; urgency=low
 
   * Fix incorrect display for MP3 files longer than 60 minutes (#530)
   * Add forward/backward seeking by 1m and 10m (#541)
