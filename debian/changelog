@@ -1,3 +1,9 @@
+madaudio (0.2-6) asimov; urgency=low
+
+  * Added translations: Polish.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Fri, 06 Nov 2009 04:21:33 +0600
+
 madaudio (0.2-5) asimov; urgency=low
 
   * Fix incorrect display for MP3 files longer than 60 minutes (#530)
