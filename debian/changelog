@@ -1,3 +1,9 @@
+madaudio (0.2-7) asimov; urgency=low
+
+  * Added translations: Russian.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Sun, 08 Nov 2009 04:36:42 +0600
+
 madaudio (0.2-6) asimov; urgency=low
 
   * Added translations: Polish.
