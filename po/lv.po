@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: madaudio 0.1\n"
 "Report-Msgid-Bugs-To: avn@daemon.hole.ru\n"
-"POT-Creation-Date: 2009-09-29 22:02+0000\n"
+"POT-Creation-Date: 2009-11-25 02:40+0000\n"
 "PO-Revision-Date: 2009-11-04 12:50+0200\n"
 "Last-Translator: Dainis <druumais@inbox.lv>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,23 +14,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/madaudio_draw.c:149
+#: src/madaudio_draw.c:155
 msgid "Composer"
 msgstr "Komponists"
 
-#: src/madaudio_draw.c:150
+#: src/madaudio_draw.c:156
 msgid "Artist"
 msgstr "Izpildītājs"
 
-#: src/madaudio_draw.c:151
+#: src/madaudio_draw.c:157
 msgid "Album"
 msgstr "Albums"
 
-#: src/madaudio_draw.c:152
+#: src/madaudio_draw.c:158
 msgid "Genre"
 msgstr "Žanrs"
 
-#: src/madaudio_draw.c:153
+#: src/madaudio_draw.c:159
 msgid "Year"
 msgstr "Gads"
-

@@ -11,4 +11,4 @@ PKG_CHECK_MODULES(LIBEOI, [libeoi])
 PKG_CHECK_MODULES(LIBKEYS, [libkeys])
 PKG_CHECK_MODULES(EDRAWABLE, [libedrawable])
 
-AC_OUTPUT(Makefile src/Makefile themes/Makefile po/Makefile data/Makefile)
+AC_OUTPUT(Makefile src/Makefile themes/Makefile po/Makefile data/Makefile help/Makefile)

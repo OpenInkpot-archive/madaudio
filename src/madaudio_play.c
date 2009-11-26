@@ -1,9 +1,11 @@
 #define _GNU_SOURCE 1
 #include <assert.h>
+#include <libintl.h>
 #include <err.h>
 #include <string.h>
 #include <mpd/client.h>
 #include <mpd/error.h>
+#include <libeoi_help.h>
 #include "madaudio.h"
 
 #define MADAUDIO_SOCKET "/tmp/madaudio-mpd.socket"
@@ -294,5 +296,10 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
         madaudio_cycle(player);
     if(!strcmp(action, "Single"))
         madaudio_single(player);
+    if(!strcmp(action, "Help"))
+        eoi_help_show(e, "madaudio", "index",
+            gettext("Madaudio: Help"),
+            player->keys, "player");
+
     madaudio_status(player);
 }

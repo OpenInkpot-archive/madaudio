@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: madaudio 0.1\n"
 "Report-Msgid-Bugs-To: avn@daemon.hole.ru\n"
-"POT-Creation-Date: 2009-09-29 22:02+0000\n"
+"POT-Creation-Date: 2009-11-25 02:40+0000\n"
 "PO-Revision-Date: 2009-09-30 12:33+0200\n"
 "Last-Translator: Artem Naluzhnyy <tut@nhamon.com.ua>\n"
 "Language-Team: Ukrainian <openinkpot-l10n@googlegroups.com>\n"
@@ -10,23 +10,22 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/madaudio_draw.c:149
+#: src/madaudio_draw.c:155
 msgid "Composer"
 msgstr "Композитор"
 
-#: src/madaudio_draw.c:150
+#: src/madaudio_draw.c:156
 msgid "Artist"
 msgstr "Виконавець"
 
-#: src/madaudio_draw.c:151
+#: src/madaudio_draw.c:157
 msgid "Album"
 msgstr "Альбом"
 
-#: src/madaudio_draw.c:152
+#: src/madaudio_draw.c:158
 msgid "Genre"
 msgstr "Стиль"
 
-#: src/madaudio_draw.c:153
+#: src/madaudio_draw.c:159
 msgid "Year"
 msgstr "Рік"
-

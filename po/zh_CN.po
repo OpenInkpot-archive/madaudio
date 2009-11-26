@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: madaudio 0.1\n"
 "Report-Msgid-Bugs-To: avn@daemon.hole.ru\n"
-"POT-Creation-Date: 2009-09-29 22:02+0000\n"
+"POT-Creation-Date: 2009-11-25 02:40+0000\n"
 "PO-Revision-Date: 2009-10-08 13:42+0800\n"
 "Last-Translator: Zhang Cong <ftofficer@ftofficer.com>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
@@ -15,22 +15,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/madaudio_draw.c:149
+#: src/madaudio_draw.c:155
 msgid "Composer"
 msgstr "作曲家"
 
-#: src/madaudio_draw.c:150
+#: src/madaudio_draw.c:156
 msgid "Artist"
 msgstr "艺术家"
 
-#: src/madaudio_draw.c:151
+#: src/madaudio_draw.c:157
 msgid "Album"
 msgstr "专辑"
 
-#: src/madaudio_draw.c:152
+#: src/madaudio_draw.c:158
 msgid "Genre"
 msgstr "流派"
 
-#: src/madaudio_draw.c:153
+#: src/madaudio_draw.c:159
 msgid "Year"
 msgstr "年份"
