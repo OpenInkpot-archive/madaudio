@@ -1,3 +1,10 @@
+madaudio (0.2-9) asimov; urgency=low
+
+  * Add help
+  * Fix segrfault on mpd startup
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 26 Nov 2009 06:33:49 +0200
+
 madaudio (0.2-8) asimov; urgency=low
 
   * Add audio/x-vorbis+ogg to list of supported mimes
