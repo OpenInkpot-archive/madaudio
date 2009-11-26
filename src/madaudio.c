@@ -321,7 +321,6 @@ int main(int argc, char** argv)
     else
         player->filename = NULL;
     madaudio_connect(player);
-    madaudio_polling_start(player);
     ecore_main_loop_begin();
 
     madaudio_free_state(player);

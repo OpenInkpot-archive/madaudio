@@ -87,7 +87,10 @@ madaudio_connect(madaudio_player_t* player)
         if(player->filename)
             madaudio_play_file(player);
         else
+        {
             madaudio_status(player);
+            madaudio_polling_start(player);
+        }
         return;
     }
 
@@ -114,6 +117,7 @@ madaudio_connect(madaudio_player_t* player)
 void
 madaudio_status(madaudio_player_t* player)
 {
+    assert(player);
     struct mpd_status *status = mpd_run_status(player->conn);
     if(!status)
         MADAUDIO_CHECK_ERROR(player);
