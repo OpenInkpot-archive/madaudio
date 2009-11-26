@@ -1,0 +1,35 @@
+# Translations template for PROJECT.
+# Copyright (C) 2009 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2009-11-25 01:30+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.1\n"
+
+#Refer to en.po for texts
+msgid "index"
+msgstr "index"
+
+#Refer to en.po for texts
+msgid "madaudio1"
+msgstr ""
+
+#Refer to en.po for texts
+msgid "madaudio2"
+msgstr ""
+
+#Refer to en.po for texts
+msgid "madaudio3"
+msgstr ""
+
