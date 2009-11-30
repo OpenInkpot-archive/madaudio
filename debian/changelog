@@ -1,3 +1,9 @@
+madaudio (0.2-10) asimov; urgency=low
+
+  * Missed help/madaudio.ini brreak build
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Mon, 30 Nov 2009 06:44:17 +0200
+
 madaudio (0.2-9) asimov; urgency=low
 
   * Add help
