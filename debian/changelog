@@ -1,3 +1,9 @@
+madaudio (0.2-11) asimov; urgency=low
+
+  * Updated help translations: Russian.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Thu, 03 Dec 2009 13:21:54 +0600
+
 madaudio (0.2-10) asimov; urgency=low
 
   * Missed help/madaudio.ini brreak build
