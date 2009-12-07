@@ -1,9 +1,10 @@
 INCLUDES = @EFL_CFLAGS@ @LIBEOI_CFLAGS@ @LIBKEYS_CFLAGS@ @EDRAWABLE_CFLAGS@
 AM_CFLAGS=-std=gnu99 -Wall -Wno-unused -Werror -DSYSCONFDIR="\"$(sysconfdir)\"" -DTHEMEDIR='"$(datadir)/madaudio"'
 
-bin_PROGRAMS = madaudio
+bin_PROGRAMS = madaudio madaudio-unsuspend
 
 madaudio_SOURCES = madaudio.c madaudio_cmd.c madaudio_play.c madaudio_draw.c madaudio_load.c madaudio_meter.c battery.c clock.c 
 madaudio_LDADD = @EFL_LIBS@ @LIBEOI_LIBS@ @LIBKEYS_LIBS@ @EDRAWABLE_LIBS@ -lmpdclient -lm
 
-
+madaudio_unsuspend_SOURCES = madaudio_unsuspend.c 
+madaudio_unsuspend_LDADD = -lmpdclient
