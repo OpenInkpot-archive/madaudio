@@ -19,12 +19,15 @@ static const char* usb0 = "/sys/class/net/usb0/carrier";
 static void
 debug(const char *fmt,...)
 {
-    fprintf(stderr, "unsleep: ");
-    va_list ap;
-    va_start(ap, fmt);
-    vfprintf(stderr, fmt, ap);
-    va_end(ap);
-    fprintf(stderr, "\n");
+    if(_debug)
+    {
+        fprintf(stderr, "unsleep: ");
+        va_list ap;
+        va_start(ap, fmt);
+        vfprintf(stderr, fmt, ap);
+        va_end(ap);
+        fprintf(stderr, "\n");
+    }
 }
 
 void
