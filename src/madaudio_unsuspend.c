@@ -14,8 +14,9 @@ static int _debug;
 static enum mpd_state oldstate;
 static const char* autosuspend = "/sys/power/autosuspend";
 static int saved=-1; /* Saved /sys/power/autosuspend value */
+static const char* usb0 = "/sys/class/net/usb0/carrier";
 
-void
+static void
 debug(const char *fmt,...)
 {
     fprintf(stderr, "unsleep: ");
@@ -35,7 +36,7 @@ check(struct mpd_connection* conn)
     exit(0);
 }
 
-void
+static void
 set_autosuspend(int mode)
 {
     FILE* file = fopen(autosuspend, "a+");
@@ -46,17 +47,24 @@ set_autosuspend(int mode)
     debug("Set autosuspend to %d", mode);
 }
 
-int
-get_autosuspend()
+
+static int
+read_int_from_file(const char* filename)
 {
     char buf[16];
-    FILE* file = fopen(autosuspend, "a+");
+    FILE* file = fopen(autosuspend, "r+");
     if(!file)
         err(1, "Can't open %s\n", autosuspend);
     if(!fgets(buf, 16, file))
         err(1, "Can't read value from %s\n", autosuspend);
     fclose(file);
     return atoi(buf);
+}
+
+int
+get_autosuspend()
+{
+    return read_int_from_file(autosuspend);
 }
 
 int
@@ -82,6 +90,15 @@ main(int argc, char **argv)
     debug("connected...");
     while(true)
     {
+        if(!access(usb0, R_OK))
+        {
+            debug("USBNET files exists, check them");
+            if(read_int_from_file(usb0))
+            {
+                debug("USBNET active, do nothing\n");
+                goto idle;
+            }
+        }
         struct mpd_status * status = mpd_run_status(conn);
         check(conn);
         if(!status)
@@ -104,6 +121,7 @@ main(int argc, char **argv)
         };
         oldstate = state;
         mpd_status_free(status);
+idle:
         mpd_run_idle_mask(conn, MPD_IDLE_PLAYER);
         check(conn);
     }
