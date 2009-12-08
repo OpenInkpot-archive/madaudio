@@ -12,7 +12,8 @@
 
 static int _debug;
 static enum mpd_state oldstate;
-const char* autosuspend = "/sys/power/autosuspend";
+static const char* autosuspend = "/sys/power/autosuspend";
+static int saved=-1; /* Saved /sys/power/autosuspend value */
 
 void
 debug(const char *fmt,...)
@@ -46,22 +47,37 @@ set_autosuspend(int mode)
 }
 
 int
+get_autosuspend()
+{
+    char buf[16];
+    FILE* file = fopen(autosuspend, "a+");
+    if(!file)
+        err(1, "Can't open %s\n", autosuspend);
+    if(!fgets(buf, 16, file))
+        err(1, "Can't read value from %s\n", autosuspend);
+    fclose(file);
+    return atoi(buf);
+}
+
+int
 main(int argc, char **argv)
 {
     int t;
-    if(!access(autosuspend, R_OK))
+    if(access(autosuspend, R_OK))
     {
         fprintf(stderr, "Autosuspend unsupported, exitting...\n");
         exit(1);
     }
     _debug = (bool) getenv("MADAUDIO_NOSLEEP_DEBUG");
-    daemon(0, 0);
+    if(!_debug)
+        daemon(0, 0);
     struct mpd_connection *conn;
-    for(t=100; t > 0; t++) {
+    for(t=500; t > 0; t++) {
         conn = mpd_connection_new(MADAUDIO_SOCKET, 0, 0);
         if(conn && mpd_connection_get_error(conn)==MPD_ERROR_SUCCESS)
             break;
         debug("can't connect to mpd, retry");
+        usleep(200);
     };
     debug("connected...");
     while(true)
@@ -74,9 +90,17 @@ main(int argc, char **argv)
         if(state != oldstate)
         {
             if(state == MPD_STATE_PLAY)
+            {
+                saved = get_autosuspend();
                 set_autosuspend(0);
+            }
             else
-                set_autosuspend(1);
+            {
+                if(saved == -1)
+                    debug("not saved");
+                else
+                    set_autosuspend(saved);
+            }
         };
         oldstate = state;
         mpd_status_free(status);
