@@ -175,6 +175,12 @@ madaudio_play(madaudio_player_t* player, int track)
 void
 madaudio_play_pause(madaudio_player_t* player)
 {
+    if(mpd_status_get_state(player->status) == MPD_STATE_STOP &&
+        player->playlist)
+    {
+        mpd_run_play_pos(player->conn, 0);
+        return;
+    }
     mpd_run_toggle_pause(player->conn);
     MADAUDIO_CHECK_ERROR(player);
 }
@@ -183,8 +189,13 @@ madaudio_play_pause(madaudio_player_t* player)
 void
 madaudio_prev(madaudio_player_t* player)
 {
+    if(mpd_status_get_state(player->status) == MPD_STATE_STOP &&
+        player->playlist)
+    {
+        mpd_run_play_pos(player->conn, eina_list_count(player->playlist));
+    }
     if((mpd_status_get_song_pos(player->status) > 0 ) ||
-        mpd_status_get_repeat(player->status))
+        mpd_status_get_repeat(player->status));
     {
         mpd_run_previous(player->conn);
         MADAUDIO_CHECK_ERROR(player);
