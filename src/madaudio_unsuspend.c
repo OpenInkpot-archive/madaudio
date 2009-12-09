@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <mpd/client.h>
 #include <mpd/error.h>
@@ -107,6 +108,14 @@ main(int argc, char **argv)
         if(!status)
             err(1, "Can't get status\n");
         enum mpd_state state = mpd_status_get_state(status);
+        if(argc == 2 && !strcmp(argv[1], "unplug"))
+        {
+            debug("Unplug handler");
+            if(state == MPD_STATE_PLAY)
+                set_autosuspend(0);
+            exit(0);
+
+        }
         if(state != oldstate)
         {
             if(state == MPD_STATE_PLAY)
