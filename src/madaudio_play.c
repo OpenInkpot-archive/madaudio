@@ -193,6 +193,7 @@ madaudio_prev(madaudio_player_t* player)
         player->playlist)
     {
         mpd_run_play_pos(player->conn, eina_list_count(player->playlist)-1);
+        return;
     }
     if((mpd_status_get_song_pos(player->status) > 0 ) ||
         mpd_status_get_repeat(player->status));

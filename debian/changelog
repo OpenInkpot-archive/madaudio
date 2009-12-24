@@ -1,6 +1,13 @@
+madaudio (0.3) zelazny; urgency=low
+
+  * Native versioning
+  * Finally fix #727 (player unable to play anything when playlist completed)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 24 Dec 2009 18:21:56 +0200
+
 madaudio (0.2-14) zelazny; urgency=low
 
-  * 
+  * Partially fix #727
 
  -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 09 Dec 2009 21:46:35 +0200
 
