@@ -1,5 +1,6 @@
 #define _GNU_SOURCE 1
 #include <err.h>
+#include <signal.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -15,6 +16,7 @@ static int _debug;
 static enum mpd_state oldstate;
 static const char* autosuspend = "/sys/power/autosuspend";
 static int saved=-1; /* Saved /sys/power/autosuspend value */
+static int saved_by_signal = -1;
 static const char* usb0 = "/sys/class/net/usb0/carrier";
 
 static void
@@ -30,6 +32,7 @@ debug(const char *fmt,...)
         fprintf(stderr, "\n");
     }
 }
+
 
 void
 check(struct mpd_connection* conn)
@@ -71,6 +74,31 @@ get_autosuspend()
     return read_int_from_file(autosuspend);
 }
 
+static void
+sigusr(int signo)
+{
+    debug("Got signal: %s", strsignal(signo));
+    if(signo == SIGUSR1)
+    {
+        if(oldstate == MPD_STATE_PLAY && saved_by_signal == -1)
+        {
+            debug("saving saved state\n");
+            saved_by_signal = saved;
+        }
+    }
+    else if(signo == SIGUSR2)
+    {
+        if(oldstate == MPD_STATE_PLAY)
+        {
+            debug("restore saved state\n");
+            saved = saved_by_signal;
+            set_autosuspend(0);
+        }
+        saved_by_signal = -1;
+    }
+    signal(signo, sigusr);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -92,6 +120,8 @@ main(int argc, char **argv)
         usleep(200);
     };
     debug("connected...");
+    signal(SIGUSR1, sigusr);
+    signal(SIGUSR2, sigusr);
     while(true)
     {
         if(!access(usb0, R_OK))
@@ -108,14 +138,6 @@ main(int argc, char **argv)
         if(!status)
             err(1, "Can't get status\n");
         enum mpd_state state = mpd_status_get_state(status);
-        if(argc == 2 && !strcmp(argv[1], "unplug"))
-        {
-            debug("Unplug handler");
-            if(state == MPD_STATE_PLAY)
-                set_autosuspend(0);
-            exit(0);
-
-        }
         if(state != oldstate)
         {
             if(state == MPD_STATE_PLAY)
