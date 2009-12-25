@@ -1,3 +1,9 @@
+madaudio (0.4) zelazny; urgency=low
+
+  * Add usb events workaround for madaudio-unsuspend
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Fri, 25 Dec 2009 03:31:11 +0200
+
 madaudio (0.3) zelazny; urgency=low
 
   * Native versioning
