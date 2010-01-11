@@ -1,3 +1,10 @@
+madaudio (0.2.1) UNRELEASED; urgency=low
+
+  * Use eoi_battery instead of copy/pasted code
+    - bump eoi-dev dependency
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 11 Jan 2010 06:57:26 +0600
+
 madaudio (0.2-11) asimov; urgency=low
 
   * Updated help translations: Russian.
