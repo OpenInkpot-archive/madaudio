@@ -1,9 +1,41 @@
-madaudio (0.2.1) UNRELEASED; urgency=low
+madaudio (0.4.1) UNRELEASED; urgency=low
 
   * Use eoi_battery instead of copy/pasted code
     - bump eoi-dev dependency
 
- -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 11 Jan 2010 06:57:26 +0600
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 11 Jan 2010 06:59:49 +0600
+
+madaudio (0.4) zelazny; urgency=low
+
+  * Add usb events workaround for madaudio-unsuspend
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Fri, 25 Dec 2009 03:31:11 +0200
+
+madaudio (0.3) zelazny; urgency=low
+
+  * Native versioning
+  * Finally fix #727 (player unable to play anything when playlist completed)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 24 Dec 2009 18:21:56 +0200
+
+madaudio (0.2-14) zelazny; urgency=low
+
+  * Partially fix #727
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 09 Dec 2009 21:46:35 +0200
+
+madaudio (0.2-13) zelazny; urgency=low
+
+  * Fix logging
+  * change suite to zelazny
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 08 Dec 2009 20:13:55 +0200
+
+madaudio (0.2-12) asimov; urgency=low
+
+  * autosuspend monitoring daemon added
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 08 Dec 2009 01:07:33 +0200
 
 madaudio (0.2-11) asimov; urgency=low
 

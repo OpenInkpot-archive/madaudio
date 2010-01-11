@@ -18,6 +18,7 @@ install-sh
 libtool
 ltmain.sh
 madaudio
+madaudio-unsuspend
 missing
 stamp-h1
 debian/files

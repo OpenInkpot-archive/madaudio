@@ -99,8 +99,12 @@ madaudio_connect(madaudio_player_t* player)
         if(!player->mpd_run)
         {
             player->mpd_run=true;
-            printf("spawing mpd\n");
             Ecore_Exe* exe;
+            printf("spawing madaudio-unsuspend\n");
+            exe = ecore_exe_run("/usr/bin/madaudio-unsuspend", NULL);
+            if(exe)
+                ecore_exe_free(exe);
+            printf("spawing mpd\n");
             exe = ecore_exe_run("/usr/bin/mpd /etc/madaudio/mpd.conf", NULL);
             if(exe)
                 ecore_exe_free(exe);
@@ -171,6 +175,12 @@ madaudio_play(madaudio_player_t* player, int track)
 void
 madaudio_play_pause(madaudio_player_t* player)
 {
+    if(mpd_status_get_state(player->status) == MPD_STATE_STOP &&
+        player->playlist)
+    {
+        mpd_run_play_pos(player->conn, 0);
+        return;
+    }
     mpd_run_toggle_pause(player->conn);
     MADAUDIO_CHECK_ERROR(player);
 }
@@ -179,8 +189,14 @@ madaudio_play_pause(madaudio_player_t* player)
 void
 madaudio_prev(madaudio_player_t* player)
 {
+    if(mpd_status_get_state(player->status) == MPD_STATE_STOP &&
+        player->playlist)
+    {
+        mpd_run_play_pos(player->conn, eina_list_count(player->playlist)-1);
+        return;
+    }
     if((mpd_status_get_song_pos(player->status) > 0 ) ||
-        mpd_status_get_repeat(player->status))
+        mpd_status_get_repeat(player->status));
     {
         mpd_run_previous(player->conn);
         MADAUDIO_CHECK_ERROR(player);
