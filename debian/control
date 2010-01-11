@@ -2,8 +2,8 @@ Source: madaudio
 Section: gui
 Maintainer: Alexander V. Nikolaev
 XCS-Cross-Host-Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config, cdbs, cdbs-embedded, oi-help-compiler
-XCS-Cross-Build-Depends: libextractor-mini-dev, libeina-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev, libmpdclient-dev, libedrawable-dev
-Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config,  libeina-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev, libmpdclient-dev, cdbs
+XCS-Cross-Build-Depends: libextractor-mini-dev, libeina-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev (>= 0.2.1), libmpdclient-dev, libedrawable-dev
+Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config,  libeina-dev, libecore-dev, libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev (>= 0.2.1), libmpdclient-dev, cdbs
 Priority: optional
 Standards-Version: 3.8.3
 
