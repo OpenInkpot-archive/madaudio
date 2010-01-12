@@ -130,16 +130,18 @@ styles {
 #define SONG(x1, y1, x2, y2) \
     part { \
         name, "title"; \
-        type, TEXTBLOCK; \
+        type, TEXT; \
         mouse_events, 0; \
         description { \
             state, "default" 0.0; \
             color, 0 0 0 255; \
             text { \
-                style, "song_title"; \
-                max, 0 1; \
+                text, ""; \
+                font, "sans-serif"; \
+                size, 24; \
+                align, 0.0 0.5; \
+                elipsis, 0.0; \
             } \
-            align, 0.5 0.5; \
             rel1 { relative, 0.0 0.0; offset, x1 y1; } \
             rel2 { relative, 0.0 0.0; offset, x2 y2; } \
         } \
@@ -182,8 +184,28 @@ styles {
 #define CAPTION(n, y1, y2) \
     STYLED(n, "caption", "clipper", CAPTION_X1, y1, CAPTION_X2, y2)
 
+#define VALUE_TEXT(n, c, x1, y1, x2, y2) \
+    part { \
+        name, n; \
+        type, TEXT; \
+        mouse_events, 0; \
+        description { \
+            state, "default" 0.0; \
+            color, 0 0 0 255; \
+            text { \
+                text, ""; \
+                font, "sans-serif"; \
+                size, 22; \
+                align, 0.0 0.5; \
+                elipsis, 0.0; \
+            } \
+            rel1 { relative, 0.0 0.0; to, c; offset, x1 y1; } \
+            rel2 { relative, 0.0 0.0; to, c; offset, x2 y2; } \
+        } \
+    }
+
 #define VALUE(n, y1, y2) \
-    STYLED(n, "values", "clipper", VALUES_X1, y1, VALUES_X2, y2)
+    VALUE_TEXT(n, "clipper", VALUES_X1, y1, VALUES_X2, y2)
 
 #define PREVNEXT(x1, y1, x2, y2) \
     CLIPPER("prev-next-clipper", x1, y1, x2, y2)  \
@@ -353,7 +375,7 @@ collections {
                     image { normal, "madaudio-vertical.png"; }
                 }
             }
-            SONG(110, 33, 595, 66) 
+            SONG(124, 33, 581, 66) 
             BLOCK(110, 76, 595, 308)
 
             /* Prev/Next Box */
@@ -403,7 +425,7 @@ collections {
                     image { normal, "madaudio-horizontal.png"; }
                 }
             }
-            SONG(5, 32, 487, 64)
+            SONG(19, 32, 473, 64)
             BLOCK(5, 80, 487, 310)
 
             /* Prev/Next Box */
