@@ -36,12 +36,11 @@
 #include <Ecore_X.h>
 #include <Edje.h>
 #include <libeoi.h>
+#include <libeoi_battery.h>
+#include <libeoi_clock.h>
 #include <libkeys.h>
 
 #include "madaudio.h"
-
-#include "battery.h"
-#include "clock.h"
 
 static madaudio_player_t* player;
 
@@ -207,8 +206,8 @@ player_switch_common(Evas_Object* contents, Evas_Object* main_edje)
     madaudio_init_meter(contents);
     evas_object_show(contents);
     evas_object_show(main_edje);
-    init_clock(main_edje);
-    init_battery(main_edje);
+    eoi_run_clock(main_edje);
+    eoi_run_battery(main_edje);
 }
 
 static void
