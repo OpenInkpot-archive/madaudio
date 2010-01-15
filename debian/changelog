@@ -1,4 +1,4 @@
-madaudio (0.4.1) UNRELEASED; urgency=low
+madaudio (0.4.1) zelazny; urgency=low
 
   * Use eoi_battery instead of copy/pasted code
     - bump eoi-dev dependency
