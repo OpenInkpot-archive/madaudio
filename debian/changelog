@@ -1,4 +1,11 @@
-madaudio (0.4.1) UNRELEASED; urgency=low
+madaudio (0.4.2) zelazny; urgency=low
+
+  * Drop mdev handler, rebuild with new libeoi
+  * Fix previous changelog entry: UNRELEASED => zelazny
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 26 Jan 2010 19:13:33 +0200
+
+madaudio (0.4.1) zelazny; urgency=low
 
   * Use eoi_battery instead of copy/pasted code
     - bump eoi-dev dependency
