@@ -1,13 +1,14 @@
-THEMES=$(wildcard *.edc)
-COMPILED_THEMES=$(patsubst %.edc,%.edj,$(THEMES))
+MAINTAINERCLEANFILES = Makefile.in
 
-theme_dir=$(datadir)/madaudio
+EDC= ${srcdir}/madaudio.edc
+EDJ = $(EDC:%.edc=%.edj)
 
-#%.edj: %.edc
-#	edje_cc $< $@
+EXTRA_DIST = $(EDC)
+CLEANFILES = $(EDJ)
 
-install-data-hook: $(COMPILED_THEMES)
-	for theme in $(COMPILED_THEMES); do \
-		$(mkdir_p) $(DESTDIR)$(theme_dir); \
-		$(INSTALL_DATA) $$theme $(DESTDIR)$(theme_dir)/$$theme; \
-	done
+themedir=$(datadir)/eoi/themes/default
+theme_DATA = $(EDJ)
+
+all: $(EDJ)
+%.edj: %.edc
+	edje_cc -o $@ $<
