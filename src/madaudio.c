@@ -176,26 +176,24 @@ player_switch_reset(Evas *evas)
     Evas_Object* gui = evas_object_name_find(evas, "player");
     Evas_Object* main_edje = evas_object_name_find(evas, "main_edje");
     if(gui)
+    {
+        printf("delete gui\n");
         evas_object_del(gui);
+        printf("gui deleted\n");
+    }
     if(main_edje)
+    {
+        printf("deleting main_edje\n");
         evas_object_del(main_edje);
+        printf("main edje deleted\n");
+    }
 }
 
 static void
 player_switch_common(Evas_Object* contents, Evas_Object* main_edje)
 {
     player->gui = contents;
-
-    int w, h;
-    Evas* canvas = evas_object_evas_get(contents);
-    evas_output_size_get(canvas, &w, &h);
-
-    evas_object_name_set(main_edje, "main_edje");
     evas_object_move(main_edje, 0, 0);
-    evas_object_resize(main_edje, w, h);
-
-
-    evas_object_name_set(contents, "player");
 
     edje_object_part_swallow(main_edje, "contents", contents);
     evas_object_focus_set(contents, true);
@@ -213,39 +211,53 @@ player_switch_common(Evas_Object* contents, Evas_Object* main_edje)
 static void
 player_switch_vertical(Evas* main_canvas)
 {
-    player_switch_reset(main_canvas);
-    Evas_Object* main_edje = eoi_main_window_create(main_canvas);
-    Evas_Object* contents = edje_object_add(main_canvas);
+    Evas_Object* main_edje = evas_object_name_find(main_canvas, "main_edje");
+    Evas_Object* contents = evas_object_name_find(main_canvas, "player");
+    eoi_main_window_footer_show(main_edje);
     edje_object_file_set(contents, THEMEDIR "/madaudio.edj", "vertical");
-    player_switch_common(contents, main_edje);
 }
 
 static void
 player_switch_horisontal(Evas* main_canvas)
 {
-    player_switch_reset(main_canvas);
-    Evas_Object* main_edje = edje_object_add(main_canvas);
-    Evas_Object* contents = edje_object_add(main_canvas);
-    edje_object_file_set(main_edje, THEMEDIR "/madaudio.edj", "main_edje");
+    Evas_Object* main_edje = evas_object_name_find(main_canvas, "main_edje");
+    Evas_Object* contents = evas_object_name_find(main_canvas, "player");
+    eoi_main_window_footer_hide(main_edje);
     edje_object_file_set(contents, THEMEDIR "/madaudio.edj", "horizontal");
-    player_switch_common(contents, main_edje);
 }
 
-static void player_edje(Ecore_Evas* main_win)
-{
-    Evas* canvas = ecore_evas_get(main_win);
-    int w, h;
-    evas_output_size_get(canvas, &w, &h);
 
+static void player_edje_select(Evas *canvas, int w, int h)
+{
     if(w > h)
         player_switch_horisontal(canvas);
     else
         player_switch_vertical(canvas);
+    Evas_Object *main_edje = evas_object_name_find(canvas, "main_edje");
+    evas_object_resize(main_edje, w, h);
 }
 
-static void main_win_resize_handler(Ecore_Evas* main_win)
+static void
+_emission(void *data, Evas_Object *o, const char *emission, const char *source)
 {
-    player_edje(main_win);
+    if(!strncmp(emission, "cursor", 6))
+        printf("Emission: %s, source: %s\n", emission, source);
+}
+
+static void player_edje(Evas *canvas, int w, int h)
+{
+    Evas_Object* main_edje = eoi_main_window_create(canvas);
+    Evas_Object* contents = edje_object_add(canvas);
+    edje_object_signal_callback_add(main_edje, "*", "*", _emission, NULL);
+    evas_object_name_set(main_edje, "main_edje");
+    evas_object_name_set(contents, "player");
+    player_edje_select(canvas, w, h);
+    player_switch_common(contents, main_edje);
+}
+
+static void main_win_resize_handler(Evas *canvas, int w, int h)
+{
+    player_edje_select(canvas, w, h);
     madaudio_draw_song(player);
 }
 
@@ -295,12 +307,14 @@ int main(int argc, char** argv)
     ecore_evas_title_set(main_win, "Madaudio");
     ecore_evas_name_class_set(main_win, "Madaudio", "Madaudio");
     ecore_evas_callback_delete_request_set(main_win, main_win_close_handler);
-    ecore_evas_callback_resize_set(main_win, main_win_resize_handler);
 
     Evas* main_canvas = ecore_evas_get(main_win);
     player->canvas = main_canvas;
+    eoi_resize_callback_add(main_canvas, main_win_resize_handler);
 
-    player_edje(main_win);
+    int w, h;
+    evas_output_size_get(main_canvas, &w, &h);
+    player_edje(main_canvas, w, h);
 
     ecore_evas_show(main_win);
 
@@ -325,9 +339,9 @@ int main(int argc, char** argv)
     madaudio_free_state(player);
 
     madaudio_opener_shutdown();
-    edje_shutdown();
     ecore_evas_shutdown();
     evas_shutdown();
+    edje_shutdown();
     ecore_shutdown();
 
     return 0;

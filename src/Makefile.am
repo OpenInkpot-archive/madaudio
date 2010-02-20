@@ -1,5 +1,5 @@
 INCLUDES = @EFL_CFLAGS@ @LIBEOI_CFLAGS@ @LIBKEYS_CFLAGS@ @EDRAWABLE_CFLAGS@
-AM_CFLAGS=-std=gnu99 -Wall -Wno-unused -Werror -DSYSCONFDIR="\"$(sysconfdir)\"" -DTHEMEDIR='"$(datadir)/madaudio"'
+AM_CFLAGS=-std=gnu99 -Wall -Wno-unused -DSYSCONFDIR="\"$(sysconfdir)\"" -DTHEMEDIR='"$(datadir)/madaudio"'
 
 bin_PROGRAMS = madaudio madaudio-unsuspend
 
