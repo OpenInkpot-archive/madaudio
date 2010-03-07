@@ -167,6 +167,8 @@ madaudio_pause(madaudio_player_t* player)
 void
 madaudio_play(madaudio_player_t* player, int track)
 {
+    /* be sure to stop recorder, to avoid races */
+    madaudio_stop_record(player);
     madaudio_polling_start(player);
     mpd_run_play_pos(player->conn, track);
     MADAUDIO_CHECK_ERROR(player);
@@ -268,11 +270,15 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
 {
     madaudio_player_t* player = (madaudio_player_t*)param;
     Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
-    const char* action = keys_lookup_by_event(player->keys, "player", ev);
+    const char* action = keys_lookup_by_event(player->keys,
+        player->recorder ? "recorder" :  "player", ev);
     if(!action)
         return;
     if(!strcmp(action, "Quit"))
+    {
+        madaudio_stop_record(player);
         ecore_main_loop_quit();
+    }
 
     /* all commands except Quit require conn and conn->status */
     if(!player->conn || !player->status)
@@ -280,8 +286,19 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
         printf("Not connected\n");
         return;
     }
+
     if(!strcmp(action, "PlayPause"))
         madaudio_play_pause(player);
+
+    /* Recorder */
+    if(!strcmp(action, "StopRecording"))
+        madaudio_stop_record(player);
+
+    if(!strcmp(action, "RecorderFolder"))
+        madaudio_recorder_folder(player);
+
+    if(!strcmp(action, "Record"))
+        madaudio_start_record(player);
 
     /* prev/next */
     if(!strcmp(action, "Previous"))

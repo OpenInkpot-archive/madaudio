@@ -24,6 +24,12 @@ struct madaudio_player_t {
     char* filename;
     int retry;
     bool mpd_run;
+
+    Ecore_Exe *recorder;
+    Ecore_Event_Handler *recorder_handler;
+    Ecore_Timer *recorder_timer;
+    time_t *recorder_start_time;
+    time_t *recorder_current_time;
 };
 
 
@@ -41,6 +47,12 @@ void madaudio_play_pause(madaudio_player_t*);
 void madaudio_draw_captions(madaudio_player_t*);
 void madaudio_draw_song(madaudio_player_t*);
 
+void madaudio_start_record(madaudio_player_t*);
+void madaudio_stop_record(madaudio_player_t*);
+void madaudio_draw_recorder_start(madaudio_player_t *);
+void madaudio_draw_recorder_stop(madaudio_player_t *);
+
+void madaudio_recorder_folder(madaudio_player_t *);
 
 void
 madaudio_polling_start(madaudio_player_t* player);

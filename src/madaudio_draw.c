@@ -10,6 +10,7 @@
 #include <mpd/status.h>
 #include "madaudio.h"
 
+
 static void
 blank_gui(Evas_Object* gui)
 {
@@ -197,4 +198,30 @@ madaudio_draw_song(madaudio_player_t* player)
             printf("No song\n");
     }
     madaudio_draw_statusbar(player);
+}
+
+static int
+record_callback(void *data)
+{
+    madaudio_player_t *player = data;
+    blank_gui(player);
+    edje_object_part_text_set(player->gui, "title", gettext("Recording..."));
+    double diff = difftime(player->recorder_current_time, player->recorder_start_time);
+    edje_object_part_text_set(player->gui, "total_time",
+        format_time((int) diff));
+}
+
+void
+madaudio_draw_recorder_start(madaudio_player_t *player)
+{
+    madaudio_polling_stop(player);
+    player->recorder_timer = ecore_timer_loop_add(5.0, record_callback, player);
+    player->recorder_start_time =  time(NULL);
+    player->recorder_current_time = player->recorder_start_time;
+    record_callback(player);
+}
+
+void
+madaudio_draw_recorder_stop(madaudio_player_t *player)
+{
 }

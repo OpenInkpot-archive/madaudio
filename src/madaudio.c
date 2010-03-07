@@ -152,22 +152,26 @@ static bool check_running_instance(const char* cmd)
 
 static int sighup_signal_handler(void* data, int type, void* event)
 {
+    madaudio_stop_record((madaudio_player_t* ) data);
     return 1;
 }
 
 static void exit_all(void *param)
 {
+    madaudio_stop_record((madaudio_player_t* ) param);
     ecore_main_loop_quit();
 }
 
 static int exit_handler(void *param, int ev_type, void *event)
 {
+   madaudio_stop_record((madaudio_player_t* ) param);
    ecore_main_loop_quit();
    return 1;
 }
 
 static void exit_app(void* param)
 {
+    madaudio_stop_record((madaudio_player_t* ) param);
     exit(1);
 }
 
@@ -261,7 +265,7 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    ecore_x_io_error_handler_set(exit_app, NULL);
+    ecore_x_io_error_handler_set(exit_app, player);
 
     if(!evas_init())
         err(1, "Unable to initialize Evas");
@@ -310,8 +314,8 @@ int main(int argc, char** argv)
     ecore_evas_show(main_win);
 
 
-    ecore_x_io_error_handler_set(exit_all, NULL);
-    ecore_event_handler_add(ECORE_EVENT_SIGNAL_EXIT, exit_handler, NULL);
+    ecore_x_io_error_handler_set(exit_all, player);
+    ecore_event_handler_add(ECORE_EVENT_SIGNAL_EXIT, exit_handler, player);
     ecore_event_handler_add(ECORE_EVENT_SIGNAL_HUP, sighup_signal_handler,
         player);
 
