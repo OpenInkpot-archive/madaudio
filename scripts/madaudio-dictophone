@@ -1,0 +1,32 @@
+#!/bin/sh -ex
+STATE=/tmp/dictophone.state
+
+beep () {
+    aplay /usr/share/madaudio/beep.wav
+}
+
+# Disable microphone, enable speaker, say beep
+restore_all() {
+    echo "Cleaning up..."
+    if [ -f "${STATE}" ]; then
+        alsactl -f "${STATE}" restore
+        beep
+        rm -f "${STATE}"
+    fi
+    exit 0
+}
+
+rm -f "${STATE}"
+trap restore_all TERM INT
+alsactl -f "${STATE}" store
+amixer -s <<EOF
+cset name='HP Mute Switch' true
+cset name='MIC Boost Gain' 3
+cset name='Capture Volume' 25
+cset name='Output Mixer Playback Switch' false
+cset name='Speaker Function' 1
+EOF
+#record
+eval "$@"
+restore_all
+

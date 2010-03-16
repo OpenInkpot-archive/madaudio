@@ -7,3 +7,4 @@ desktop_DATA = madaudio.desktop
 etcdir=/etc/madaudio
 etc_DATA = mpd.conf
 
+data_DATA = beep.wav

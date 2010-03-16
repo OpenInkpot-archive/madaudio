@@ -12,8 +12,8 @@
 #include "madaudio.h"
 
 #define FILENAME_LEN 512
-#define DEFAULT_COMMAND "arecord %s"
-#define DEFAULT_FILETEMPLATE  "%F-%H:%M:%S"
+#define DEFAULT_COMMAND "madaudio-dictophone arecord %s"
+#define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
 #define MADAUDIO_INI "/etc/madaudio.ini"
@@ -98,13 +98,16 @@ madaudio_start_record(madaudio_player_t *player)
     if(!ensure_dir(path))
         return;
 
+    printf("Recording...\n");
     char *fullname = xasprintf("%s/%s", path, madaudio_strftime(template));
-    char *cmdline = xasprintf(command, fullname);
-
+    char *line = xasprintf(command, fullname);
+    char *cmdline = xasprintf("chpst -P %s", line);
     player->recorder_handler = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
                                                        madaudio_callback,
                                                        player);
+    printf("Run: %s\n", cmdline);
     player->recorder = ecore_exe_run(cmdline, NULL);
+    free(line);
     free(cmdline);
     free(fullname);
     madaudio_draw_recorder_start(player);
@@ -117,7 +120,13 @@ madaudio_stop_record(madaudio_player_t *player)
     if(player->recorder)
     {
         printf("Sending SIGTERM to recorder\n");
-        ecore_exe_terminate(player->recorder);
+//        ecore_exe_terminate(player->recorder);
+        int pid = ecore_exe_pid_get(player->recorder);
+        if(pid > 1)
+        {
+            printf("Signalling %d\n", pid);
+            kill(-pid, SIGINT);
+        }
     }
 }
 
@@ -130,7 +139,7 @@ madaudio_recorder_folder(madaudio_player_t *player)
     if(!ensure_dir(path))
         return;
     char *cmd = xasprintf("/usr/bin/madshelf --filter=audio %s", path);
-    Ecore_Exe *exe = ecore_exe_run("/usr/bin/madshelf --filter=audio", NULL);
+    Ecore_Exe *exe = ecore_exe_run(cmd, NULL);
     if(exe)
         ecore_exe_free(exe);
     free(cmd);

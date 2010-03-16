@@ -8,4 +8,4 @@ StartupNotify=true
 Terminal=false
 Type=Application
 Categories=Audio;
-MimeType=audio/mpeg;audio/x-vorbis+ogg
+MimeType=audio/mpeg;audio/x-vorbis+ogg;audio/x-wav;audio/x-aiff

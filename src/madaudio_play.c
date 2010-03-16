@@ -177,6 +177,11 @@ madaudio_play(madaudio_player_t* player, int track)
 void
 madaudio_play_pause(madaudio_player_t* player)
 {
+    if(player->recorder)
+    {
+        madaudio_stop_record(player);
+        return;
+    }
     if(mpd_status_get_state(player->status) == MPD_STATE_STOP &&
         player->playlist)
     {

@@ -161,6 +161,17 @@ madaudio_draw_captions(madaudio_player_t* player)
 }
 
 static void
+madaudio_clear_captions(madaudio_player_t *player)
+{
+    Evas_Object* gui = player->gui;
+    edje_object_part_text_set(gui, "caption-composer", "");
+    edje_object_part_text_set(gui, "caption-artist", "");
+    edje_object_part_text_set(gui, "caption-album", "");
+    edje_object_part_text_set(gui, "caption-genre", "");
+    edje_object_part_text_set(gui, "caption-year", "");
+}
+
+static void
 madaudio_draw_statusbar(madaudio_player_t* player)
 {
     if(!player->status)
@@ -181,6 +192,10 @@ madaudio_draw_statusbar(madaudio_player_t* player)
 void
 madaudio_draw_song(madaudio_player_t* player)
 {
+    /* recorder has own "draw" */
+    if(player->recorder)
+        return;
+
     madaudio_draw_captions(player);
     blank_gui(player->gui);
     if(!player->conn || !player->status)
@@ -204,9 +219,8 @@ static int
 record_callback(void *data)
 {
     madaudio_player_t *player = data;
-    blank_gui(player);
-    edje_object_part_text_set(player->gui, "title", gettext("Recording..."));
-    double diff = difftime(player->recorder_current_time, player->recorder_start_time);
+    time_t current_time = time(NULL);
+    double diff = difftime(current_time, player->recorder_start_time);
     edje_object_part_text_set(player->gui, "total_time",
         format_time((int) diff));
 }
@@ -215,13 +229,20 @@ void
 madaudio_draw_recorder_start(madaudio_player_t *player)
 {
     madaudio_polling_stop(player);
+    blank_gui(player->gui);
+    madaudio_clear_captions(player);
     player->recorder_timer = ecore_timer_loop_add(5.0, record_callback, player);
     player->recorder_start_time =  time(NULL);
     player->recorder_current_time = player->recorder_start_time;
+    edje_object_part_text_set(player->gui, "title", gettext("Recording..."));
+    madaudio_update_meter(player->gui, 0);
     record_callback(player);
 }
 
 void
 madaudio_draw_recorder_stop(madaudio_player_t *player)
 {
+    ecore_timer_del(player->recorder_timer);
+    player->recorder_timer = NULL;
+    madaudio_draw_song(player);
 }
