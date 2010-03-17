@@ -1,3 +1,9 @@
+madaudio (0.4.4) zelazny; urgency=low
+
+  * Early dictophone support (problems with mixer can appear from nothing)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 18 Mar 2010 01:56:37 +0200
+
 madaudio (0.4.3) zelazny; urgency=low
 
   * Adopt libeoi1 -> libeoi2 transition
