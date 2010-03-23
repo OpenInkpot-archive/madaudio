@@ -165,6 +165,13 @@ madaudio_pause(madaudio_player_t* player)
 }
 
 void
+madaudio_stop(madaudio_player_t *player)
+{
+    mpd_run_stop(player->conn);
+    MADAUDIO_CHECK_ERROR(player);
+}
+
+void
 madaudio_play(madaudio_player_t* player, int track)
 {
     /* be sure to stop recorder, to avoid races */

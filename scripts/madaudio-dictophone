@@ -22,11 +22,11 @@ alsactl -f "${STATE}" store
 amixer -q -s <<EOF
 cset name='HP Mute Switch' true
 cset name='MIC Boost Gain' 3
-cset name='Capture Volume' 25
+cset name='Capture Volume' 30
 cset name='Output Mixer Playback Switch' false
 cset name='Speaker Function' 1
-cset name='Input Mixer Line Capture Switch'
-cset name='Input Mixer MIC Capture Switch'
+cset name='Input Mixer Line Capture Switch' on
+cset name='Input Mixer MIC Capture Switch' on
 EOF
 #record
 eval "$@"

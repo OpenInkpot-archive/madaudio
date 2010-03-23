@@ -44,6 +44,7 @@ bool madaudio_command(madaudio_player_t*, const char*);
 
 void madaudio_status(madaudio_player_t* player);
 void madaudio_play(madaudio_player_t* player, int track);
+void madaudio_stop(madaudio_player_t* player);
 void madaudio_pause(madaudio_player_t* player);
 void madaudio_play_pause(madaudio_player_t*);
 
