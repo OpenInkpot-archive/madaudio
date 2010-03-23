@@ -276,7 +276,8 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     madaudio_player_t* player = (madaudio_player_t*)param;
     Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
     const char* action = keys_lookup_by_event(player->keys,
-        player->recorder ? "recorder" :  "player", ev);
+                                              player->context, ev);
+
     if(!action)
         return;
     if(!strcmp(action, "Quit"))
@@ -302,7 +303,7 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     if(!strcmp(action, "RecorderFolder"))
         madaudio_recorder_folder(player);
 
-    if(!strcmp(action, "Record"))
+    if(!strcmp(action, "RecorderStart"))
         madaudio_start_record(player);
 
     /* prev/next */
@@ -342,6 +343,31 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
         eoi_help_show(e, "madaudio", "index",
             gettext("Madaudio: Help"),
             player->keys, "player");
+
+    if(!strcmp(action,"ToggleExtendedControls"))
+    {
+        if(player->extended_controls)
+        {
+            player->extended_controls = false;
+            edje_object_signal_emit(player->gui, "hide-extended-controls", "");
+        }
+        else
+        {
+            player->extended_controls = true;
+            edje_object_signal_emit(player->gui, "show-extended-controls", "");
+        }
+    }
+
+    if(!strcmp(action, "RecorderDialogOpen"))
+    {
+        player->context = "recorder";
+        edje_object_signal_emit(player->gui, "show-recorder-controls", "");
+    }
+    if(!strcmp(action, "RecorderDialogClose"))
+    {
+        player->context = "player";
+        edje_object_signal_emit(player->gui, "hide-recorder-controls", "");
+    }
 
     madaudio_status(player);
 }

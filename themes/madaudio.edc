@@ -33,6 +33,18 @@ images {
     image: "volume-90-v.png" COMP;
     image: "volume-100.png" COMP;
     image: "volume-100-v.png" COMP;
+
+    image: "forward-1.png" COMP;
+    image: "forward-10.png" COMP;
+    image: "backward-1.png" COMP;
+    image: "backward-10.png" COMP;
+    image: "button-folder.png" COMP;
+
+    image: "dict_bg.png" COMP;
+    image: "dict_bg_h.png" COMP;
+    image: "microphone.png" COMP;
+    image: "dict_record.png" COMP;
+    image: "dict_pause.png" COMP;
 }
 
 styles {
@@ -51,6 +63,10 @@ styles {
     style {
         name, "times";
         base, "font=sans font_size=24 color=#000 align=right"; 
+    }
+    style {
+        name, "centered";
+        base, "font=sans font_size=24 color=#000 align=center"; 
     }
     style {
         name, "playlist";
@@ -263,6 +279,45 @@ styles {
                 }                                           \
             }
 
+#define EXT_CLIPPER(part_name, x1, y1, x2, y2)                      \
+    part {                                                          \
+        name, part_name;                                            \
+        type, RECT;                                                 \
+        description {                                               \
+            state, "default" 0.0;                                   \
+            color, 0 0 0 0;                                         \
+            rel1 { relative, 0.0 0.0; to, clipper; offset, x1 y1; } \
+            rel2  {relative, 0.0 0.0; to, clipper; offset, x2 y2; } \
+        }                                                           \
+        description {                                               \
+            state, "visible" 0.0;                                   \
+            inherit, "default" 0.0;                                 \
+            color, 255 255 255 255;                                 \
+        }                                                           \
+    }
+
+#define EXT_BUTTON(part_name, clipper, base, x1, y1, x2, y2, rx, ry, image_name)  \
+    part {                                                          \
+        name, part_name;                                            \
+        type, IMAGE;                                                \
+        mouse_events, 0;                                            \
+        clip_to, clipper;                                           \
+        description {                                               \
+            state, "default" 0.0;                                   \
+            color, 255 255 255 255;                                 \
+            rel1 { relative, rx ry; to, base; offset, x1 y1; }      \
+            rel2 { relative, rx ry; to, base; offset, x2 y2; }      \
+            image { normal, image_name; }                           \
+        }                                                           \
+    }
+
+#define EXT_PROGRAM(part_name, signal_name, state_name)             \
+    program {                                                       \
+        name, signal_name;                                          \
+        signal, signal_name;                                        \
+        action, STATE_SET state_name 0.0;                           \
+        target, part_name;                                          \
+    }
 
 #define VOLUME_STATE(name, file)                              \
         description {                                   \
@@ -340,29 +395,6 @@ styles {
 
 collections {
     group {
-        name, "main_edje";
-        parts {
-            BACKGROUND(0,-1)
-            HEADER_RECT
-            part {
-                name, "clock";
-                type, TEXT;
-                description {
-                    state, "default" 0.0;
-                    color, 255 255 255 255;
-                    text {
-                        font, sans-serif;
-                        size, 28;
-                        align, 1.0 0.5;
-                    }
-                    rel1 { to, "header"; relative, 1.0 0.0; offset, -100 0; }
-                    rel2 { to, "header"; relative, 1.0 1.0; offset, -10 -1; }
-                }
-            }
-            CONTENTS_SWALLOW
-        }
-    }
-    group {
         name, "vertical";
         parts {
             part {
@@ -403,12 +435,173 @@ collections {
                 "volume-90.png",
                 "volume-100.png"
                 )
+
+
+            /* Extended controls */
+            part {
+                name, "extended-controls";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 0 0 0 0; 
+                    rel1 { relative, 0.0 0.0; offset, 0 310; }
+                    rel2  {relative, 0.0 1.0;  offset, 102 -1; }
+                }
+                description {
+                    state, "visible" 0.0;
+                    inherit, "default" 0.0;
+                    color, 255 255 255 255;
+                }
+            }
+
+            EXT_BUTTON("forward1", "extended-controls", "extended-controls",
+                0, 0, 102, 74, 0.0, 0.0, "forward-1.png")
+            EXT_BUTTON("backward1", "extended-controls", "forward1",
+                0, 6, 102, 80, 0.0, 1.0, "backward-1.png")
+            EXT_BUTTON("forward10", "extended-controls", "backward1",
+                0, 6, 102, 80, 0.0, 1.0, "forward-10.png")
+            EXT_BUTTON("backward10", "extended-controls", "forward10",
+                0, 6, 102, 80, 0.0, 1.0, "backward-10.png")
+            EXT_BUTTON("folder", "extended-controls", "backward10",
+                0, 6, 102, 80, 0.0, 1.0, "button-folder.png")
+
+            part {
+                name, "recorder-controls";
+                type, RECT;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 0 0 0 0; 
+                    rel1 { relative, 0.0 0.0; offset, 109 432; }
+                    rel2  {relative, 1.0 1.0;  offset, -1 -1; }
+                }
+                description {
+                    state, "visible" 0.0;
+                    inherit, "default" 0.0;
+                    color, 255 255 255 255;
+                }
+            }
+            part {
+                name, "recorder-window";
+                type, RECT;
+                clip_to, "recorder-controls";
+                description {
+                    state, "default" 0.0;
+                    color, 210 210 210 255;
+                    rel1 { to, "recorder-controls"; }
+                    rel2 { to, "recorder-controls"; }
+                }
+            }
+            part {
+                name, "recorder-window-background";
+                type, IMAGE;
+                clip_to, "recorder-controls";
+                description {
+                    state, "default" 0.0;
+                    rel1 { to, "recorder-controls"; relative, 0.0 0.0; offset, 0 0; }
+                    rel2 { to, "recorder-controls"; relative, 1.0 0.0; offset, -1 72; }
+                    image { normal, "dict_bg.png"; }
+                }
+            }
+            part {
+                name, "recorder-title"; 
+                type, TEXTBLOCK;
+                clip_to, "recorder-controls";
+                description {
+                    color, 0 0 0 255;
+                    text {
+                        max, 0 1;
+                        style, "centered";
+                    }
+                    align, 0.5 0.5;
+                    rel1 { relative, 0.0 0.0; offset, 0 15; to, "recorder-controls"; }
+                    rel2 { relative, 1.0 0.0; offset, 0 50; to, "recorder-controls"; }
+                }
+            }
+            part {
+                name, "recorder-help"; 
+                type, TEXTBLOCK;
+                clip_to, "recorder-controls";
+                description {
+                    color, 0 0 0 255;
+                    text {
+                        max, 0 1;
+                        style, "centered";
+                    }
+                    align, 0.5 0.5;
+                    rel1 { relative, 0.0 1.0; offset, 0 -50; to, "recorder-controls"; }
+                    rel2 { relative, 1.0 1.0; offset, 0 -15; to, "recorder-controls"; }
+                }
+            }
+            part {
+                name, "microphone-icon";
+                type, IMAGE;
+                clip_to, "recorder-controls";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { to, "recorder-controls"; relative, 0.0 0.0;
+                        offset, 6 91; }
+                    rel2 { to, "recorder-controls"; relative, 0.0 0.0;
+                       offset, 121 223; }
+                    image { normal, "microphone.png"; }
+                }
+            }
+            part {
+                name, "recorder-button";
+                type, IMAGE;
+                clip_to, "recorder-controls";
+                description {
+                    color, 255 255 255 255;
+                    state, "default" 0.0;
+                    
+                    rel1 { to, "recorder-controls"; relative, 0.0 0.0;
+                        offset, 274 99; }
+                    rel2 { to, "recorder-controls"; relative, 0.0 0.0;
+                       offset, 319 144; }
+                    image {
+                        normal, "dict_record.png";
+                    }
+                }
+                description {
+                    state, "pause" 0.0;
+                    inherit, "default" 0.0;
+                    image { normal, "dict_pause.png"; }
+                }
+            }
         }
         programs {
             BUTTON_PROG("cycle", 6, "cycle,*")
             BUTTON_PROG("full", 5, "full,*")
             BUTTON_PROG("playpause", 10, "playpause,*")
             VOLUME_PROG()
+            EXT_PROGRAM("extended-controls",
+                        "show-extended-controls",
+                        "visible")
+            EXT_PROGRAM("extended-controls",
+                        "hide-extended-controls",
+                        "default")
+            EXT_PROGRAM("recorder-controls",
+                        "show-recorder-controls",
+                        "visible")
+            EXT_PROGRAM("recorder-controls",
+                        "hide-recorder-controls",
+                        "default") 
+            program {
+                name, "recording-start";
+                signal, "recording-button";
+                source, "start";
+                action, STATE_SET "pause" 0.0;
+                target, "recorder-button";
+            }
+            program {
+                name, "recording-stop";
+                signal, "recording-button";
+                source, "stop";
+                action, STATE_SET "default" 0.0;
+                target, "recorder-button";
+            }
         }
     }
 

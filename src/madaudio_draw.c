@@ -26,6 +26,14 @@ blank_gui(Evas_Object* gui)
 }
 
 static void
+fill_recorder_gui(Evas_Object *gui)
+{
+    edje_object_part_text_set(gui, "recorder-title", gettext("Recorder"));
+    edje_object_part_text_set(gui, "recorder-help",
+        gettext("Press OK to start recording"));
+}
+
+static void
 draw_song_tag(Evas_Object* gui, const char *field, const struct mpd_song* song,
                 enum mpd_tag_type type)
 {
@@ -212,6 +220,7 @@ madaudio_draw_song(madaudio_player_t* player)
         else
             printf("No song\n");
     }
+    fill_recorder_gui(player->gui);
     madaudio_draw_statusbar(player);
 }
 
@@ -234,8 +243,12 @@ madaudio_draw_recorder_start(madaudio_player_t *player)
     player->recorder_timer = ecore_timer_loop_add(5.0, record_callback, player);
     player->recorder_start_time =  time(NULL);
     player->recorder_current_time = player->recorder_start_time;
-    edje_object_part_text_set(player->gui, "title", gettext("Recording..."));
+    edje_object_part_text_set(player->gui, "recorder-title",
+        gettext("Recording..."));
+    edje_object_part_text_set(player->gui, "recorder-help",
+        gettext("Press C or OK to stop"));
     madaudio_update_meter(player->gui, 0);
+    edje_object_signal_emit(player->gui, "recording-button", "start");
     record_callback(player);
 }
 
@@ -244,5 +257,6 @@ madaudio_draw_recorder_stop(madaudio_player_t *player)
 {
     ecore_timer_del(player->recorder_timer);
     player->recorder_timer = NULL;
+    edje_object_signal_emit(player->gui, "recording-button", "stop");
     madaudio_draw_song(player);
 }

@@ -25,6 +25,9 @@ struct madaudio_player_t {
     int retry;
     bool mpd_run;
 
+    bool extended_controls;
+    const char *context;
+
     Ecore_Exe *recorder;
     Ecore_Event_Handler *recorder_handler;
     Ecore_Timer *recorder_timer;

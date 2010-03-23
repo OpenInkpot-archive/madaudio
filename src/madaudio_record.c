@@ -74,6 +74,7 @@ madaudio_callback(void *data, int type __attribute__((unused)),
     player->recorder_handler = NULL;
     player->recorder = NULL;
     printf("Recorder stopped\n");
+    player->context = "recorder";
     madaudio_draw_recorder_stop(player);
     return ECORE_CALLBACK_CANCEL;
 }
@@ -92,6 +93,8 @@ madaudio_start_record(madaudio_player_t *player)
     }
     if(player->status == MPD_STATE_PLAY)
         madaudio_play_pause(player);
+
+    player->context = "recording";
 
     madaudio_read_config(&template, &path, &command);
 
