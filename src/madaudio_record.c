@@ -12,7 +12,7 @@
 #include "madaudio.h"
 
 #define FILENAME_LEN 512
-#define DEFAULT_COMMAND "madaudio-dictophone arecord %s"
+#define DEFAULT_COMMAND "madaudio-dictophone arecord -f cd -t wav %s"
 #define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
@@ -92,7 +92,7 @@ madaudio_start_record(madaudio_player_t *player)
         return;
     }
     if(player->status == MPD_STATE_PLAY)
-        madaudio_play_pause(player);
+        madaudio_stop(player);
 
     player->context = "recording";
 
