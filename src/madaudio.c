@@ -95,19 +95,13 @@ static int _client_del(void* param, int ev_type, void* ev)
         madaudio_player_t* player = (madaudio_player_t*)param;
         Ecore_Evas* win = player->win;
 
-        bool raise = false;
-
         if(msg->msg[0] == '/') {
+            free(player->filename);
             player->filename = strdup(msg->msg);
             madaudio_play_file(player);
-            raise = true;
-        } else {
-            raise = madaudio_command(player, msg->msg);
-        };
-        if(raise){
+            madaudio_action(player, msg->msg);
             ecore_evas_show(win);
             ecore_evas_raise(win);
-            madaudio_polling_start(player);
         };
     }
 

@@ -277,13 +277,10 @@ madaudio_volume(madaudio_player_t* player, int offset)
     }
 }
 
-void
-madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+
+static void
+madaudio_action_internal(Evas *e, madaudio_player_t *player, const char *action)
 {
-    madaudio_player_t* player = (madaudio_player_t*)param;
-    Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
-    const char* action = keys_lookup_by_event(player->keys,
-                                              player->context, ev);
 
     if(!action)
         return;
@@ -351,6 +348,9 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
             gettext("Madaudio: Help"),
             player->keys, "player");
 
+    if(!strcmp(action, "RecorderReplay"))
+        madaudio_play_file(player);
+
     if(!strcmp(action,"ToggleExtendedControls"))
     {
         if(player->extended_controls)
@@ -377,4 +377,22 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     }
 
     madaudio_status(player);
+}
+
+void
+madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+{
+    madaudio_player_t* player = (madaudio_player_t*)param;
+    Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
+    const char* action = keys_lookup_by_event(player->keys,
+                                              player->context, ev);
+    madaudio_action_internal(e, player, action);
+}
+
+void
+madaudio_action(madaudio_player_t *player, const char *key)
+{
+    char *action = keys_lookup(player->keys, player->context, key);
+    Evas *e = evas_object_evas_get(player->gui);
+    madaudio_action_internal(e, player, action);
 }

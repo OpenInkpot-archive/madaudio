@@ -33,6 +33,8 @@ struct madaudio_player_t {
     Ecore_Timer *recorder_timer;
     time_t *recorder_start_time;
     time_t *recorder_current_time;
+    char *recorder_track; // this track recorded now if *recorder not NULL,
+                          // or last recorded file
 };
 
 
@@ -57,6 +59,9 @@ void madaudio_draw_recorder_start(madaudio_player_t *);
 void madaudio_draw_recorder_stop(madaudio_player_t *);
 
 void madaudio_recorder_folder(madaudio_player_t *);
+
+void
+madaudio_action(madaudio_player_t *player, const char *key);
 
 void
 madaudio_polling_start(madaudio_player_t* player);

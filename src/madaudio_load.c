@@ -101,8 +101,6 @@ madaudio_play_file(madaudio_player_t* player)
     madaudio_status(player);
     int track_no = madaudio_find_song_by_filename(player, player->filename);
     madaudio_play(player, track_no);
-    free(player->filename);
-    player->filename = NULL;
     madaudio_status(player);
 }
 
