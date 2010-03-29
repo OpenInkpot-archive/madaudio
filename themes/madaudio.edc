@@ -50,31 +50,31 @@ images {
 styles {
     style {
         name, "song_title";
-        base, "font=sans:bold font_size=24 color=#000 align=middle"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#000 align=middle"; 
     }
     style {
         name, "caption";
-        base, "font=sans:bold font_size=24 color=#555 align=left"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#555 align=left"; 
     }
     style {
         name, "values";
-        base, "font=sans font_size=22 color=#000 align=left"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left"; 
     }
     style {
         name, "times";
-        base, "font=sans font_size=24 color=#000 align=right"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#000 align=right"; 
     }
     style {
         name, "centered";
-        base, "font=sans font_size=24 color=#000 align=center"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#000 align=center"; 
     }
     style {
         name, "playlist";
-        base, "font=sans font_size=24 color=#000 align=left"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#000 align=left"; 
     }
     style {
         name, "shaded";
-        base, "font=sans font_size=24 color=#555 align=left"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#555 align=left"; 
     }
 }
 
