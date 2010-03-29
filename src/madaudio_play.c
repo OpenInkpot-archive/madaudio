@@ -394,5 +394,6 @@ madaudio_action(madaudio_player_t *player, const char *key)
 {
     char *action = keys_lookup(player->keys, player->context, key);
     Evas *e = evas_object_evas_get(player->gui);
+    printf("Action: %s -> %s\n", key, action);
     madaudio_action_internal(e, player, action);
 }
