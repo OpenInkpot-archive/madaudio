@@ -94,6 +94,7 @@ madaudio_find_song_by_filename(madaudio_player_t* player, const char* filename)
 void
 madaudio_play_file(madaudio_player_t* player)
 {
+    printf("madaudio_play_file(\"%s\")\n", player->filename);
     const char* dir = ecore_file_dir_get(player->filename);
     mpd_run_clear(player->conn);
     madaudio_check_error(player);

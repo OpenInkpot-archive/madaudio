@@ -99,10 +99,11 @@ static int _client_del(void* param, int ev_type, void* ev)
             free(player->filename);
             player->filename = strdup(msg->msg);
             madaudio_play_file(player);
+        }
+        else
             madaudio_action(player, msg->msg);
-            ecore_evas_show(win);
-            ecore_evas_raise(win);
-        };
+        ecore_evas_show(win);
+        ecore_evas_raise(win);
     }
 
     free(msg->msg);
