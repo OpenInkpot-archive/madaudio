@@ -1,3 +1,11 @@
+madaudio (0.4.6) zelazny; urgency=low
+
+  * Fix beeping and beep.wav location (#869)
+  * Fix playpause issue
+  * Switch font to "condensed"
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Mon, 29 Mar 2010 09:58:46 +0300
+
 madaudio (0.4.5) zelazny; urgency=low
 
   * Recording works well for me.
