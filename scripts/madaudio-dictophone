@@ -19,6 +19,7 @@ restore_all() {
 rm -f "${STATE}"
 trap restore_all TERM INT
 alsactl -f "${STATE}" store
+beep
 amixer -q -s <<EOF
 cset name='Mic Capture Switch' on
 cset name='Mic Capture Volume' 3
