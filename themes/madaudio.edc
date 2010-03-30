@@ -34,8 +34,12 @@ images {
     image: "volume-100.png" COMP;
     image: "volume-100-v.png" COMP;
 
+    image: "forward-small.png" COMP;
+    image: "forward-0.png" COMP;
     image: "forward-1.png" COMP;
     image: "forward-10.png" COMP;
+    image: "backward-small.png" COMP;
+    image: "backward-0.png" COMP;
     image: "backward-1.png" COMP;
     image: "backward-10.png" COMP;
     image: "button-folder.png" COMP;
@@ -411,10 +415,11 @@ collections {
             BLOCK(110, 76, 595, 308)
 
             /* Prev/Next Box */
-            CLIPPER("prev-next-clipper", 130, 317, 595, 424)
-            STYLED("prev-song", "shaded", "prev-next-clipper", 15, 5, 450, 35)
-            STYLED("this-song", "playlist", "prev-next-clipper", 15, 39, 450, 66)
-            STYLED("next-song", "shaded", "prev-next-clipper", 15, 67, 450, 103)
+            CLIPPER("prev-next-clipper", 107, 315, 595, 424)
+            STYLED("prev-song", "shaded", "prev-next-clipper", 38, 5, 473, 35)
+            STYLED("this-song", "playlist", "prev-next-clipper", 38, 39, 473, 66)
+
+            STYLED("next-song", "shaded", "prev-next-clipper", 38, 67, 473, 103)
 
             BUTTON("cycle", 0, 2, 102, 76, 
                 "repeat-none-vertical.png", "repeat-all-vertical.png")
@@ -436,6 +441,59 @@ collections {
                 "volume-100.png"
                 )
 
+            part {
+                name, "forward-0";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    image { normal, "forward-0.png"; }
+                    rel1 { relative, 0.0 0.0; to, "background"; offset, 0 158; }
+                    rel2 { relative, 0.0 0.0; to, "background"; offset, 102 229; }
+                }
+            }
+
+            part {
+                name, "backward-0";
+                type, IMAGE;
+                mouse_events, 0;
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    image { normal, "backward-0.png"; }
+                    rel1 { relative, 0.0 0.0; to, "background"; offset, 0 235; }
+                    rel2 { relative, 0.0 0.0; to, "background"; offset, 102 305; }
+                }
+            }
+
+            part {
+                name, "backward-small";
+                type, IMAGE;
+                mouse_events, 0;
+                clip_to, "prev-next-clipper";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    image { normal, "backward-small.png"; }
+                    rel1 { relative, 0.0 0.0; to, "prev-next-clipper"; offset, 15 15; }
+                    rel2 { relative, 0.0 0.0; to, "prev-next-clipper"; offset, 31 35; }
+                }
+            }
+
+            part {
+                name, "forward-small";
+                type, IMAGE;
+                mouse_events, 0;
+                clip_to, "prev-next-clipper";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    image { normal, "forward-small.png"; }
+                    rel1 { relative, 0.0 0.0; to, "prev-next-clipper"; offset, 15 80; }
+                    rel2 { relative, 0.0 0.0; to, "prev-next-clipper"; offset, 31 100; }
+                }
+            }
 
             /* Extended controls */
             part {
