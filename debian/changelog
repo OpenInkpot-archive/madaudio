@@ -1,3 +1,10 @@
+madaudio (0.4.7) zelazny; urgency=low
+
+  * tech preview release: most recorder window elements are on places.
+  * add free space (in seconds ;) indication
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 31 Mar 2010 02:08:20 +0300
+
 madaudio (0.4.6) zelazny; urgency=low
 
   * Fix beeping and beep.wav location (#869)
