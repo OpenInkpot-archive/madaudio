@@ -78,7 +78,7 @@ styles {
     }
     style {
         name, "shaded";
-        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#555 align=left"; 
+        base, "font=DejaVu\\ Sans\\ Condensed font_size=24 color=#555 align=left"; 
     }
 }
 
@@ -626,6 +626,48 @@ collections {
                     state, "pause" 0.0;
                     inherit, "default" 0.0;
                     image { normal, "dict_pause.png"; }
+                }
+            }
+            part {
+                name, "recorder-meter";
+                type, SWALLOW;
+                clip_to, "recorder-controls";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { to, "recorder-controls"; relative, 1.0 0.0; offset, -386 169 ;}
+                    rel2 { to, "recorder-controls"; relative, 1.0 0.0; offset, -11 179;}
+                }
+            }
+            part {
+                name, "recorder-timer"; 
+                type, TEXTBLOCK;
+                clip_to, "recorder-controls";
+                description {
+                    color, 0 0 0 255;
+                    text {
+                        max, 0 1;
+                        style, "values";
+                    }
+                    align, 0.5 0.5;
+                    rel1 { relative, 0.0 1.0; offset, 0 5; to, "recorder-meter"; }
+                    rel2 { relative, 1.0 1.0; offset, 0 40; to, "recorder-meter"; }
+                }
+            }
+
+            part {
+                name, "recorder-freespace"; 
+                type, TEXTBLOCK;
+                clip_to, "recorder-controls";
+                description {
+                    color, 0 0 0 255;
+                    text {
+                        max, 0 1;
+                        style, "times";
+                    }
+                    align, 0.5 0.5;
+                    rel1 { relative, 0.0 1.0; offset, 0 5; to, "recorder-meter"; }
+                    rel2 { relative, 1.0 1.0; offset, 0 40; to, "recorder-meter"; }
                 }
             }
         }

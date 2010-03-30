@@ -1,3 +1,4 @@
+#include <sys/statvfs.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -147,4 +148,23 @@ madaudio_recorder_folder(madaudio_player_t *player)
     if(exe)
         ecore_exe_free(exe);
     free(cmd);
+}
+
+
+static int
+_get_freespace()
+{
+    char *path = DEFAULT_PATH;
+    struct statvfs vfs;
+    madaudio_read_config(NULL, &path, NULL);
+    statvfs(path, &vfs);
+    int k = ( vfs.f_bsize * vfs.f_bavail ) ;
+    printf("k=%d %d %d\n", k, vfs.f_bsize, vfs.f_bavail);
+    return k / (44100 * 2);
+}
+
+void
+madaudio_update_freespace(madaudio_player_t *player)
+{
+    player->freespace = _get_freespace();
 }

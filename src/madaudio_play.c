@@ -368,6 +368,7 @@ madaudio_action_internal(Evas *e, madaudio_player_t *player, const char *action)
     if(!strcmp(action, "RecorderDialogOpen"))
     {
         player->context = "recorder";
+        madaudio_draw_recorder_window(player);
         edje_object_signal_emit(player->gui, "show-recorder-controls", "");
     }
     if(!strcmp(action, "RecorderDialogClose"))

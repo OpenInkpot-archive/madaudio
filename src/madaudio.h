@@ -28,6 +28,8 @@ struct madaudio_player_t {
     bool extended_controls;
     const char *context;
 
+    int freespace; // In seconds!!!
+
     Ecore_Exe *recorder;
     Ecore_Event_Handler *recorder_handler;
     Ecore_Timer *recorder_timer;
@@ -72,10 +74,16 @@ void madaudio_connect(madaudio_player_t*);
 void madaudio_opener_init();
 void madaudio_opener_shutdown();
 
-void madaudio_update_meter(Evas_Object* gui, int value);
+void madaudio_update_meter(Evas_Object* gui, const char*, const char*, int value);
 void madaudio_init_meter(Evas_Object* gui);
 
 void
 madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info);
+
+void
+madaudio_draw_recorder_window(madaudio_player_t *player);
+
+void
+madaudio_update_freespace(madaudio_player_t *player);
 
 #endif

@@ -145,12 +145,12 @@ draw_status(Evas_Object* gui, const struct mpd_status* status)
         free(elapsed);
         if(elapsed_time)
             elapsed_time = trunc(100 * elapsed_time/ time);
-        madaudio_update_meter(gui, elapsed_time);
+        madaudio_update_meter(gui, "meter", "meter", elapsed_time);
     }
     else
     {
         edje_object_part_text_set(gui, "total_time", format_time(time));
-        madaudio_update_meter(gui, 0);
+        madaudio_update_meter(gui, "meter", "meter", 0);
     }
     draw_button(gui, "playpause", (state == MPD_STATE_PLAY));
     draw_button(gui, "cycle", mpd_status_get_repeat(status));
@@ -230,13 +230,14 @@ record_callback(void *data)
     madaudio_player_t *player = data;
     time_t current_time = time(NULL);
     double diff = difftime(current_time, player->recorder_start_time);
-    edje_object_part_text_set(player->gui, "total_time",
+    edje_object_part_text_set(player->gui, "recorder-timer",
         format_time((int) diff));
 }
 
 void
 madaudio_draw_recorder_start(madaudio_player_t *player)
 {
+    madaudio_update_freespace(player);
     madaudio_polling_stop(player);
     blank_gui(player->gui);
     madaudio_clear_captions(player);
@@ -247,7 +248,8 @@ madaudio_draw_recorder_start(madaudio_player_t *player)
         gettext("Recording..."));
     edje_object_part_text_set(player->gui, "recorder-help",
         gettext("Press C or OK to stop"));
-    madaudio_update_meter(player->gui, 0);
+    madaudio_update_meter(player->gui, "meter", "meter", 0);
+    madaudio_update_meter(player->gui, "recorder-meter", "recorder-meter", 0);
     edje_object_signal_emit(player->gui, "recording-button", "start");
     record_callback(player);
 }
@@ -258,5 +260,15 @@ madaudio_draw_recorder_stop(madaudio_player_t *player)
     ecore_timer_del(player->recorder_timer);
     player->recorder_timer = NULL;
     edje_object_signal_emit(player->gui, "recording-button", "stop");
+    madaudio_update_freespace(player);
     madaudio_draw_song(player);
+}
+
+void
+madaudio_draw_recorder_window(madaudio_player_t *player)
+{
+    madaudio_update_freespace(player);
+    edje_object_part_text_set(player->gui, "recorder-timer", "");
+    edje_object_part_text_set(player->gui, "recorder-freespace",
+        format_time(player->freespace));
 }
