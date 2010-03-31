@@ -1,3 +1,9 @@
+madaudio (0.4.8) zelazny; urgency=low
+
+  * Change recording paremeters to 16/8khz/1
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 01 Apr 2010 00:22:32 +0300
+
 madaudio (0.4.7) zelazny; urgency=low
 
   * tech preview release: most recorder window elements are on places.
