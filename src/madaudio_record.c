@@ -13,7 +13,7 @@
 #include "madaudio.h"
 
 #define FILENAME_LEN 512
-#define DEFAULT_COMMAND "madaudio-dictophone arecord -f S16_LE -c1 -r44100 -t wav %s"
+#define DEFAULT_COMMAND "madaudio-dictophone arecord -f S16_LE -c1 -r8000 -t wav %s"
 #define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
@@ -160,7 +160,7 @@ _get_freespace()
     statvfs(path, &vfs);
     int k = ( vfs.f_bsize * vfs.f_bavail ) ;
     printf("k=%d %d %d\n", k, vfs.f_bsize, vfs.f_bavail);
-    return k / (44100 * 2);
+    return k / (8000 * 2);
 }
 
 void
