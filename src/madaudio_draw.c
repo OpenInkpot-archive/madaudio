@@ -92,6 +92,8 @@ draw_song(Evas_Object* gui, const struct mpd_song* song)
 static const char *
 format_time(int inttime)
 {
+    if(inttime < 0)
+        return "unknown";
     static char buf[64];
     time_t time = inttime;
     const struct tm *tm = gmtime(&time);
@@ -134,14 +136,14 @@ draw_status(Evas_Object* gui, const struct mpd_status* status)
 {
     int time = mpd_status_get_total_time(status);
     enum mpd_state state = mpd_status_get_state(status);
+    char* total = strdup(format_time(time));
+    printf("time in status: %d ==\"%s\"\n", time, total);
     if(state == MPD_STATE_PLAY || state == MPD_STATE_PAUSE) {
         int elapsed_time = mpd_status_get_elapsed_time(status);
-        char* total = strdup(format_time(time));
         char* elapsed = strdup(format_time(elapsed_time));
         char timestr[1024];
         snprintf(timestr, 1024, "%s / %s", elapsed, total);
         edje_object_part_text_set(gui, "total_time", timestr);
-        free(total);
         free(elapsed);
         if(elapsed_time)
             elapsed_time = trunc(100 * elapsed_time/ time);
@@ -152,6 +154,7 @@ draw_status(Evas_Object* gui, const struct mpd_status* status)
         edje_object_part_text_set(gui, "total_time", format_time(time));
         madaudio_update_meter(gui, "meter", "meter", 0);
     }
+    free(total);
     draw_button(gui, "playpause", (state == MPD_STATE_PLAY));
     draw_button(gui, "cycle", mpd_status_get_repeat(status));
     draw_button(gui, "full", mpd_status_get_single(status));
