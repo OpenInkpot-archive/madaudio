@@ -1,3 +1,11 @@
+madaudio (0.4.10) zelazny; urgency=low
+
+  * Implement new progressbar
+  * Drop edrawable dependency
+  * Complete horizontal face
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 07 Apr 2010 01:28:17 +0300
+
 madaudio (0.4.9) zelazny; urgency=low
 
   * Fix issues with "undead" files
