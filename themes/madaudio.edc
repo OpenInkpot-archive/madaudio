@@ -57,6 +57,9 @@ images {
     image: "microphone-h.png" COMP;
     image: "dict_record.png" COMP;
     image: "dict_pause.png" COMP;
+
+    image: "meter-empty.png" COMP;
+    image: "meter-full.png" COMP;
 }
 
 styles {
@@ -70,15 +73,19 @@ styles {
     }
     style {
         name, "values";
-        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#000 align=left"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=22 color=#555 align=left"; 
     }
     style {
         name, "times";
-        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#000 align=right"; 
+        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#555 align=right"; 
     }
     style {
         name, "centered";
-        base, "font=DejaVu\\ Sans\\ Condensed:style=bold font_size=24 color=#000 align=center"; 
+        base, "font=DejaVu\\ Sans\\ Condensed font_size=24 color=#000 align=center"; 
+    }
+    style {
+        name, "centered-multiline";
+        base, "font=DejaVu\\ Sans\\ Condensed font_size=24 color=#000 align=center wrap=word"; 
     }
     style {
         name, "playlist";
@@ -868,10 +875,10 @@ collections {
                     color, 0 0 0 255;
                     text {
                         max, 0 1;
-                        style, "centered";
+                        style, "centered-multiline";
                     }
                     align, 0.5 0.5;
-                    rel1 { relative, 0.0 1.0; offset, 15 -65; to, "recorder-controls"; }
+                    rel1 { relative, 0.0 1.0; offset, 15 -70; to, "recorder-controls"; }
                     rel2 { relative, 1.0 1.0; offset, 5 -15; to, "recorder-controls"; }
                 }
             }
@@ -911,6 +918,48 @@ collections {
                     image { normal, "dict_pause.png"; }
                 }
             }
+            part {
+                name, "recorder-meter";
+                type, SWALLOW;
+                clip_to, "recorder-controls";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { to, "recorder-controls"; relative, 0.0 0.0; offset, 15 272 ;}
+                    rel2 { to, "recorder-controls"; relative, 1.0 0.0; offset, -15 282;}
+                }
+            }
+            part {
+                name, "recorder-timer"; 
+                type, TEXTBLOCK;
+                clip_to, "recorder-controls";
+                description {
+                    color, 0 0 0 255;
+                    text {
+                        max, 0 1;
+                        style, "values";
+                    }
+                    align, 0.5 0.5;
+                    rel1 { relative, 0.0 1.0; offset, 0 5; to, "recorder-meter"; }
+                    rel2 { relative, 1.0 1.0; offset, 0 40; to, "recorder-meter"; }
+                }
+            }
+
+            part {
+                name, "recorder-freespace"; 
+                type, TEXTBLOCK;
+                clip_to, "recorder-controls";
+                description {
+                    color, 0 0 0 255;
+                    text {
+                        max, 0 1;
+                        style, "times";
+                    }
+                    align, 0.5 0.5;
+                    rel1 { relative, 0.0 1.0; offset, 0 5; to, "recorder-meter"; }
+                    rel2 { relative, 1.0 1.0; offset, 0 40; to, "recorder-meter"; }
+                }
+            }
         }
         programs {
             BUTTON_PROG("cycle", 6, "cycle,*")
@@ -945,4 +994,97 @@ collections {
             }
         }
     } 
+    group {
+        name, "meter";
+        parts {
+            part {
+                name, "background";
+                type, RECT;
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { relative, 0.0 0.0; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; offset, -1 -1; }
+                }
+            }
+            part {
+                name, "empty-image";
+                type, IMAGE;
+                clip_to, "background";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { relative, 0.0 0.0; to, "background"; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; to, "background"; offset, -1 -1; }
+                    image { normal, "meter-empty.png"; }
+                }
+            } 
+            part {
+                name, "clipper";
+                type, RECT;
+                clip_to, "background";
+#define METER_STATE(x)                                                  \
+                description {                                           \
+                    state, "default" x;                                 \
+                    color, 255 255 255 255;                             \
+                    rel1 {                                              \
+                        relative, 0.0 0.0;                              \
+                        to, "background";                               \
+                        offset, 0 0;                                    \
+                    }                                                   \
+                    rel2 {                                              \
+                        relative, x 1.0;                                \
+                        to, "background";                               \
+                        offset, 0 -1;                                   \
+                    }                                                   \
+                }
+                METER_STATE(0.0)
+                METER_STATE(0.05)
+                METER_STATE(0.10)
+                METER_STATE(0.15)
+                METER_STATE(0.20)
+                METER_STATE(0.25)
+                METER_STATE(0.30)
+                METER_STATE(0.35)
+                METER_STATE(0.40)
+                METER_STATE(0.45)
+                METER_STATE(0.50)
+                METER_STATE(0.55)
+                METER_STATE(0.60)
+                METER_STATE(0.65)
+                METER_STATE(0.70)
+                METER_STATE(0.75)
+                METER_STATE(0.80)
+                METER_STATE(0.85)
+                METER_STATE(0.90)
+                METER_STATE(0.95)
+                METER_STATE(1.0)
+            }
+            part {
+                name, "full-image";
+                type, IMAGE;
+                clip_to, "clipper";
+                description {
+                    state, "default" 0.0;
+                    color, 255 255 255 255;
+                    rel1 { relative, 0.0 0.0; to, "background"; offset, 0 0; }
+                    rel2 { relative, 1.0 1.0; to, "background"; offset, -1 -1; }
+                    image { normal, "meter-full.png"; }
+                }
+            }
+        }
+        programs {
+            program {
+                name, "set-meter";
+                signal, "set-meter";
+                source, "*";
+                script {
+                    new s[256];
+                    getsarg(1, s, 256);
+                    new Float:f = Float:atof(s);
+                    set_state(PART:"clipper", "default", f);
+                }
+            }
+        }
+    }
 }
