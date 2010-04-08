@@ -321,6 +321,23 @@ madaudio_volume(madaudio_player_t* player, int offset)
 
 
 static void
+madaudio_close_recorder(madaudio_player_t *player)
+{
+    player->context = "player";
+    edje_object_signal_emit(player->gui, "hide-recorder-controls", "");
+}
+
+static void
+madaudio_replay_file(madaudio_player_t *player)
+{
+    if(player->recorder)
+        madaudio_stop_record(player);
+    madaudio_close_recorder(player);
+    madaudio_play_file(player);
+}
+
+
+static void
 madaudio_action_internal(Evas *e, madaudio_player_t *player, const char *action)
 {
 
@@ -391,7 +408,7 @@ madaudio_action_internal(Evas *e, madaudio_player_t *player, const char *action)
             player->keys, "player");
 
     if(!strcmp(action, "RecorderReplay"))
-        madaudio_play_file(player);
+        madaudio_replay_file(player);
 
     if(!strcmp(action,"ToggleExtendedControls"))
     {
@@ -414,10 +431,7 @@ madaudio_action_internal(Evas *e, madaudio_player_t *player, const char *action)
         edje_object_signal_emit(player->gui, "show-recorder-controls", "");
     }
     if(!strcmp(action, "RecorderDialogClose"))
-    {
-        player->context = "player";
-        edje_object_signal_emit(player->gui, "hide-recorder-controls", "");
-    }
+        madaudio_close_recorder(player);
 
     madaudio_status(player);
 }
