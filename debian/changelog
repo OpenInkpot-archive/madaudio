@@ -1,3 +1,58 @@
+madaudio (0.4.11) zelazny; urgency=low
+
+  * Depend on fixed mpd
+  * Fix playpause issue
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 08 Apr 2010 11:20:29 +0300
+
+madaudio (0.4.10) zelazny; urgency=low
+
+  * Implement new progressbar
+  * Drop edrawable dependency
+  * Complete horizontal face
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 07 Apr 2010 01:28:17 +0300
+
+madaudio (0.4.9) zelazny; urgency=low
+
+  * Fix issues with "undead" files
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 06 Apr 2010 01:17:02 +0300
+
+madaudio (0.4.8) zelazny; urgency=low
+
+  * Change recording paremeters to 16/8khz/1
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 01 Apr 2010 00:22:32 +0300
+
+madaudio (0.4.7) zelazny; urgency=low
+
+  * tech preview release: most recorder window elements are on places.
+  * add free space (in seconds ;) indication
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Wed, 31 Mar 2010 02:08:20 +0300
+
+madaudio (0.4.6) zelazny; urgency=low
+
+  * Fix beeping and beep.wav location (#869)
+  * Fix playpause issue
+  * Switch font to "condensed"
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Mon, 29 Mar 2010 09:58:46 +0300
+
+madaudio (0.4.5) zelazny; urgency=low
+
+  * Recording works well for me.
+    (tech preview release)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 23 Mar 2010 17:55:39 +0200
+
+madaudio (0.4.4) zelazny; urgency=low
+
+  * Early dictophone support (problems with mixer can appear from nothing)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Thu, 18 Mar 2010 01:56:37 +0200
+
 madaudio (0.4.3) zelazny; urgency=low
 
   * Adopt libeoi1 -> libeoi2 transition

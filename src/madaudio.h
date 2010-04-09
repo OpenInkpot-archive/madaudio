@@ -25,11 +25,18 @@ struct madaudio_player_t {
     int retry;
     bool mpd_run;
 
+    bool extended_controls;
+    const char *context;
+
+    int freespace; // In seconds!!!
+
     Ecore_Exe *recorder;
     Ecore_Event_Handler *recorder_handler;
     Ecore_Timer *recorder_timer;
     time_t *recorder_start_time;
     time_t *recorder_current_time;
+    char *recorder_track; // this track recorded now if *recorder not NULL,
+                          // or last recorded file
 };
 
 
@@ -41,6 +48,7 @@ bool madaudio_command(madaudio_player_t*, const char*);
 
 void madaudio_status(madaudio_player_t* player);
 void madaudio_play(madaudio_player_t* player, int track);
+void madaudio_stop(madaudio_player_t* player);
 void madaudio_pause(madaudio_player_t* player);
 void madaudio_play_pause(madaudio_player_t*);
 
@@ -55,6 +63,9 @@ void madaudio_draw_recorder_stop(madaudio_player_t *);
 void madaudio_recorder_folder(madaudio_player_t *);
 
 void
+madaudio_action(madaudio_player_t *player, const char *key);
+
+void
 madaudio_polling_start(madaudio_player_t* player);
 void
 madaudio_polling_stop(madaudio_player_t* player);
@@ -63,10 +74,16 @@ void madaudio_connect(madaudio_player_t*);
 void madaudio_opener_init();
 void madaudio_opener_shutdown();
 
-void madaudio_update_meter(Evas_Object* gui, int value);
+void madaudio_update_meter(Evas_Object* gui, const char*, const char*, int value);
 void madaudio_init_meter(Evas_Object* gui);
 
 void
 madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info);
+
+void
+madaudio_draw_recorder_window(madaudio_player_t *player);
+
+void
+madaudio_update_freespace(madaudio_player_t *player);
 
 #endif

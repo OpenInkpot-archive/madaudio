@@ -3,6 +3,8 @@
 #include <libintl.h>
 #include <err.h>
 #include <string.h>
+#include <Ecore_File.h>
+#include <Edje.h>
 #include <mpd/client.h>
 #include <mpd/error.h>
 #include <libeoi_help.h>
@@ -117,9 +119,61 @@ madaudio_connect(madaudio_player_t* player)
         ecore_main_loop_quit();
     }
 }
+static void
+kill_old_playlist(Eina_List *playlist)
+{
+    struct mpd_song * old;
+    EINA_LIST_FREE(playlist, old)
+        mpd_song_free(old);
+}
+
+static Eina_List *
+get_playlist(madaudio_player_t *player)
+{
+    Eina_List *playlist = NULL;
+    mpd_send_command(player->conn, "playlistinfo", NULL);
+    struct mpd_entity* entity;
+    while((entity = mpd_recv_entity(player->conn)) != NULL)
+    {
+        if(mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG)
+        {
+            printf("protocol: Out of sync: %d\n", mpd_entity_get_type(entity));
+            mpd_entity_free(entity);
+            return playlist;
+        }
+        const struct mpd_song * song;
+        song = mpd_song_dup(mpd_entity_get_song(entity));
+        playlist = eina_list_append(playlist, song);
+        mpd_entity_free(entity);
+    }
+    mpd_response_finish(player->conn);
+    return playlist;
+}
+
+static bool
+cleanup_undeads(madaudio_player_t *player, Eina_List *playlist)
+{
+    Eina_List *tmp;
+    struct mpd_song *song;
+    bool modified = false;
+    EINA_LIST_REVERSE_FOREACH(playlist, tmp, song)
+    {
+        const char *uri = mpd_song_get_uri(song);
+        if(uri[0] == '/')
+        {
+            if(!ecore_file_exists(uri))
+            {
+                fprintf(stderr, "Undead: %s\n", uri);
+                int pos = mpd_song_get_pos(song);
+                mpd_run_delete(player->conn, pos);
+            }
+        }
+    }
+    return modified;
+}
 
 void
-madaudio_status(madaudio_player_t* player)
+madaudio_status(madaudio_player_t *player)
 {
     assert(player);
     struct mpd_status *status = mpd_run_status(player->conn);
@@ -130,29 +184,17 @@ madaudio_status(madaudio_player_t* player)
     player->status = status;
     if(player->playlist_stamp != mpd_status_get_queue_version(status))
     {
-        /* kill old playlist */
-        struct mpd_song * old;
-        EINA_LIST_FREE(player->playlist, old)
-            mpd_song_free(old);
-        player->playlist = NULL;
-
-        mpd_send_command(player->conn, "playlistinfo", NULL);
-        struct mpd_entity* entity;
-        while((entity = mpd_recv_entity(player->conn)) != NULL)
-        {
-            if(mpd_entity_get_type(entity) != MPD_ENTITY_TYPE_SONG)
-            {
-                printf("protocol: Out of sync: %d\n", mpd_entity_get_type(entity));
-                mpd_entity_free(entity);
-                return;
-            }
-            const struct mpd_song * song;
-            song = mpd_song_dup(mpd_entity_get_song(entity));
-            player->playlist = eina_list_append(player->playlist, song);
-            mpd_entity_free(entity);
-        }
-        mpd_response_finish(player->conn);
+        kill_old_playlist(player->playlist);
+        Eina_List *playlist = get_playlist(player);
         MADAUDIO_CHECK_ERROR(player);
+        if(cleanup_undeads(player, playlist))
+        {
+            // playlist modified, refetch
+            kill_old_playlist(playlist);
+            playlist = get_playlist(player);
+            MADAUDIO_CHECK_ERROR(player);
+        }
+        player->playlist = playlist;
     }
     madaudio_draw_song(player);
 }
@@ -161,6 +203,13 @@ void
 madaudio_pause(madaudio_player_t* player)
 {
     mpd_run_pause(player->conn, true);
+    MADAUDIO_CHECK_ERROR(player);
+}
+
+void
+madaudio_stop(madaudio_player_t *player)
+{
+    mpd_run_stop(player->conn);
     MADAUDIO_CHECK_ERROR(player);
 }
 
@@ -270,13 +319,28 @@ madaudio_volume(madaudio_player_t* player, int offset)
     }
 }
 
-void
-madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+
+static void
+madaudio_close_recorder(madaudio_player_t *player)
 {
-    madaudio_player_t* player = (madaudio_player_t*)param;
-    Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
-    const char* action = keys_lookup_by_event(player->keys,
-        player->recorder ? "recorder" :  "player", ev);
+    player->context = "player";
+    edje_object_signal_emit(player->gui, "hide-recorder-controls", "");
+}
+
+static void
+madaudio_replay_file(madaudio_player_t *player)
+{
+    if(player->recorder)
+        madaudio_stop_record(player);
+    madaudio_close_recorder(player);
+    madaudio_play_file(player);
+}
+
+
+static void
+madaudio_action_internal(Evas *e, madaudio_player_t *player, const char *action)
+{
+
     if(!action)
         return;
     if(!strcmp(action, "Quit"))
@@ -302,7 +366,7 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
     if(!strcmp(action, "RecorderFolder"))
         madaudio_recorder_folder(player);
 
-    if(!strcmp(action, "Record"))
+    if(!strcmp(action, "RecorderStart"))
         madaudio_start_record(player);
 
     /* prev/next */
@@ -343,5 +407,50 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
             gettext("Madaudio: Help"),
             player->keys, "player");
 
+    if(!strcmp(action, "RecorderReplay"))
+        madaudio_replay_file(player);
+
+    if(!strcmp(action,"ToggleExtendedControls"))
+    {
+        if(player->extended_controls)
+        {
+            player->extended_controls = false;
+            edje_object_signal_emit(player->gui, "hide-extended-controls", "");
+        }
+        else
+        {
+            player->extended_controls = true;
+            edje_object_signal_emit(player->gui, "show-extended-controls", "");
+        }
+    }
+
+    if(!strcmp(action, "RecorderDialogOpen"))
+    {
+        player->context = "recorder";
+        madaudio_draw_recorder_window(player);
+        edje_object_signal_emit(player->gui, "show-recorder-controls", "");
+    }
+    if(!strcmp(action, "RecorderDialogClose"))
+        madaudio_close_recorder(player);
+
     madaudio_status(player);
+}
+
+void
+madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
+{
+    madaudio_player_t* player = (madaudio_player_t*)param;
+    Evas_Event_Key_Up* ev = (Evas_Event_Key_Up*)event_info;
+    const char* action = keys_lookup_by_event(player->keys,
+                                              player->context, ev);
+    madaudio_action_internal(e, player, action);
+}
+
+void
+madaudio_action(madaudio_player_t *player, const char *key)
+{
+    const char *action = keys_lookup(player->keys, player->context, key);
+    Evas *e = evas_object_evas_get(player->gui);
+    printf("Action: %s -> %s\n", key, action);
+    madaudio_action_internal(e, player, action);
 }

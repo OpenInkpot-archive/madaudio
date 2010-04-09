@@ -43,7 +43,7 @@
 
 #include "madaudio.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 
 /* FIXME */
@@ -95,20 +95,15 @@ static int _client_del(void* param, int ev_type, void* ev)
         madaudio_player_t* player = (madaudio_player_t*)param;
         Ecore_Evas* win = player->win;
 
-        bool raise = false;
-
         if(msg->msg[0] == '/') {
+            free(player->filename);
             player->filename = strdup(msg->msg);
             madaudio_play_file(player);
-            raise = true;
-        } else {
-            raise = madaudio_command(player, msg->msg);
-        };
-        if(raise){
-            ecore_evas_show(win);
-            ecore_evas_raise(win);
-            madaudio_polling_start(player);
-        };
+        }
+        else
+            madaudio_action(player, msg->msg);
+        ecore_evas_show(win);
+        ecore_evas_raise(win);
     }
 
     free(msg->msg);
@@ -218,8 +213,7 @@ static void main_edje_resize(Ecore_Evas *ee __attribute__((unused)),
 static void
 _emission(void *data, Evas_Object *o, const char *emission, const char *source)
 {
-    if(!strncmp(emission, "cursor", 6))
-        printf("Emission: %s, source: %s\n", emission, source);
+    printf("Emission: %s, source: %s\n", emission, source);
 }
 #endif
 
@@ -248,6 +242,7 @@ int main(int argc, char** argv)
     player = calloc(1, sizeof(madaudio_player_t));
 
     player->retry = 10;
+    player->context = "player";
 
     if(!ecore_init())
         err(1, "Unable to initialize Ecore");
@@ -296,7 +291,7 @@ int main(int argc, char** argv)
     evas_output_size_get(main_canvas, &w, &h);
     Evas_Object* main_edje = eoi_main_window_create(main_canvas);
 #ifdef DEBUG
-    edje_object_signal_callback_add(main_edje, "*", "*", _emission, NULL);
+//    edje_object_signal_callback_add(main_edje, "*", "*", _emission, NULL);
 #endif
     evas_object_name_set(main_edje, "main_edje");
     evas_object_move(main_edje, 0, 0);
@@ -307,6 +302,9 @@ int main(int argc, char** argv)
     Evas_Object *contents = player_edje(main_canvas, w, h, player);
     edje_object_part_swallow(main_edje, "contents", contents);
     eoi_resize_object_register(main_win, contents, player_edje_resize, player);
+#ifdef DEBUG
+    edje_object_signal_callback_add(contents, "*", "*", _emission, NULL);
+#endif
 
     evas_object_show(main_edje);
     eoi_run_clock(main_edje);

@@ -1,5 +1,6 @@
-#!/bin/sh -ex
+#!/bin/sh 
 STATE=/tmp/dictophone.state
+AUTOSUSPEND=$(cat /sys/power/autosuspend)
 
 beep () {
     aplay /usr/share/madaudio/beep.wav
@@ -13,18 +14,21 @@ restore_all() {
         beep
         rm -f "${STATE}"
     fi
+    echo "${AUTOSUSPEND}" >/sys/power/autosuspend
     exit 0
 }
 
 rm -f "${STATE}"
 trap restore_all TERM INT
+echo 0 >/sys/power/autosuspend
 alsactl -f "${STATE}" store
-amixer -s <<EOF
-cset name='HP Mute Switch' true
-cset name='MIC Boost Gain' 3
-cset name='Capture Volume' 25
-cset name='Output Mixer Playback Switch' false
+beep
+amixer -q -s <<EOF
+cset name='Mic Capture Switch' on
+cset name='Mic Capture Volume' 3
+cset name='Capture Volume' 30
 cset name='Speaker Function' 1
+cset name='Line Capture Switch' on
 EOF
 #record
 eval "$@"

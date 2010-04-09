@@ -1,3 +1,4 @@
+#include <sys/statvfs.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,7 +13,7 @@
 #include "madaudio.h"
 
 #define FILENAME_LEN 512
-#define DEFAULT_COMMAND "madaudio-dictophone arecord %s"
+#define DEFAULT_COMMAND "madaudio-dictophone arecord -f S16_LE -c1 -r8000 -t wav %s"
 #define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
@@ -74,6 +75,7 @@ madaudio_callback(void *data, int type __attribute__((unused)),
     player->recorder_handler = NULL;
     player->recorder = NULL;
     printf("Recorder stopped\n");
+    player->context = "recorder";
     madaudio_draw_recorder_stop(player);
     return ECORE_CALLBACK_CANCEL;
 }
@@ -91,7 +93,9 @@ madaudio_start_record(madaudio_player_t *player)
         return;
     }
     if(player->status == MPD_STATE_PLAY)
-        madaudio_play_pause(player);
+        madaudio_stop(player);
+
+    player->context = "recording";
 
     madaudio_read_config(&template, &path, &command);
 
@@ -109,7 +113,8 @@ madaudio_start_record(madaudio_player_t *player)
     player->recorder = ecore_exe_run(cmdline, NULL);
     free(line);
     free(cmdline);
-    free(fullname);
+    free(player->filename);
+    player->filename = fullname;
     madaudio_draw_recorder_start(player);
 }
 
@@ -143,4 +148,23 @@ madaudio_recorder_folder(madaudio_player_t *player)
     if(exe)
         ecore_exe_free(exe);
     free(cmd);
+}
+
+
+static int
+_get_freespace()
+{
+    char *path = DEFAULT_PATH;
+    struct statvfs vfs;
+    madaudio_read_config(NULL, &path, NULL);
+    statvfs(path, &vfs);
+    int k = ( vfs.f_bsize * vfs.f_bavail ) ;
+    printf("k=%d %d %d\n", k, vfs.f_bsize, vfs.f_bavail);
+    return k / (8000 * 2);
+}
+
+void
+madaudio_update_freespace(madaudio_player_t *player)
+{
+    player->freespace = _get_freespace();
 }
