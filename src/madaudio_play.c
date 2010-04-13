@@ -102,12 +102,12 @@ madaudio_connect(madaudio_player_t* player)
         {
             player->mpd_run=true;
             Ecore_Exe* exe;
-            printf("spawing madaudio-unsuspend\n");
-            exe = ecore_exe_run("/usr/bin/madaudio-unsuspend", NULL);
-            if(exe)
-                ecore_exe_free(exe);
             printf("spawing mpd\n");
             exe = ecore_exe_run("/usr/bin/mpd /etc/madaudio/mpd.conf", NULL);
+            if(exe)
+                ecore_exe_free(exe);
+            printf("spawing madaudio-unsuspend\n");
+            exe = ecore_exe_run("/usr/bin/madaudio-unsuspend", NULL);
             if(exe)
                 ecore_exe_free(exe);
         }

@@ -1,6 +1,5 @@
 #!/bin/sh 
 STATE=/tmp/dictophone.state
-AUTOSUSPEND=$(cat /sys/power/autosuspend)
 
 beep () {
     aplay /usr/share/madaudio/beep.wav
@@ -14,13 +13,13 @@ restore_all() {
         beep
         rm -f "${STATE}"
     fi
-    echo "${AUTOSUSPEND}" >/sys/power/autosuspend
+    autosuspend okay
     exit 0
 }
 
 rm -f "${STATE}"
 trap restore_all TERM INT
-echo 0 >/sys/power/autosuspend
+autosuspend prevent
 alsactl -f "${STATE}" store
 beep
 amixer -q -s <<EOF

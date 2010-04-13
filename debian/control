@@ -9,7 +9,7 @@ Standards-Version: 3.8.3
 
 Package: madaudio
 Architecture: any
-Depends: ${shlibs:Depends}, mpd (>= 0.15.6-1.ip2), alsa-utils (>= 1.0.20-6), madshelf (>= 0.2.48)
+Depends: ${shlibs:Depends}, mpd (>= 0.15.6-1.ip2), alsa-utils (>= 1.0.20-6), madshelf (>= 0.2.48), unsuspendd
 Description: Audioplayer application
  Bookshelf application.
 
