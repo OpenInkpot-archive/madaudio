@@ -1,7 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
+# madaudio.
 # This file is put in the public domain.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: madaudio 0.1\n"
@@ -28,7 +29,7 @@ msgstr "Album"
 
 #: src/madaudio_draw.c:158
 msgid "Genre"
-msgstr "Benre"
+msgstr "Genre"
 
 #: src/madaudio_draw.c:159
 msgid "Year"
