@@ -1,8 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: madaudio 0.1\n"
