@@ -1,6 +1,7 @@
 madaudio (0.4.12) zelazny; urgency=low
 
   * Use unsuspendd instead direct work with /sys/power/autosuspend
+  * Merge bg and fr translations.
 
  -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Fri, 09 Apr 2010 00:16:01 +0300
 
