@@ -57,7 +57,7 @@ set_autosuspend(int mode)
 {
     int unsuspendd = read_int_from_file(unsuspendd_pidfile);
     int sig = mode ? SIGUSR2 : SIGUSR1;
-    kill(sig, unsuspendd);
+    kill(unsuspendd, sig);
     debug("Sending %s to unsuspendd[%d]", strsignal(sig), unsuspendd);
 }
 
