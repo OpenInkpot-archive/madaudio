@@ -3,6 +3,7 @@
 #include <libintl.h>
 #include <err.h>
 #include <string.h>
+#include <syslog.h>
 #include <Ecore_File.h>
 #include <Edje.h>
 #include <mpd/client.h>
@@ -451,6 +452,6 @@ madaudio_action(madaudio_player_t *player, const char *key)
 {
     const char *action = keys_lookup(player->keys, player->context, key);
     Evas *e = evas_object_evas_get(player->gui);
-    printf("Action: %s -> %s\n", key, action);
+    syslog(LOG_INFO, "Action: %s -> %s\n", key, action);
     madaudio_action_internal(e, player, action);
 }

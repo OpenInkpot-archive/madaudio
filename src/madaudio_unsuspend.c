@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 #include <unistd.h>
 #include <mpd/client.h>
 #include <mpd/error.h>
@@ -20,15 +21,10 @@ static const char* unsuspendd_pidfile = "/var/run/unsuspendd.pid";
 static void
 debug(const char *fmt,...)
 {
-    if(_debug)
-    {
-        fprintf(stderr, "madaudio-unsuspend[%d]: ", pid);
-        va_list ap;
-        va_start(ap, fmt);
-        vfprintf(stderr, fmt, ap);
-        va_end(ap);
-        fprintf(stderr, "\n");
-    }
+    va_list ap;
+    va_start(ap, fmt);
+    vsyslog(LOG_INFO, fmt, ap);
+    va_end(ap);
 }
 
 
@@ -74,6 +70,11 @@ main(int argc, char **argv)
     _debug = (bool) getenv("MADAUDIO_DEBUG");
     if(!_debug)
         daemon(0, 0);
+    int flags = LOG_NDELAY | LOG_PID;
+    if(_debug)
+        flags |= LOG_PERROR;
+    openlog("madaudio-unsuspend", flags, LOG_DAEMON);
+
     struct mpd_connection *conn;
     for(t=1000; t > 0; t++) {
         conn = mpd_connection_new(MADAUDIO_SOCKET, 0, 0);
