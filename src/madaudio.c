@@ -26,6 +26,7 @@
 #include <locale.h>
 #include <limits.h>
 #include <string.h>
+#include <syslog.h>
 
 #include <Evas.h>
 #include <Ecore.h>
@@ -95,13 +96,15 @@ static int _client_del(void* param, int ev_type, void* ev)
         madaudio_player_t* player = (madaudio_player_t*)param;
         Ecore_Evas* win = player->win;
 
-        if(msg->msg[0] == '/') {
+        char *cmd = strndup(msg->msg, msg->size);
+        if(cmd[0] == '/') {
             free(player->filename);
-            player->filename = strdup(msg->msg);
+            player->filename = strdup(cmd);
             madaudio_play_file(player);
         }
         else
-            madaudio_action(player, msg->msg);
+            madaudio_action(player, cmd);
+        free(cmd);
         ecore_evas_show(win);
         ecore_evas_raise(win);
     }
@@ -135,6 +138,7 @@ static bool check_running_instance(const char* cmd)
         if(!server)
             return false;
 
+        syslog(LOG_INFO, "send %s to running copy\n");
         ecore_con_server_send(server, cmd, strlen(cmd));
         ecore_con_server_flush(server);
         ecore_con_server_del(server);
@@ -244,6 +248,12 @@ int main(int argc, char** argv)
     player->retry = 10;
     player->context = "player";
 
+    int flags = LOG_NDELAY | LOG_PID;
+    if (getenv("MADAUDIO_DEBUG"))
+        flags |= LOG_PERROR;
+
+    openlog("madaudio", flags, LOG_USER);
+
     if(!ecore_init())
         err(1, "Unable to initialize Ecore");
 
@@ -336,6 +346,7 @@ int main(int argc, char** argv)
     evas_shutdown();
     edje_shutdown();
     ecore_shutdown();
+    closelog();
 
     return 0;
 }
