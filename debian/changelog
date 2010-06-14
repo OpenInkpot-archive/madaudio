@@ -1,3 +1,10 @@
+madaudio (0.4.13) zelazny; urgency=low
+
+  * Fix interaction between madaudio-unsuspend and unuspendd
+  * Fix issue with lost keypresses
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Tue, 15 Jun 2010 01:39:23 +0300
+
 madaudio (0.4.12) zelazny; urgency=low
 
   * Use unsuspendd instead direct work with /sys/power/autosuspend
