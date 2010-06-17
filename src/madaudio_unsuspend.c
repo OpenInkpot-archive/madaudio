@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <mpd/client.h>
 #include <mpd/error.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 
 #define MADAUDIO_SOCKET "/tmp/madaudio-mpd.socket"
 
