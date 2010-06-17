@@ -1,3 +1,9 @@
+madaudio (0.4.14) zelazny; urgency=low
+
+  * Use the new unsuspendd interface.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Thu, 17 Jun 2010 18:40:53 +0700
+
 madaudio (0.4.13) zelazny; urgency=low
 
   * Fix interaction between madaudio-unsuspend and unuspendd
