@@ -16,7 +16,10 @@
 pid_t pid;
 static int _debug;
 static enum mpd_state oldstate;
-static const char* unsuspendd_pidfile = "/var/run/unsuspendd.pid";
+
+static int unsuspend_fd;
+
+#define UNSUSPENDD_SOCKET "/var/lib/unsuspendd/commands.sock"
 
 static void
 debug(const char *fmt,...)
@@ -27,7 +30,6 @@ debug(const char *fmt,...)
     va_end(ap);
 }
 
-
 void
 check(struct mpd_connection* conn)
 {
@@ -37,28 +39,28 @@ check(struct mpd_connection* conn)
     exit(0);
 }
 
-
-
-static int
-read_int_from_file(const char* filename)
+static void
+lock_autosuspend()
 {
-    char buf[16];
-    FILE* file = fopen(filename, "r+");
-    if(!file)
-        err(1, "madaudio-unsuspend[%d]: Can't open %s\n", pid, filename);
-    if(!fgets(buf, 16, file))
-        err(1, "madaudio-unsuspend[%d]: Can't read value from %s\n", pid, filename);
-    fclose(file);
-    return atoi(buf);
+    if (unsuspend_fd != -1)
+        return;
+
+    unsuspend_fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (unsuspend_fd == -1)
+        err(1, "madaudio-unsuspend[%d]: Can't create socket\n", pid);
+
+    struct sockaddr_un addr = { .sun_family = AF_UNIX };
+    memcpy(addr.sun_path, UNSUSPENDD_SOCKET, strlen(UNSUSPENDD_SOCKET));
+
+    if (connect(unsuspend_fd, (struct sockaddr *)&addr, sizeof(addr)) == -1)
+        err(1, "madaudio-unsuspend[%d]: Can't connect to unsuspendd\n", pid);
 }
 
 static void
-set_autosuspend(int mode)
+unlock_autosuspend()
 {
-    int unsuspendd = read_int_from_file(unsuspendd_pidfile);
-    int sig = mode ? SIGUSR2 : SIGUSR1;
-    kill(unsuspendd, sig);
-    debug("Sending %s to unsuspendd[%d]", strsignal(sig), unsuspendd);
+    close(unsuspend_fd);
+    unsuspend_fd = -1;
 }
 
 int
@@ -94,13 +96,11 @@ main(int argc, char **argv)
         if(state != oldstate)
         {
             if(state == MPD_STATE_PLAY)
-            {
-                set_autosuspend(0);
-            }
+                lock_autosuspend();
             else
             {
                 if(!firsttime)
-                    set_autosuspend(1);
+                    unlock_autosuspend();
             }
         };
         oldstate = state;
