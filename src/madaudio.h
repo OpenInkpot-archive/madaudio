@@ -5,8 +5,20 @@
 #include <Evas.h>
 #include <Ecore.h>
 #include <Ecore_Evas.h>
+#include <Efreet.h>
 #include <libkeys.h>
 #include <mpd/connection.h>
+
+#define USER_CONFIG_DIR ".e/madaudio"
+#define USER_CONFIG_FILE "codec.conf"
+
+typedef struct madaudio_config_t madaudio_config_t;
+struct madaudio_config_t {
+    char *template;
+    char *path;
+    char *default_codec;
+    Efreet_Desktop *codec;
+};
 
 typedef struct madaudio_player_t madaudio_player_t;
 struct madaudio_player_t {
@@ -37,6 +49,8 @@ struct madaudio_player_t {
     time_t *recorder_current_time;
     char *recorder_track; // this track recorded now if *recorder not NULL,
                           // or last recorded file
+
+    madaudio_config_t *config;
 };
 
 
@@ -85,5 +99,11 @@ madaudio_draw_recorder_window(madaudio_player_t *player);
 
 void
 madaudio_update_freespace(madaudio_player_t *player);
+
+void
+madaudio_read_config(madaudio_player_t *player);
+
+void
+madaudio_free_config(madaudio_player_t *player);
 
 #endif
