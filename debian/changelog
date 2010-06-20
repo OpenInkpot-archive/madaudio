@@ -1,3 +1,11 @@
+madaudio (0.4.14.bradbury.1) bradbury; urgency=low
+
+  * Upload to bradbury
+  * Fix issue with recording
+  * Upload new "beep" from azbooka vendor
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Mon, 21 Jun 2010 01:20:06 +0300
+
 madaudio (0.4.14) zelazny; urgency=low
 
   * Use the new unsuspendd interface.
