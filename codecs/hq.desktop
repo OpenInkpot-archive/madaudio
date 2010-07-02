@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=HQ
 GenericName=High quality .wav
-Exec=/usr/bin/chpst -P /usr/bin/madaudio-dictophone arecord -f S16_LE -c1 -r8000 -t wav %f
+Exec=/usr/bin/madaudio-dictophone arecord -f S16_LE -c1 -r8000 -t wav %f
 StartupNotify=true
 Terminal=false
 Type=Application

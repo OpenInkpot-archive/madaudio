@@ -168,13 +168,15 @@ _efreet_exec_cb(void *data, Efreet_Desktop *desktop __attribute__((unused)),
 {
 
     madaudio_player_t *player = (madaudio_player_t *) data;
-//    char *cmdline = xasprintf("chpst -P %s", line);
     player->recorder_handler = ecore_event_handler_add(ECORE_EXE_EVENT_DEL,
                                                        madaudio_callback,
                                                        player);
-    printf("Run: %s\n", cmdline);
+    /* FIXME: chpst don't work from .desktop files */
+    char *newcmdline = xasprintf("chpst -P %s", cmdline);
+    printf("Run: %s\n", newcmdline);
     player->recorder = ecore_exe_run(cmdline, data);
     madaudio_draw_recorder_start(player);
+    free(newcmdline);
 }
 
 void
