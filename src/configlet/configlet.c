@@ -18,8 +18,6 @@
 
 #define _(x) x
 
-#define PATH_MAX 4096
-
 typedef struct {
     char *filename;
     char *title;
@@ -38,10 +36,9 @@ _current_codec(madaudio_configlet_t *configlet)
 {
     int num=0;
     Eina_List *each = configlet->codecs;
-    while(each)
+    while((each = eina_list_next(each)))
     {
         madaudio_codec_t *codec = eina_list_data_get(each);
-        each = eina_list_next(each);
         if(!strcmp(codec->filename, configlet->current))
             return num;
         num++;
@@ -102,7 +99,10 @@ madaudio_draw(void *data, Evas_Object *item)
     madaudio_codec_t *codec = eina_list_nth(configlet->codecs,
         _current_codec(configlet));
     edje_object_part_text_set(item, "title", gettext("Recorder codec"));
-    edje_object_part_text_set(item, "value", codec->title);
+    char *title = "N/A";
+    if(codec)
+        title = codec->title;
+    edje_object_part_text_set(item, "value", title);
 }
 
 static void *
@@ -112,7 +112,7 @@ madaudio_load()
 
     char *filename;
     Eina_List *ls = ecore_file_ls(MADAUDIO_CODEC_PATH);
-    Eina_List *ls_free;
+    Eina_List *ls_free = ls;
     while(ls)
     {
         filename = eina_list_data_get(ls);
@@ -136,12 +136,11 @@ madaudio_load()
         codec->title = strdup(current->name);
         codec->generic = strdup(current->generic_name);
 
-        eina_desktop_free(current);
+        efreet_desktop_free(current);
         configlet->codecs = eina_list_append(configlet->codecs, codec);
-    }
-    EINA_LIST_FREE(ls_free, filename)
         free(filename);
-
+    }
+    eina_list_free(ls_free);
     configlet->num = eina_list_count(configlet->codecs);
 
     return configlet;
