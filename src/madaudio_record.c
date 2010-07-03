@@ -64,13 +64,13 @@ madaudio_ini_value_get(Efreet_Ini *ini, const char *key, char **value,
 }
 
 void
-madaudio_free_config(madaudio_player_t *player)
+madaudio_free_config(madaudio_config_t *config)
 {
-    free(player->config->template);
-    free(player->config->path);
-    free(player->config->default_codec);
-    efreet_desktop_free(player->config->codec);
-    free(player->config);
+    free(config->template);
+    free(config->path);
+    free(config->default_codec);
+    efreet_desktop_free(config->codec);
+    free(config);
 }
 
 static char *
@@ -127,24 +127,30 @@ madaudio_get_codec(madaudio_config_t *config)
     return codec;
 }
 
-void
+madaudio_config_t *
 madaudio_read_config(madaudio_player_t *player)
 {
+    madaudio_config_t *config = calloc(1, sizeof(madaudio_config_t));
     Efreet_Ini *ini = efreet_ini_new(MADAUDIO_INI);
     if(!ini)
-        return;
-    if(!player->config)
-        player->config = calloc(1, sizeof(madaudio_config_t));
+    {
+        config->template = strdup(DEFAULT_FILETEMPLATE);
+        config->path = strdup(DEFAULT_PATH);
+        config->default_codec = strdup(DEFAULT_CODEC);
+        config->codec = madaudio_get_codec(config);
+        return config;
+    }
     efreet_ini_section_set(ini, MADAUDIO_RECORDER_SECTION);
-    madaudio_ini_value_get(ini, "template", &player->config->template,
+    madaudio_ini_value_get(ini, "template", &config->template,
         DEFAULT_FILETEMPLATE);
-    madaudio_ini_value_get(ini, "path", &player->config->path,
+    madaudio_ini_value_get(ini, "path", &config->path,
         DEFAULT_PATH);
     madaudio_ini_value_get(ini, "default_codec",
-        &player->config->default_codec, DEFAULT_CODEC);
+        &config->default_codec, DEFAULT_CODEC);
 
-    player->config->codec = madaudio_get_codec(player->config);
+    config->codec = madaudio_get_codec(config);
     efreet_ini_free(ini);
+    return config;
 }
 
 

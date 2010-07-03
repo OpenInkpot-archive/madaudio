@@ -282,7 +282,7 @@ int main(int argc, char** argv)
         err(1, "Unable to initialize Ecore Con");
     madaudio_opener_init();
 
-    madaudio_read_config(player);
+    player->config = madaudio_read_config();
 
     setlocale(LC_ALL, "");
     textdomain("madaudio");
@@ -342,7 +342,7 @@ int main(int argc, char** argv)
     ecore_main_loop_begin();
 
     madaudio_free_state(player);
-    madaudio_free_config(player);
+    madaudio_free_config(player->config);
 
     madaudio_opener_shutdown();
     ecore_evas_shutdown();

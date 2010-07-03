@@ -11,6 +11,7 @@
 
 #define USER_CONFIG_DIR ".e/madaudio"
 #define USER_CONFIG_FILE "codec.conf"
+#define MADAUDIO_CODEC_PATH "/usr/share/madaudio/codecs"
 
 typedef struct madaudio_config_t madaudio_config_t;
 struct madaudio_config_t {
@@ -100,10 +101,10 @@ madaudio_draw_recorder_window(madaudio_player_t *player);
 void
 madaudio_update_freespace(madaudio_player_t *player);
 
-void
-madaudio_read_config(madaudio_player_t *player);
+madaudio_config_t *
+madaudio_read_config();
 
 void
-madaudio_free_config(madaudio_player_t *player);
+madaudio_free_config(madaudio_config_t *config);
 
 #endif
