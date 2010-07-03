@@ -1,3 +1,5 @@
+SUBDIRS = configlet
+
 INCLUDES = @EFL_CFLAGS@ @LIBEOI_CFLAGS@ @LIBKEYS_CFLAGS@ @LIBLOPS_CFLAGS@
 AM_CFLAGS=-std=gnu99 -Wall -Wno-unused -DSYSCONFDIR="\"$(sysconfdir)\"" -DTHEMEDIR='"$(datadir)/madaudio"'
 
