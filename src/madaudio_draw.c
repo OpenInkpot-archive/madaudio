@@ -227,7 +227,7 @@ madaudio_draw_song(madaudio_player_t* player)
     madaudio_draw_statusbar(player);
 }
 
-static int
+static Eina_Bool
 record_callback(void *data)
 {
     madaudio_player_t *player = data;
