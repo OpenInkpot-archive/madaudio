@@ -1,3 +1,9 @@
+madaudio (0.4.16) zelazny; urgency=low
+
+  * Adjustment to ecore API changes
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Mon, 05 Jul 2010 08:01:23 +0200
+
 madaudio (0.4.15) zelazny; urgency=low
 
   * Fix various issues with run recoring process
