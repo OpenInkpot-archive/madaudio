@@ -37,7 +37,7 @@ madaudio_check_error(madaudio_player_t* player)
     return true;
 }
 
-static int
+static Eina_Bool
 reconnect_callback(void* data)
 {
     madaudio_player_t* player = (madaudio_player_t *) data;
@@ -46,7 +46,7 @@ reconnect_callback(void* data)
 }
 
 
-static int
+static Eina_Bool
 poll_callback(void* data)
 {
     madaudio_player_t* player = (madaudio_player_t *) data;

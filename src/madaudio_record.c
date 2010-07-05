@@ -154,7 +154,7 @@ madaudio_read_config(madaudio_player_t *player)
 }
 
 
-static int
+static Eina_Bool
 madaudio_callback(void *data, int type __attribute__((unused)),
     void *event __attribute__((unused)))
 {

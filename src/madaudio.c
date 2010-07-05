@@ -70,7 +70,7 @@ typedef struct
     int size;
 } client_data_t;
 
-static int _client_add(void* param, int ev_type, void* ev)
+static Eina_Bool _client_add(void* param, int ev_type, void* ev)
 {
     Ecore_Con_Event_Client_Add* e = ev;
     client_data_t* msg = malloc(sizeof(client_data_t));
@@ -80,7 +80,7 @@ static int _client_add(void* param, int ev_type, void* ev)
     return 0;
 }
 
-static int _client_del(void* param, int ev_type, void* ev)
+static Eina_Bool _client_del(void* param, int ev_type, void* ev)
 {
     Ecore_Con_Event_Client_Del* e = ev;
     client_data_t* msg = ecore_con_client_data_get(e->client);
@@ -114,7 +114,7 @@ static int _client_del(void* param, int ev_type, void* ev)
     return 0;
 }
 
-static int _client_data(void* param, int ev_type, void* ev)
+static Eina_Bool _client_data(void* param, int ev_type, void* ev)
 {
     Ecore_Con_Event_Client_Data* e = ev;
     client_data_t* msg = ecore_con_client_data_get(e->client);
@@ -149,7 +149,7 @@ static bool check_running_instance(const char* cmd)
     return false;
 }
 
-static int sighup_signal_handler(void* data, int type, void* event)
+static Eina_Bool sighup_signal_handler(void* data, int type, void* event)
 {
     madaudio_stop_record((madaudio_player_t* ) data);
     return 1;
@@ -161,7 +161,7 @@ static void exit_all(void *param)
     ecore_main_loop_quit();
 }
 
-static int exit_handler(void *param, int ev_type, void *event)
+static Eina_Bool exit_handler(void *param, int ev_type, void *event)
 {
    madaudio_stop_record((madaudio_player_t* ) param);
    ecore_main_loop_quit();
