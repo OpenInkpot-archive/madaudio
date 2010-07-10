@@ -127,12 +127,12 @@ static int _client_data(void* param, int ev_type, void* ev)
 static bool check_running_instance(const char* cmd)
 {
     Ecore_Con_Server* server
-        = ecore_con_server_add(ECORE_CON_LOCAL_USER, "madaudio-singleton", 0, NULL);
+        = ecore_con_server_add(ECORE_CON_LOCAL_SYSTEM, "madaudio-singleton", 0, NULL);
 
     if(!server)
     {
         /* Somebody already listens there */
-        server = ecore_con_server_connect(ECORE_CON_LOCAL_USER,
+        server = ecore_con_server_connect(ECORE_CON_LOCAL_SYSTEM,
                                           "madaudio-singleton", 0, NULL);
 
         if(!server)
