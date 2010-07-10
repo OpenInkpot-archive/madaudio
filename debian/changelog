@@ -1,3 +1,9 @@
+madaudio (0.4.14.bradbury.2) bradbury; urgency=low
+
+  * Switch ecore-con server from LOCAL_USER to LOCAL_SYSTEM
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 10 Jul 2010 21:51:34 +0200
+
 madaudio (0.4.14.bradbury.1) bradbury; urgency=low
 
   * Upload to bradbury
