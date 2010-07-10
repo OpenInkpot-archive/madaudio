@@ -1,3 +1,9 @@
+madaudio (0.4.17) zelazny; urgency=low
+
+  * Switch ecore-con server from LOCAL_USER to LOCAL_SYSTEM
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 10 Jul 2010 21:49:59 +0200
+
 madaudio (0.4.16) zelazny; urgency=low
 
   * Adjustment to ecore API changes
