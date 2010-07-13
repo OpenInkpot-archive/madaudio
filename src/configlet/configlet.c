@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <libintl.h>
 #include <err.h>
+#include <unistd.h>
 
 #include <Evas.h>
 #include <Ecore.h>
@@ -27,7 +28,7 @@ typedef struct {
 typedef struct {
     int num;
     Eina_List *codecs;
-    const char *current;
+    char *current;
     madaudio_config_t *config;
 } madaudio_configlet_t;
 
