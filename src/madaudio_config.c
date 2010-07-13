@@ -18,16 +18,14 @@
 
 #include "madaudio.h"
 
-#define FILENAME_LEN 512
-#define DEFAULT_COMMAND "madaudio-dictophone arecord -f S16_LE -c1 -r8000 -t wav %s"
 #define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
 #define DEFAULT_CODEC "hq"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
 #define MADAUDIO_INI "/etc/madaudio.ini"
 
-static bool
-ensure_dir(const char *path)
+bool
+madaudio_ensure_dir(const char *path)
 {
     if(!ecore_file_is_dir(path))
     {
@@ -91,10 +89,9 @@ get_user_codec()
     return path;
 }
 
-static Efreet_Desktop *
-madaudio_get_codec(madaudio_config_t *config)
+char *
+madaudio_get_current_codec_path(madaudio_config_t *config)
 {
-    Efreet_Desktop *codec = NULL;
     char *codec_path = NULL;
 
     codec_path = get_user_codec();
@@ -103,7 +100,15 @@ madaudio_get_codec(madaudio_config_t *config)
         codec_path = xasprintf("/usr/share/madaudio/codecs/%s.desktop",
             config->default_codec);
     }
+    return codec_path;
 
+}
+
+static Efreet_Desktop *
+madaudio_get_codec(madaudio_config_t *config)
+{
+    Efreet_Desktop *codec = NULL;
+    char *codec_path = madaudio_get_current_codec_path(config);
     if(!ecore_file_exists(codec_path))
     {
         fprintf(stderr, "Default codec not exists: %s\n", codec_path);
