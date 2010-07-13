@@ -26,20 +26,6 @@
 #define MADAUDIO_RECORDER_SECTION "recorder"
 #define MADAUDIO_INI "/etc/madaudio.ini"
 
-static bool
-ensure_dir(const char *path)
-{
-    if(!ecore_file_is_dir(path))
-    {
-        if(!ecore_file_mkdir(path))
-        {
-            printf("Can't create dir %s\n", path);
-            return false;
-        }
-    }
-    return true;
-}
-
 static char *
 madaudio_strftime(const char *template)
 {
@@ -96,7 +82,7 @@ madaudio_start_record(madaudio_player_t *player)
 
     player->context = "recording";
 
-    if(!ensure_dir(player->config->path))
+    if(!madaudio_ensure_dir(player->config->path))
         return;
 
     printf("Recording...\n");
@@ -132,7 +118,7 @@ void
 madaudio_recorder_folder(madaudio_player_t *player)
 {
     char *path = DEFAULT_PATH;
-    if(!ensure_dir(path))
+    if(!madaudio_ensure_dir(path))
         return;
     char *cmd = xasprintf("/usr/bin/madshelf --filter=audio %s", path);
     Ecore_Exe *exe = ecore_exe_run(cmd, NULL);
