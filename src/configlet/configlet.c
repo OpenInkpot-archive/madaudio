@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <libintl.h>
 #include <err.h>
+#include <unistd.h>
 
 #include <Evas.h>
 #include <Ecore.h>
@@ -27,9 +28,32 @@ typedef struct {
 typedef struct {
     int num;
     Eina_List *codecs;
-    const char *current;
+    char *current;
+    madaudio_config_t *config;
 } madaudio_configlet_t;
 
+
+void
+_save_user_codec(const char *codecname)
+{
+    char *home = getenv("HOME");
+    if(!home)
+        home = "/home";
+    char *dirname = xasprintf("%s/%s", home, USER_CONFIG_DIR);
+    madaudio_ensure_dir(dirname);
+    char *filename = xasprintf("%s/%s", dirname, USER_CONFIG_FILE);
+
+    int fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY);
+    if(fd)
+    {
+        writen(fd, codecname, strlen(codecname));
+        close(fd);
+    }
+    else
+        fprintf(stderr, "Can't open %s\n", filename);
+    free(filename);
+    free(dirname);
+}
 
 static int
 _current_codec(madaudio_configlet_t *configlet)
@@ -71,6 +95,15 @@ static void madaudio_submenu_handler(
 
     Evas_Object *parent = (Evas_Object*)param;
     choicebox_invalidate_item(parent, 1);
+    madaudio_configlet_t *configlet =
+             evas_object_data_get(choicebox, "configlet");
+    madaudio_codec_t *codec = eina_list_nth(configlet->codecs, item_num);
+    if(codec)
+    {
+        free(configlet->current);
+        configlet->current = strdup(codec->filename);
+        _save_user_codec(codec->filename);
+    }
 }
 
 static void
@@ -142,6 +175,8 @@ madaudio_load()
     }
     eina_list_free(ls_free);
     configlet->num = eina_list_count(configlet->codecs);
+    configlet->config = madaudio_read_config();
+    configlet->current = madaudio_get_current_codec_path(configlet->config);
 
     return configlet;
 }
@@ -158,6 +193,8 @@ madaudio_unload(void *data)
         free(each->generic);
         free(each);
     }
+    madaudio_free_config(configlet->config);
+    free(configlet->current);
     free(configlet);
 }
 

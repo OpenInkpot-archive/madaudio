@@ -1,6 +1,12 @@
 #ifndef _MADAUDIO_H
 #define _MADAUDIO_H 1
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#include <liblops.h>
+
 #include <Eina.h>
 #include <Evas.h>
 #include <Ecore.h>
@@ -107,4 +113,7 @@ madaudio_read_config();
 void
 madaudio_free_config(madaudio_config_t *config);
 
+char * madaudio_get_current_codec_path(madaudio_config_t *config);
+
+bool madaudio_ensure_dir(const char *);
 #endif
