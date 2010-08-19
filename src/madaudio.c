@@ -290,7 +290,7 @@ int main(int argc, char** argv)
     player->keys = keys_alloc("madaudio");
     /* End of state */
 
-    Ecore_Evas* main_win = ecore_evas_software_x11_new(0, 0, 0, 0, 600, 800);
+    Ecore_Evas* main_win = ecore_evas_software_x11_8_new(0, 0, 0, 0, 600, 800);
     player->win = main_win;
     ecore_evas_title_set(main_win, "Madaudio");
     ecore_evas_name_class_set(main_win, "Madaudio", "Madaudio");
