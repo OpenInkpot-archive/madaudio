@@ -1,0 +1,36 @@
+# madaudio.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: madaudio 0.1\n"
+"Report-Msgid-Bugs-To: avn@daemon.hole.ru\n"
+"POT-Creation-Date: 2009-11-25 02:40+0000\n"
+"PO-Revision-Date: 2010-04-27 11:24+0100\n"
+"Last-Translator: Sven Bring <sven.bring@yahoo.se>\n"
+"Language-Team: Swedish <openinkpot-l10n@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/madaudio_draw.c:155
+msgid "Composer"
+msgstr "Kompositör"
+
+#: src/madaudio_draw.c:156
+msgid "Artist"
+msgstr "Artist"
+
+#: src/madaudio_draw.c:157
+msgid "Album"
+msgstr "Album"
+
+#: src/madaudio_draw.c:158
+msgid "Genre"
+msgstr "Genre"
+
+#: src/madaudio_draw.c:159
+msgid "Year"
+msgstr "År"
