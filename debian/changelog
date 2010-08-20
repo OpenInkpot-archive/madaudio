@@ -1,3 +1,26 @@
+madaudio (0.4.18) zelazny; urgency=low
+
+  [ Tomasz Długosz ]
+  * l10n: initial swedish translation
+  * l10n: initial hungarian translation
+
+  [ Sven Bring ]
+  * l10n: Updates to Swedish (sv) translation
+
+  [ Alexander V. Nikolaev ]
+  * Split config reading
+  * Read/write codec name
+  * Cleanup a bit
+  * Eliminate warnings in configlet.c
+
+  [ Alexander Kerner ]
+  * Use 8bpp engine
+  * Adjustment to ecore API changes
+  * Add liblops-dev to build dependencies
+  * Switch ecore-con server from LOCAL_USER to LOCAL_SYSTEM
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Fri, 20 Aug 2010 21:59:56 +0200
+
 madaudio (0.4.17) zelazny; urgency=low
 
   * Switch ecore-con server from LOCAL_USER to LOCAL_SYSTEM
