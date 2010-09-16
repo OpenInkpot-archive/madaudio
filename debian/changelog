@@ -1,4 +1,4 @@
-madaudio (0.4.18) zelazny; urgency=low
+madaudio (0.4.19) zelazny; urgency=low
 
   * Integrate MP3 encoder to dictophone ("test-me-please" release)
 
