@@ -1,5 +1,11 @@
 usr/bin
-usr/share
 usr/lib/gm/configlets
+usr/share/applications
+usr/share/eoi
+usr/share/help
+usr/share/keys
+usr/share/locale  
+usr/share/madaudio/beep.wav
+usr/share/madaudio/codecs/hq.desktop
 etc
 

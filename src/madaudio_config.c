@@ -18,7 +18,7 @@
 
 #include "madaudio.h"
 
-#define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
+#define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S"
 #define DEFAULT_CODEC "hq"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
@@ -79,7 +79,7 @@ get_user_codec()
     int r = readn(fd, str, PATH_MAX);
     if(r > 0)
     {
-        str[r-1] = '\0';
+        str[r] = '\0';
         char *c = strchr(str, '\n');
         if(c)
             *c = '\0';

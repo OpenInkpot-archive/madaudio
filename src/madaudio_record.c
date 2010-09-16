@@ -19,8 +19,6 @@
 #include "madaudio.h"
 
 #define FILENAME_LEN 512
-#define DEFAULT_COMMAND "madaudio-dictophone arecord -f S16_LE -c1 -r8000 -t wav %s"
-#define DEFAULT_FILETEMPLATE  "%F-%H_%M_%S.wav"
 #define DEFAULT_CODEC "hq"
 #define DEFAULT_PATH "/mnt/storage/dictophone"
 #define MADAUDIO_RECORDER_SECTION "recorder"
@@ -86,8 +84,12 @@ madaudio_start_record(madaudio_player_t *player)
         return;
 
     printf("Recording...\n");
-    char *fullname = xasprintf("%s/%s", player->config->path,
-        madaudio_strftime(player->config->template));
+    char *file_ext = efreet_desktop_x_field_get(player->config->codec,
+        "X-FileExtension");
+    if(!file_ext)
+        file_ext="wav"; /* fallback */
+    char *fullname = xasprintf("%s/%s.%s", player->config->path,
+        madaudio_strftime(player->config->template), file_ext);
     free(player->filename);
     player->filename = fullname;
 
