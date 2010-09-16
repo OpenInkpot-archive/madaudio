@@ -21,3 +21,9 @@ Description: Audioplayer application -- debugging symbols
  Audioplayer application.
  .
  This package contains debugging symbols.
+
+Package: madaudio-mp3
+Architecture: any
+Priority: extra
+Depends: madaudio (= ${binary:Version}), libfixedlame-sox (>= 0.2), sox
+Description: MP3 codec configuration and dependencies for recorder
