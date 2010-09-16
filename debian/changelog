@@ -1,5 +1,11 @@
 madaudio (0.4.18) zelazny; urgency=low
 
+  * Integrate MP3 encoder to dictophone ("test-me-please" release)
+
+ -- Alexander V. Nikolaev <avn@daemon.hole.ru>  Fri, 17 Sep 2010 01:14:18 +0300
+
+madaudio (0.4.18) zelazny; urgency=low
+
   [ Tomasz Długosz ]
   * l10n: initial swedish translation
   * l10n: initial hungarian translation
