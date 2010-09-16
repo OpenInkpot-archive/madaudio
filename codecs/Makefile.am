@@ -1,2 +1,2 @@
 desktopdir = $(pkgdatadir)/codecs
-desktop_DATA = hq.desktop
+desktop_DATA = hq.desktop mp3.desktop
