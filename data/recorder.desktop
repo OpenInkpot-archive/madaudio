@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Recorder
+Name[ru]=Диктофон
+TryExec=madaudio
+Exec=madaudio RecorderDialogOpen
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Applications

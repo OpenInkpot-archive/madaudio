@@ -60,13 +60,15 @@ _current_codec(madaudio_configlet_t *configlet)
 {
     int num=0;
     Eina_List *each = configlet->codecs;
-    while((each = eina_list_next(each)))
+    while(each)
     {
         madaudio_codec_t *codec = eina_list_data_get(each);
         if(!strcmp(codec->filename, configlet->current))
             return num;
         num++;
+        each = eina_list_next(each);
     }
+    fprintf(stderr, "Not found\n");
     return 0;
 }
 
@@ -86,15 +88,11 @@ static void madaudio_submenu_draw(
 }
 
 static void madaudio_submenu_handler(
-                    Evas_Object *choicebox __attribute__((unused)),
+                    Evas_Object *choicebox,
                     int item_num,
                     bool is_alt __attribute__((unused)),
                     void *param __attribute__((unused)))
 {
-    gm_configlet_submenu_pop(choicebox);
-
-    Evas_Object *parent = (Evas_Object*)param;
-    choicebox_invalidate_item(parent, 1);
     madaudio_configlet_t *configlet =
              evas_object_data_get(choicebox, "configlet");
     madaudio_codec_t *codec = eina_list_nth(configlet->codecs, item_num);
@@ -103,7 +101,13 @@ static void madaudio_submenu_handler(
         free(configlet->current);
         configlet->current = strdup(codec->filename);
         _save_user_codec(codec->filename);
+        fprintf(stderr, "configlet=%x\n", configlet);
+        gm_configlet_invalidate_parent(choicebox, configlet);
     }
+
+    // last, because we pass choicebox to gm_configlet_invalidate_parent
+    //    where choicebox must be valid and attached to evas
+    gm_configlet_submenu_pop(choicebox);
 }
 
 static void
