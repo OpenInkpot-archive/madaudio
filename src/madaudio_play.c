@@ -88,7 +88,18 @@ madaudio_connect(madaudio_player_t* player)
             err(1, "mpd not ready or has wrong version\n");
         madaudio_status(player);
         if(player->filename)
-            madaudio_play_file(player);
+        {
+            if(player->filename[0] == '/') /* real filename */
+                madaudio_play_file(player);
+            else
+            {
+                /* some "commands" can alter player->filename, so detach it */
+                char *cmd=player->filename;
+                player->filename = NULL;
+                madaudio_action(player, cmd);
+                free(cmd);
+            }
+        }
         else
         {
             madaudio_status(player);
@@ -450,7 +461,9 @@ madaudio_key_handler(void* param, Evas* e, Evas_Object* o, void* event_info)
 void
 madaudio_action(madaudio_player_t *player, const char *key)
 {
-    const char *action = keys_lookup(player->keys, player->context, key);
+    char *action = keys_lookup(player->keys, player->context, key);
+    if(!action || !strlen(action))
+        action = key;
     Evas *e = evas_object_evas_get(player->gui);
     syslog(LOG_INFO, "Action: %s -> %s\n", key, action);
     madaudio_action_internal(e, player, action);
