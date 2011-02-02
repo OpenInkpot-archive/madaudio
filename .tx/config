@@ -1,0 +1,8 @@
+[oi.madaudio]
+file_filter = po/<lang>.po
+source_file = po/madaudio.pot
+source_lang = en
+
+[main]
+host = transifex.net
+

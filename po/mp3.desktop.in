@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=MP3
-GenericName=MP3 encoding
+_GenericName=MP3 encoding
 Exec=/usr/bin/madaudio-dictophone rec -q -t fixedpoint_mp3 %f
 StartupNotify=true
 Terminal=false
