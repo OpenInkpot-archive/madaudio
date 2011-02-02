@@ -25,3 +25,5 @@ debian/files
 debian/*.log
 debian/stamp-*
 *.edj
+*.in.h
+*.desktop
