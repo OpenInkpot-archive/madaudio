@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=recorder
-_GenericName=Recorder
-#Name[ru]=Диктофон
+GenericName=Recorder
+_Name[ru]=Диктофон
 TryExec=madaudio
 Exec=madaudio RecorderDialogOpen
 StartupNotify=true

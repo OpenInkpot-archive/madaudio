@@ -124,8 +124,10 @@ madaudio_select(void *data, Evas_Object *parent)
     if(!choicebox)
         printf("We all dead\n");
     choicebox_set_selection(choicebox, _current_codec(configlet));
-    Evas_Object * main_canvas_edje = evas_object_name_find(canvas,"main_canvas_edje");
-    edje_object_part_text_set(main_canvas_edje, "title", gettext("Select recorder codec"));
+    Evas_Object * main_canvas_edje =
+        evas_object_name_find(canvas,"main_canvas_edje");
+    edje_object_part_text_set(main_canvas_edje, "title",
+        dgettext("madaudio", "Select recorder codec"));
     evas_object_data_set(choicebox, "configlet", data);
 }
 
@@ -135,7 +137,8 @@ madaudio_draw(void *data, Evas_Object *item)
     madaudio_configlet_t *configlet = data;
     madaudio_codec_t *codec = eina_list_nth(configlet->codecs,
         _current_codec(configlet));
-    edje_object_part_text_set(item, "title", gettext("Recorder codec"));
+    edje_object_part_text_set(item, "title",
+        dgettext("madaudio","Recorder codec"));
     char *title = "N/A";
     if(codec)
         title = codec->title;

@@ -14,4 +14,4 @@ PKG_CHECK_MODULES(LIBLOPS, [liblops])
 
 AC_OUTPUT(Makefile src/Makefile src/configlet/Makefile themes/Makefile 
 themes/azbooka/Makefile themes/default/Makefile po/Makefile data/Makefile
-help/Makefile scripts/Makefile codecs/Makefile)
+help/Makefile scripts/Makefile)
