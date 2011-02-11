@@ -3,7 +3,7 @@ Section: gui
 Maintainer: Alexander V. Nikolaev
 XCS-Cross-Host-Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config, libtool, cdbs, cdbs-embedded, oi-help-compiler, libedje-bin
 XCS-Cross-Build-Depends: libextractor-mini-dev, libeina-dev, libecore-dev (>= 0.9.9.49898-5), libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev (>= 0.2.1), libmpdclient-dev, gm-dev (>= 0.4.8), liblops-dev
-Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config,  libtool, libeina-dev, libecore-dev (>= 0.9.9.49898-5), libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev (>= 0.2.1), libmpdclient-dev, cdbs, gm-dev, liblops-dev
+Build-Depends: debhelper (>= 7), autoconf, automake, pkg-config,  libtool, libeina-dev, libecore-dev (>= 0.9.9.49898-5), libefreet-dev, libedje-dev, libkeys-dev, libeoi-dev (>= 0.2.1), libmpdclient-dev, cdbs, gm-dev, liblops-dev, intltool
 Priority: optional
 Standards-Version: 3.8.3
 
