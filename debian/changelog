@@ -1,3 +1,18 @@
+madaudio (0.4.21) zelazny; urgency=low
+
+  [ Mikhail Gusarov ]
+  * Convert .po handling to use Tx.net
+  * .gitignore
+
+  [ Alexander V. Nikolaev ]
+  * Localization patch from Burunduk (from IRC)
+  * Add intltool to build depends
+
+  [ Alexander Kerner ]
+  * Update translations
+
+ -- Alexander Kerner <lunohod@openinkpot.org>  Sat, 12 Feb 2011 18:54:23 +0100
+
 madaudio (0.4.20) zelazny; urgency=low
 
   * Fix issue in configlet, with stalled value in "setting" menu
