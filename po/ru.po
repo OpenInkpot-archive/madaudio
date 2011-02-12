@@ -22,7 +22,7 @@ msgstr "Тип кодирования записи"
 
 #: src/configlet/configlet.c:138
 msgid "Recorder codec"
-msgstr "Тип кодирования записи\n"
+msgstr "Тип кодирования записи"
 
 #: src/madaudio_play.c:419
 msgid "Madaudio: Help"
