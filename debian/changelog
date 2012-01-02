@@ -1,3 +1,9 @@
+madaudio (0.4.22) zelazny; urgency=low
+
+  * Do not fail if SIGUSR1/SIGUSR2 is received during startup.
+
+ -- Mikhail Gusarov <dottedmag@dottedmag.net>  Mon, 02 Jan 2012 21:57:06 +0100
+
 madaudio (0.4.21) zelazny; urgency=low
 
   [ Mikhail Gusarov ]
