@@ -246,8 +246,13 @@ int main(int argc, char** argv)
      * signals. Let's work around it by ignoring SIGUSR1/2 at the startup. Those
      * signals are nothing but "re-read your state", and if we are starting up,
      * then we have nothing to re-read */
-    sigaction(SIGUSR1, SIG_IGN, NULL);
-    sigaction(SIGUSR2, SIG_IGN, NULL);
+    struct sigaction ignore = {
+        .sa_handler = SIG_IGN,
+        .sa_flags = SA_RESTART
+    };
+
+    sigaction(SIGUSR1, &ignore, NULL);
+    sigaction(SIGUSR2, &ignore, NULL);
 
     static madaudio_player_t* player;
     player = calloc(1, sizeof(madaudio_player_t));
