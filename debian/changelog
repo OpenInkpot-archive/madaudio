@@ -1,3 +1,9 @@
+madaudio (0.4.23) zelazny; urgency=low
+
+  * Properly handle SIGUSR* signals.
+
+ -- Mikhail Gusarov <dottedmag@openinkpot.org>  Tue, 13 Mar 2012 20:45:19 +0100
+
 madaudio (0.4.22) zelazny; urgency=low
 
   * Do not fail if SIGUSR1/SIGUSR2 is received during startup.
